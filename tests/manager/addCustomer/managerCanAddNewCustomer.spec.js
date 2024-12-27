@@ -1,5 +1,8 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
 /* 
@@ -23,6 +26,30 @@ usage:
  const lastName = faker.person.LastName();
  const postCode = faker.location.zipCode(); 
 
- 2. Do not rely on the customer row id for the steps 8-11. Use the ".last()" locator to get the last row.
+ 2. Do not rely on the customer row id for the steps 8-11.
+  Use the ".last()" locator to get the last row.
 */
+const addCustomerPage = new AddCustomerPage(page); 
+const customersListPage = new CustomersListPage(page); 
+const bankManagerMainPage = new BankManagerMainPage(page); 
+
+await addCustomerPage.open();
+await addCustomerPage.waitForOpened();
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
+const postCode = faker.location.zipCode();
+
+await addCustomerPage.fillFirstName(firstName);
+await addCustomerPage.fillLastName(lastName);
+await addCustomerPage.fillPostCode(postCode);
+await addCustomerPage.clickAddCustomerButton();
+await addCustomerPage.reload();
+await bankManagerMainPage.open();
+await bankManagerMainPage.clickCustomersButton();
+await customersListPage.waitForOpened();
+await customersListPage.asserLastRowIsVisible();
+await customersListPage.assertLastRowFirstNameContainsText(firstName);
+await customersListPage.assertLastRowLastNameContainsText(lastName);
+await customersListPage.assertLastRowPostCodeContainsText(postCode);
 });
+

@@ -1,9 +1,13 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
 let firstName;
 let lastName;
-let postalCode; 
+let postCode; 
 
 test.beforeEach( async ({ page }) => {
   /* 
@@ -17,8 +21,16 @@ test.beforeEach( async ({ page }) => {
 
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode(); 
+  postCode = faker.location.zipCode(); 
 
+const addCustomerPage = new AddCustomerPage(page); 
+    await addCustomerPage.open();
+    await addCustomerPage.waitForOpened();
+    await addCustomerPage.fillFirstName(firstName);
+    await addCustomerPage.fillLastName(lastName);
+    await addCustomerPage.fillPostCode(postCode);
+    await addCustomerPage.clickAddCustomerButton();
+    await addCustomerPage.reload();
 
 });
 
@@ -30,6 +42,13 @@ Test:
 3. Assert customer row is present in the table. 
 4. Assert no other rows is present in the table.
 */
+const bankManagerMainPage = new BankManagerMainPage(page); 
+const openAccountPage = new OpenAccountPage(page); 
+const customersListPage= new CustomersListPage (page);
 
+await bankManagerMainPage.open();
+await bankManagerMainPage.clickCustomersButton();
+await customersListPage.waitForOpened();
+await customersListPage.searchCustomerByPostCode(postCode);
 
 });
