@@ -44,6 +44,6 @@ Test:
 
   await customersListPage.open();
   await customersListPage.fillSearchField(lastName);
-  await customersListPage.assertCustomerSerchRowIsVisible();
+  await customersListPage.assertCustomerSearchRowIsVisible();
   await customersListPage.assertOtherRowsIsNotVisible();
 });

@@ -4,7 +4,7 @@ export class CustomersListPage {
   constructor(page) {
     this.page = page; 
     this.lastRowLocator = page.getByRole('row').last();
-    this.firstNamaCellLocator = this.lastRowLocator.getByRole('cell').nth(0);
+    this.firstNameCellLocator = this.lastRowLocator.getByRole('cell').nth(0);
     this.lastNameCellLocator = this.lastRowLocator.getByRole('cell').nth(1);
     this.postCodeCellLocator = this.lastRowLocator.getByRole('cell').nth(2);
     this.accountNumberCellLocator = this.lastRowLocator.getByRole('cell').nth(3);
@@ -28,7 +28,7 @@ export class CustomersListPage {
   }
 
   async assertFirstNameCellContainsText(firstName) {
-    await expect(this.firstNamaCellLocator).toContainText(firstName);
+    await expect(this.firstNameCellLocator).toContainText(firstName);
   }
 
   async assertLastNameCellContainsText(lastName) {
@@ -55,7 +55,7 @@ export class CustomersListPage {
     await expect(this.deletedRowLocator).toBeHidden();
   }
 
-  async assertCustomerSerchRowIsVisible() {
+  async assertCustomerSearchRowIsVisible() {
     await expect(this.customerSearchRowLocator).toBeVisible();
   }
 

@@ -44,6 +44,6 @@ Test:
 
   await customersListPage.open();
   await customersListPage.fillSearchField(postalCode);
-  await customersListPage.assertCustomerSerchRowIsVisible();
+  await customersListPage.assertCustomerSearchRowIsVisible();
   await customersListPage.assertOtherRowsIsNotVisible();
 });

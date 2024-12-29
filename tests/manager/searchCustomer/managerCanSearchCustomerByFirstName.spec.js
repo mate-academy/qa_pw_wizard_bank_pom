@@ -44,6 +44,6 @@ customersListPage = new CustomersListPage(page);
 
 await customersListPage.open();
 await customersListPage.fillSearchField(firstName);
-await customersListPage.assertCustomerSerchRowIsVisible();
+await customersListPage.assertCustomerSearchRowIsVisible();
 await customersListPage.assertOtherRowsIsNotVisible();
 });
