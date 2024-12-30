@@ -1,31 +1,47 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
-test.beforeEach( async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
+test.beforeEach(async ({ page, context }) => {
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
 
+  // Сохраняем данные в контексте теста
+  context.firstName = firstName;
+  context.lastName = lastName;
+
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+  await page.fill('input[placeholder="First Name"]', firstName);
+  await page.fill('input[placeholder="Last Name"]', lastName);
+  await page.fill('input[placeholder="Post Code"]', postCode);
+  await page.click('button[type="submit"]');
+
+  await page.on('dialog', async dialog => {
+    await dialog.accept();
+  });
+
+  await page.reload();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
-/* 
-Test:
-1. Click [Open Account].
-2. Select Customer name you just created.
-3. Select currency.
-4. Click [Process].
-5. Reload the page (This is a simplified step to close the popup).
-6. Click [Customers].
-7. Assert the customer row has the account number not empty.
+test('Assert manager can add new customer', async ({ page, context }) => {
+  const firstName = context.firstName;
+  const lastName = context.lastName;
 
-Tips:
- 1. Do not rely on the customer row id for the step 13. Use the ".last()" locator to get the last row.
-*/
+  await page.click('button[ng-click="openAccount()"]');
+
+  await page.selectOption('select[ng-model="custId"]', { label: `${firstName} ${lastName}` });
+  await page.selectOption('select[ng-model="currency"]', 'Dollar');
+  await page.click('button[type="submit"]');
+
+  await page.on('dialog', async dialog => {
+    await dialog.accept();
+  });
+
+  await page.reload();
+  await page.click('button[ng-click="showCust()"]');
+
+  const lastRow = page.locator('table tbody tr').last();
+  await expect(lastRow.locator('td:nth-child(1)')).toHaveText(firstName);
+  await expect(lastRow.locator('td:nth-child(2)')).toHaveText(lastName);
+  await expect(lastRow.locator('td:nth-child(4)')).not.toBeEmpty();
 });

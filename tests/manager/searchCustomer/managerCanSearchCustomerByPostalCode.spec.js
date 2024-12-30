@@ -1,35 +1,83 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
 let firstName;
 let lastName;
-let postalCode; 
+let postalCode;
 
-test.beforeEach( async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-
+test.beforeEach(async ({ page }) => {
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode(); 
+  postalCode = faker.location.zipCode();
 
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+  await page.fill('input[placeholder="First Name"]', firstName);
+  await page.fill('input[placeholder="Last Name"]', lastName);
+  await page.fill('input[placeholder="Post Code"]', postalCode);
+  await page.click('button[type="submit"]');
 
+  await page.on('dialog', async dialog => {
+    await dialog.accept();
+  });
+
+  await page.reload();
+});
+
+test('Assert manager can add new customer', async ({ page }) => {
+  await page.click('button[ng-click="openAccount()"]');
+
+  await page.selectOption('select[ng-model="custId"]', { label: `${firstName} ${lastName}` });
+  await page.selectOption('select[ng-model="currency"]', 'Dollar');
+  await page.click('button[type="submit"]');
+
+  await page.on('dialog', async dialog => {
+    await dialog.accept();
+  });
+
+  await page.reload();
+  await page.click('button[ng-click="showCust()"]');
+
+  const lastRow = page.locator('table tbody tr').last();
+  await expect(lastRow.locator('td:nth-child(1)')).toHaveText(firstName);
+  await expect(lastRow.locator('td:nth-child(2)')).toHaveText(lastName);
+  await expect(lastRow.locator('td:nth-child(4)')).not.toBeEmpty();
+});
+
+test('Assert manager can search customer by First Name', async ({ page }) => {
+  await page.click('button[ng-click="showCust()"]');
+
+  await page.fill('input[ng-model="searchCustomer"]', firstName);
+
+  const rows = page.locator('table tbody tr');
+  await expect(rows).toHaveCount(1);
+
+  const firstRow = rows.first();
+  await expect(firstRow.locator('td:nth-child(1)')).toHaveText(firstName);
+  await expect(firstRow.locator('td:nth-child(2)')).toHaveText(lastName);
+});
+
+test('Assert manager can search customer by Last Name', async ({ page }) => {
+  await page.click('button[ng-click="showCust()"]');
+
+  await page.fill('input[ng-model="searchCustomer"]', lastName);
+
+  const rows = page.locator('table tbody tr');
+  await expect(rows).toHaveCount(1);
+
+  const firstRow = rows.first();
+  await expect(firstRow.locator('td:nth-child(1)')).toHaveText(firstName);
+  await expect(firstRow.locator('td:nth-child(2)')).toHaveText(lastName);
 });
 
 test('Assert manager can search customer by Postal Code', async ({ page }) => {
-/* 
-Test:
-1. Open Customers page
-2. Fill the postalCode to the search field
-3. Assert customer row is present in the table. 
-4. Assert no other rows is present in the table.
-*/
+  await page.click('button[ng-click="showCust()"]');
 
+  await page.fill('input[ng-model="searchCustomer"]', postalCode);
 
+  const rows = page.locator('table tbody tr');
+  await expect(rows).toHaveCount(1);
+
+  const firstRow = rows.first();
+  await expect(firstRow.locator('td:nth-child(1)')).toHaveText(firstName);
+  await expect(firstRow.locator('td:nth-child(2)')).toHaveText(lastName);
 });
