@@ -1,12 +1,14 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-test('Assert manager can Login ', async ({ page }) => {
-/* 
-Test:
-1. Open Wizard bank home page (https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login)
-2. Click [Bank Manager Login]
-3. Assert button [Add Customer] is visible
-4. Assert button [Open Account] is visible
-5. Assert button [Customers] is visible
-*/
+test('Assert manager can Login', async ({ page }) => {
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
+  await page.click('button[ng-click="manager()"]');
+
+  const addCustomerButton = page.locator('button[ng-click="addCust()"]');
+  const openAccountButton = page.locator('button[ng-click="openAccount()"]');
+  const customersButton = page.locator('button[ng-click="showCust()"]');
+
+  await expect(addCustomerButton).toBeVisible();
+  await expect(openAccountButton).toBeVisible();
+  await expect(customersButton).toBeVisible();
 });

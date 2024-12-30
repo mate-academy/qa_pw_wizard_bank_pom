@@ -1,27 +1,40 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
-test.beforeEach( async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
+test.beforeEach(async ({ page, context }) => {
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
 
+  context.firstName = firstName;
+  context.lastName = lastName;
+
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+  await page.fill('input[placeholder="First Name"]', firstName);
+  await page.fill('input[placeholder="Last Name"]', lastName);
+  await page.fill('input[placeholder="Post Code"]', postCode);
+  await page.click('button[type="submit"]');
+
+  await page.on('dialog', async dialog => {
+    await dialog.accept();
+  });
+
+  await page.reload();
 });
 
-test('Assert manager can delete customer', async ({ page }) => {
-/* 
-Test:
-1. Open Customers page
-2. Click [Delete] for the row with customer name.
-3. Assert customer row is not present in the table. 
-4. Reload the page.
-5. Assert customer row is not present in the table. 
-*/
+test('Assert manager can delete customer', async ({ page, context }) => {
+  const firstName = context.firstName;
+  const lastName = context.lastName;
 
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/list');
 
+  const customerRow = page.locator('table tbody tr').filter({ hasText: firstName });
+  await customerRow.locator('button').nth(0).click();
+
+  await expect(customerRow).not.toBeVisible();
+
+  await page.reload();
+
+  const reloadedRow = page.locator('table tbody tr').filter({ hasText: firstName });
+  await expect(reloadedRow).not.toBeVisible();
 });
