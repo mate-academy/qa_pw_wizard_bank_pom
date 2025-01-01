@@ -1,13 +1,23 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
-  
-const firstName = faker.person.firstName();
-const lastName = faker.person.lastName();
-const postCode = faker.location.zipCode(); 
+
+let firstName, lastName, postCode;
 
 test.beforeEach( async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+
+  await addCustomerPage.open();
+  
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  await addCustomerPage.fillFirstNameField(firstName);
+  await addCustomerPage.fillLastNameField(lastName);
+
+  postCode = faker.number.int(10000).toString();
+  await addCustomerPage.fillPostalCodeField(postCode);
+  await addCustomerPage.clickAddCustomerButton();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -16,24 +26,17 @@ test.beforeEach( async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
-
-  const addCustomerPage = new AddCustomerPage(page); 
-
-  await addCustomerPage.open();
-  await addCustomerPage.fillFirstNameInputField(firstName);
-  await addCustomerPage.fillLastNameInputField(lastName);
-  await addCustomerPage.fillPostCodeInputField(postCode);
-  await addCustomerPage.clickAddCustomerButton();
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
-
-const customersListPage = new CustomersListPage(page); 
-const fullName = firstName + ' ' + lastName + ' ' + postCode;
-
-await customersListPage.open();
-await customersListPage.clickDeleteButton(fullName);
-await customersListPage.assertCustomerRowIsNotPresentInTable(fullName);
-await customersListPage.reload();
-await customersListPage.assertCustomerRowIsNotPresentInTable(fullName);
+  const customersListPage = new CustomersListPage(page);
+  
+  const customersName = `${firstName} ${lastName} ${postCode}`;
+  await customersListPage.open();
+      
+  const row = page.getByRole('row', { name: customersName });
+  await row.getByRole('button', { name: 'Delete' }).click();
+  await expect (page.locator('row', { name: customersName })).toBeHidden(); 
+  await page.reload();
+  await expect (page.locator('row', { name: customersName })).toBeHidden();
 });

@@ -2,41 +2,40 @@ const { expect } = require('@playwright/test');
 
 export class OpenAccountPage {
   constructor(page) {
-    this.page = page; 
+    this.page = page;
     this.currencyDropDown = page.getByTestId('currency');
-    this.customerDropDown = page.getByTestId('userSelect');
+    this.customerNameDropDown = page.getByTestId('userSelect');
     this.processButton = page.getByRole('button', { name: 'Process' });
     this.customersButton = page.getByRole('button', { name: 'Customers' });
-  
-    this.lastRow = page.getByRole('row').last();
-    this.accountNumberCell = this.lastRow.getByRole('cell').nth(3);
   }
 
   async open() {
     await this.page.goto('/angularJs-protractor/BankingProject/#/manager/openAccount');
   }
 
-  async setCurrency(value) {
-    await this.currencyDropDown.selectOption(value);
+  async assertSelectCurrencyDropdownIsVisible() {
+    await expect(this.currencyDropDown).toBeVisible();
   }
 
-  async assertCurrencyDropDownHasText(value) {
-    await expect(this.currencyDropDown).toHaveValue(value);
+  async selectCurrency(currency) {
+    await this.currencyDropDown.selectOption(currency);
   }
 
-  async selectCustomer(value) {
-    await this.customerDropDown.selectOption(value);
+  async assertSelectCurrencyDropdownContainsValue(value) {
+    const currentOptionText = await this.currencyDropDown.inputValue();
+    expect(currentOptionText).toBe(value);
+  }
+
+  async selectCustomerName(customerName) {
+    await this.customerNameDropDown.selectOption(customerName);
   }
 
   async clickProcessButton() {
     await this.processButton.click();
   }
 
-  async reload() {
-    await this.page.reload();
-  }
-
   async clickCustomersButton() {
     await this.customersButton.click();
   }
+   
 }

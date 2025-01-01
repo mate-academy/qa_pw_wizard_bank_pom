@@ -4,54 +4,56 @@ export class CustomersListPage {
   constructor(page) {
     this.page = page;
     this.lastRow = page.getByRole('row').last();
-    this.accountNumberCell = this.lastRow.getByRole('cell').nth(3);
-    this.searchField = this.page.getByPlaceholder('Search Customer');
-  
+    this.rawCustomers = page.getByRole('row');
+    this.lastRowFirstCell = this.lastRow.getByRole('cell').nth(0);
+    this.lastRowSecondCell = this.lastRow.getByRole('cell').nth(1);
+    this.lastRowThirdCell = this.lastRow.getByRole('cell').nth(2);
+    this.lastRowForthCell = this.lastRow.getByRole('cell').nth(3);
+    this.searchField = page.getByPlaceholder('Search Customer');
     this.firstRow = page.getByRole('row').nth(1);
-    this.firstNameCell = this.firstRow.getByRole('cell').nth(0);
-
-    this.lastNameCell = this.firstRow.getByRole('cell').nth(1);
-
-    this.postCodeCell = this.firstRow.getByRole('cell').nth(2);
+    this.firstRowFirstCell = this.firstRow.getByRole('cell').nth(0);
+    this.firstRowSecondCell = this.firstRow.getByRole('cell').nth(1);
+    this.firstRowThirdCell = this.firstRow.getByRole('cell').nth(2);
+    this.secondRow = page.getByRole('row').nth(2);
   }
 
   async open() {
     await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list');
   }
 
-  async clickDeleteButton(value) {
-    await this.page.getByRole('row', { name: value }).getByRole('button').click();
+  async assertLastRowFirstCellContainsText(text) {
+    await expect(this.lastRowFirstCell).toContainText(text);
   }
 
-  async assertCustomerRowIsNotPresentInTable(value) {
-    await expect(this.page.getByRole('row', { name: value })).toHaveCount(0);
+  async assertLastRowSecondCellContainsText(text) {
+    await expect(this.lastRowSecondCell).toContainText(text);
   }
 
-  async reload() {
-    await this.page.reload();
+  async assertLastRowThirdCellContainsText(text) {
+    await expect(this.lastRowThirdCell).toContainText(text);
   }
 
-  async assertCustomerRowHasAccountNumber(value) {
-    await expect(this.accountNumberCell).not.toBeEmpty();
+  async assertLastRowForthCellContainsText(text) {
+    await expect(this.lastRowForthCell).toContainText(text);
   }
 
-  async fillSearchField(value) {
-    await this.searchField.fill(value);
+  async fillSearchField(text) {
+    await this.searchField.fill(text);
   }
 
-  async assertCustomerRowHasFirstName(value) {
-    await expect(this.firstNameCell).toContainText(value);
+  async assertFirstRowFirstCellContainsText(text) {
+    await expect(this.firstRowFirstCell).toContainText(text);
   }
 
-  async assertCustomerTableContainsSingleRow() {
-    await expect(this.page.getByRole('row')).toHaveCount(2);
+  async assertFirstRowSecondCellContainsText(text) {
+    await expect(this.firstRowSecondCell).toContainText(text);
   }
 
-  async assertCustomerRowHasLastName(value) {
-    await expect(this.lastNameCell).toContainText(value);
+  async assertFirstRowThirdCellContainsText(text) {
+    await expect(this.firstRowThirdCell).toContainText(text);
   }
 
-  async assertCustomerRowHasPostCode(value) {
-    await expect(this.postCodeCell).toContainText(value);
+  async assertSecondRowIsHidden() {
+    await expect(this.secondRow).toBeHidden();
   }
 }
