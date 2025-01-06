@@ -48,13 +48,13 @@ Test:
   const customerListPage = new CustomersListPage(page);
 
   await customerListPage.waitForLoading();
-  await customerListPage.assertCustomerRowVisibility(customer.firstName, customer.lastName, customer.postCode, true)
+  await customerListPage.assertCustomerRowVisibility(customer.firstName, customer.lastName, customer.postCode, true);
 
   await customerListPage.deleteCustomer(customer.firstName, customer.lastName, customer.postCode);
-  await customerListPage.assertCustomerRowVisibility(customer.firstName, customer.lastName, customer.postCode, false)
+  await customerListPage.assertCustomerRowVisibility(customer.firstName, customer.lastName, customer.postCode, false);
 
   await customerListPage.reload();
-  await customerListPage.assertCustomerRowVisibility(customer.firstName, customer.lastName, customer.postCode, false)
+  await customerListPage.assertCustomerRowVisibility(customer.firstName, customer.lastName, customer.postCode, false);
 
 
 });

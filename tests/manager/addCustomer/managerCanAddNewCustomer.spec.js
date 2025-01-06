@@ -1,9 +1,9 @@
 import { test } from '@playwright/test';
-import { Faker, faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open new account', async ({ page }) => {
 /* 
 Test:
 1. Open add customer page by link https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust

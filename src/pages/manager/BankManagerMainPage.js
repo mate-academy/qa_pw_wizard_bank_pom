@@ -14,7 +14,7 @@ export class BankManagerMainPage {
   }
 
   async getButtonByName (buttonName) {
-    return this.page.getByRole('button', { name: `${buttonName}` })
+    return this.page.getByRole('button', { name: `${buttonName}` });
   }
 
   async assertButtonIsVisible (buttonName) {

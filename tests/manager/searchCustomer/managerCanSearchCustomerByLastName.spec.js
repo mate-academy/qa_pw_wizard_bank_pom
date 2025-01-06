@@ -40,7 +40,7 @@ test('Assert manager can search customer by Last Name', async ({ page }) => {
 /* 
 Test:
 1. Open Customers page
-2. Fill the firstName to the search field
+2. Fill the lastName to the search field
 3. Assert customer row is present in the table. 
 4. Assert no other rows is present in the table.
 */
