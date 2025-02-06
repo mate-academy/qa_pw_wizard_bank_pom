@@ -4,14 +4,14 @@ import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 
+const fakerFirstName = faker.person.firstName();
+const fakerLastName = faker.person.lastName();
+const fakerPostCode = faker.location.zipCode();
 
 test('Assert manager can add new customer', async ({ page }) => {
 const addCustomerPage = new AddCustomerPage(page);
 const customersListPage = new CustomersListPage(page);
 
-const fakerFirstName = faker.person.firstName();
-const fakerLastName = faker.person.lastName();
-const fakerPostCode = faker.location.zipCode();
 
 
 await addCustomerPage.open();
@@ -21,12 +21,13 @@ await addCustomerPage.fillPostalCode(fakerPostCode);
 await addCustomerPage.clickAddCustomerButton();
 await page.reload();
 await addCustomerPage.customerButtonClick();
+// await page.waitForLoadState();
+await page.waitForTimeout(1000);
 
 await customersListPage.assertFirstNameNewUser(fakerFirstName);
 await customersListPage.assertLastNameNewUser(fakerLastName);
 await customersListPage.assertPostCodeNewUser(fakerPostCode);
 await customersListPage.assertAccountNumberNewUser();
-// await page.waitForTimeout(1000);
 
 /* 
 Test:

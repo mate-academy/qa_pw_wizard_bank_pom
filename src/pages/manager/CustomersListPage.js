@@ -3,6 +3,7 @@ import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 // const add1CustomerPage = new AddCustomerPage(page);
 
 
+// const fakerFirstName = faker.person.firstName();
 
 export class CustomersListPage {
   constructor(page) {
@@ -11,7 +12,17 @@ export class CustomersListPage {
     this.lastNameNewCustumer = page.getByRole('row').last().getByRole('cell').nth(1);
     this.postCodeNewCustumer = page.getByRole('row').last().getByRole('cell').nth(2);
     this.accountNumberNewCustumer = page.getByRole('row').last().getByRole('cell').nth(3);
+    this.deleteButtonNewUser = page.getByRole('row').last().getByRole('cell').nth(4).getByRole('button');
+    this.rowNewUser = page.getByRole('row').last();
 
+  }
+
+  // async assertDeleteRow(){
+  //   expect(this.rowNewUser).toBeHidden();
+  // }
+
+  async clickDeleteButtonNewUser(){
+    await this.deleteButtonNewUser.click();
   }
 
   async assertFirstNameNewUser(text){
