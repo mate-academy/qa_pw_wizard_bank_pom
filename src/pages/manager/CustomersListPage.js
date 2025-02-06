@@ -41,6 +41,10 @@ export class CustomersListPage {
     expect(this.accountNumberNewCustumer).toBeEmpty();
   }
 
+  async assertIsPresentAccountNumberNewUser(){
+    expect(this.accountNumberNewCustumer).not.toBeEmpty();
+  }
+
   async open() {
     await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list');
   }

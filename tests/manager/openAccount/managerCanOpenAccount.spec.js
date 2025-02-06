@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
-import{ OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
 
 
@@ -19,7 +19,6 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillPostalCode(fakerPostCode);
   await addCustomerPage.clickAddCustomerButton();
   await page.reload();
-  await page.waitForTimeout(1000);
 
   /* 
   Pre-conditons:
@@ -35,9 +34,23 @@ test.beforeEach(async ({ page }) => {
 
 test('Assert manager can add new customer', async ({ page }) => {
   const openAccountPage = new OpenAccountPage(page);
+  const customersListPage = new CustomersListPage(page);
+  const costumerNameLastname = fakerFirstName + ' ' + fakerLastName;
 
 
-// await openAccountPage.open();
+  // await openAccountPage.open();
+  await openAccountPage.openAccBtnClick();
+  console.log(costumerNameLastname);
+  
+  await openAccountPage.selectUser(costumerNameLastname);
+  await openAccountPage.selectCurency('Dollar');
+  await openAccountPage.processButtonClick();
+  await page.reload();
+
+  await openAccountPage.costumersButtonClick();
+  await customersListPage.assertIsPresentAccountNumberNewUser();
+  await page.waitForTimeout(1000);
+
 
   /* 
   Test:
@@ -46,6 +59,7 @@ test('Assert manager can add new customer', async ({ page }) => {
   3. Select currency.
   4. Click [Process].
   5. Reload the page (This is a simplified step to close the popup).
+
   6. Click [Customers].
   7. Assert the customer row has the account number not empty.
   
