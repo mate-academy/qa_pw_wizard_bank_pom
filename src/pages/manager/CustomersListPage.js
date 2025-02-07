@@ -14,12 +14,25 @@ export class CustomersListPage {
     this.accountNumberNewCustumer = page.getByRole('row').last().getByRole('cell').nth(3);
     this.deleteButtonNewUser = page.getByRole('row').last().getByRole('cell').nth(4).getByRole('button');
     this.rowNewUser = page.getByRole('row').last();
+    this.searchRow = page.getByPlaceholder('Search Customer');
+    this.rowOfReturnedUser = page.getByRole('row').nth(1);
+    this.rowAbsented = page.getByRole('row').nth(2);
+
 
   }
 
-  // async assertDeleteRow(){
-  //   expect(this.rowNewUser).toBeHidden();
-  // }
+  async assertAnotherRowAbsented(){
+    expect (this.rowAbsented).toBeHidden();
+
+  }
+
+  async assertCoctumerRowDisplayed(text){
+    expect (this.rowOfReturnedUser).toContainText(text);
+  }
+
+  async searchRowFill(text){
+    await this.searchRow.fill(text);
+  }
 
   async clickDeleteButtonNewUser(){
     await this.deleteButtonNewUser.click();
