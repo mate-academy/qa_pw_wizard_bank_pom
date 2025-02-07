@@ -1,21 +1,12 @@
-import { th } from '@faker-js/faker';
-import { faker } from '@faker-js/faker';
-
-
-
-const { expect } = require('@playwright/test');
-
 export class AddCustomerPage {
   constructor(page) {
-    this.page = page; 
+    this.page = page;
     this.firstNameInput = page.getByPlaceholder('First Name');
     this.lastNameInput = page.getByPlaceholder('Last Name');
     this.postalCodeInput = page.getByPlaceholder('Post Code');
     this.addCustomerButton = page.getByRole('form').getByRole('button', { name: 'Add Customer' });
     this.customerButton = page.getByRole('button', { name: 'Customers' });
   }
-   
-
 
   async customerButtonClick() {
     await this.customerButton.click();
@@ -25,7 +16,6 @@ export class AddCustomerPage {
     await this.page.goto('/angularJs-protractor/BankingProject/#/manager/addCust');
   }
 
-  
   async fillFirstName(text) {
     await this.firstNameInput.fill(text);
   }

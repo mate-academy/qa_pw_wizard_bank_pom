@@ -1,13 +1,8 @@
 const { expect } = require('@playwright/test');
-import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
-// const add1CustomerPage = new AddCustomerPage(page);
-
-
-// const fakerFirstName = faker.person.firstName();
 
 export class CustomersListPage {
   constructor(page) {
-    this.page = page; 
+    this.page = page;
     this.firstNameNewCustumer = page.getByRole('row').last().getByRole('cell').first();
     this.lastNameNewCustumer = page.getByRole('row').last().getByRole('cell').nth(1);
     this.postCodeNewCustumer = page.getByRole('row').last().getByRole('cell').nth(2);
@@ -17,44 +12,41 @@ export class CustomersListPage {
     this.searchRow = page.getByPlaceholder('Search Customer');
     this.rowOfReturnedUser = page.getByRole('row').nth(1);
     this.rowAbsented = page.getByRole('row').nth(2);
-
-
   }
 
-  async assertAnotherRowAbsented(){
-    expect (this.rowAbsented).toBeHidden();
-
+  async assertAnotherRowAbsented() {
+    expect(this.rowAbsented).toBeHidden();
   }
 
-  async assertCoctumerRowDisplayed(text){
-    expect (this.rowOfReturnedUser).toContainText(text);
+  async assertCoctumerRowDisplayed(text) {
+    expect(this.rowOfReturnedUser).toContainText(text);
   }
 
-  async searchRowFill(text){
+  async searchRowFill(text) {
     await this.searchRow.fill(text);
   }
 
-  async clickDeleteButtonNewUser(){
+  async clickDeleteButtonNewUser() {
     await this.deleteButtonNewUser.click();
   }
 
-  async assertFirstNameNewUser(text){
+  async assertFirstNameNewUser(text) {
     expect(this.firstNameNewCustumer).toHaveText(text);
   }
 
-  async assertLastNameNewUser(text){
+  async assertLastNameNewUser(text) {
     expect(this.lastNameNewCustumer).toHaveText(text);
   }
 
-  async assertPostCodeNewUser(text){
+  async assertPostCodeNewUser(text) {
     expect(this.postCodeNewCustumer).toHaveText(text);
   }
 
-  async assertAccountNumberNewUser(){
+  async assertAccountNumberNewUser() {
     expect(this.accountNumberNewCustumer).toBeEmpty();
   }
 
-  async assertIsPresentAccountNumberNewUser(){
+  async assertIsPresentAccountNumberNewUser() {
     expect(this.accountNumberNewCustumer).not.toBeEmpty();
   }
 

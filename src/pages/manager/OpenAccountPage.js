@@ -10,15 +10,15 @@ export class OpenAccountPage {
     this.costumersButton = page.getByRole('button', { name: 'Customers' });
   }
 
-  async costumersButtonClick(){
+  async costumersButtonClick() {
     await this.costumersButton.click();
   }
 
-async processButtonClick(){
-  await this.processButton.click();
-}
+  async processButtonClick() {
+    await this.processButton.click();
+  }
 
-  async selectUser(text){
+  async selectUser(text) {
     await this.userDropDownMenu.selectOption(text);
   }
 
