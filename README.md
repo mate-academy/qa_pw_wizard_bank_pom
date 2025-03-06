@@ -1,8 +1,9 @@
 # Playwright: Wizard Bank test project
 
-This project implements test coverage for the Wizard Bank functionality. 
+This project implements test coverage for the Wizard Bank functionality.
 
 ## Task description
+
 Please read the [instructions](TaskDescription.md) in order to complete this task.
 
 # Test coverage
@@ -21,23 +22,32 @@ Please read the [instructions](TaskDescription.md) in order to complete this tas
 # How to run the tests
 
 ## Install project
+
 ```bash
 npm i
 npx playwright install
 ```
- ## Run tests in UI mode
+
+## Run tests in UI mode
+
 ```bash
 npx playwright test --ui
 ```
- ## Run tests in debug mode
+
+## Run tests in debug mode
+
 ```bash
 npx playwright test --debug
 ```
- ## Run tests in headless mode
+
+## Run tests in headless mode
+
 ```bash
 npx playwright test
 ```
- ## Generate report for headless run
+
+## Generate report for headless run
+
 ```bash
 npx playwright show-report
 ```
