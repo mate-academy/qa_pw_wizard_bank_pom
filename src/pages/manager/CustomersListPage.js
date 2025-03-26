@@ -8,6 +8,7 @@ export class CustomersListPage {
     this.lastAddedCustomerLastName = this.lastAddedCustomerRow.getByRole('cell').nth(1);
     this.lastAddedCustomerPostCode = this.lastAddedCustomerRow.getByRole('cell').nth(2);
     this.lastAddedCustomerAccountNumber = this.lastAddedCustomerRow.getByRole('cell').nth(3);
+    this.lastAddedCustomerDeleteButton = this.lastAddedCustomerRow.getByRole('button', { name: 'Delete' });
   }
 
   async open() {
@@ -34,4 +35,16 @@ export class CustomersListPage {
     await expect(this.lastAddedCustomerAccountNumber).toContainText('');
   }
 
+  async assertLastAddedCustomerAccountNumberIsNotEmpty() {
+    await expect(this.lastAddedCustomerAccountNumber).not.toEqual('');
+  }
+  
+  async clickLastAddedCustomerDeleteButton() {
+    await this.lastAddedCustomerDeleteButton.click();
+  }
+
+  async customerRowIsNotVisible(firstName, lastName, postCode) {
+    this.customerRowLocator = this.page.getByRole('row', { name: `${firstName} ${lastName} ${postCode}` });
+    await expect(this.customerRowLocator).toBeHidden();
+  }
 }
