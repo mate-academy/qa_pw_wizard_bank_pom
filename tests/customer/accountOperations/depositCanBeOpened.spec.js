@@ -41,7 +41,7 @@ await accountPage.clickTransactionsButton();
 await transactionsPage.assertHeaderIsVisible();
 
 await transactionsPage.reload();
-
+await transactionsPage.waitforLoad();
 await transactionsPage.assertFirstRowAmountContainsText(amount);
 await transactionsPage.assertFirstRowTypeContainsText('Credit');
 });
