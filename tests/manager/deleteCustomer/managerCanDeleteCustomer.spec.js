@@ -38,7 +38,7 @@ Test:
 
   await customersListPage.open();
   await customersListPage.clickLastAddedCustomerDeleteButton();
-  await customersListPage.customerRowIsNotVisible(firstName, lastName, postCode);
+  await customersListPage.assertCustomerRowIsNotVisible(firstName, lastName, postCode);
   await customersListPage.open();
-  await customersListPage.customerRowIsNotVisible(firstName, lastName, postCode);
+  await customersListPage.assertCustomerRowIsNotVisible(firstName, lastName, postCode);
 });

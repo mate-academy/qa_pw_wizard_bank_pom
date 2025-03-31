@@ -9,6 +9,8 @@ export class CustomersListPage {
     this.lastAddedCustomerPostCode = this.lastAddedCustomerRow.getByRole('cell').nth(2);
     this.lastAddedCustomerAccountNumber = this.lastAddedCustomerRow.getByRole('cell').nth(3);
     this.lastAddedCustomerDeleteButton = this.lastAddedCustomerRow.getByRole('button', { name: 'Delete' });
+    this.searchField = page.getByPlaceholder('Search Customer');
+    this.secondTableRow = page.getByRole('row').nth(2);
   }
 
   async open() {
@@ -17,6 +19,14 @@ export class CustomersListPage {
 
   async waitForPageLoad() {
     await this.page.waitForURL('/angularJs-protractor/BankingProject/#/manager/list')
+  }
+
+  async clickLastAddedCustomerDeleteButton() {
+    await this.lastAddedCustomerDeleteButton.click();
+  }
+
+  async fillTheSearchField(searchName) {
+    await this.searchField.fill(searchName);
   }
 
   async assertLastAddedCustomerFirstName(firstName) {
@@ -38,13 +48,18 @@ export class CustomersListPage {
   async assertLastAddedCustomerAccountNumberIsNotEmpty() {
     await expect(this.lastAddedCustomerAccountNumber).not.toEqual('');
   }
-  
-  async clickLastAddedCustomerDeleteButton() {
-    await this.lastAddedCustomerDeleteButton.click();
-  }
 
-  async customerRowIsNotVisible(firstName, lastName, postCode) {
+  async assertCustomerRowIsNotVisible(firstName, lastName, postCode) {
     this.customerRowLocator = this.page.getByRole('row', { name: `${firstName} ${lastName} ${postCode}` });
     await expect(this.customerRowLocator).toBeHidden();
+  }
+
+  async assertCustomerRowIsVisible(firstName, lastName, postCode) {
+    this.customerRowLocator = this.page.getByRole('row', { name: `${firstName} ${lastName} ${postCode}` });
+    await expect(this.customerRowLocator).toBeVisible();
+  }
+
+  async assertNoOtherRowsArePresent() {
+    await expect(this.secondTableRow).toBeHidden();  
   }
 }
