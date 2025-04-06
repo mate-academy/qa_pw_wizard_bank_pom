@@ -17,6 +17,7 @@ Test:
 8. Assert Balance
 9. Click [Transactions]
 10. Assert Deposit transaction
+
 */
 
 const customerLoginPage = new CustomerLoginPage(page); 
@@ -35,6 +36,7 @@ await accountPage.fillAmountInputField(amount);
 await accountPage.clickDepositFormButton();
 
 await accountPage.assertDepositSuccessfulMessageIsVisible();
+await accountPage.assertDepositAdded(amount)
 
 await accountPage.clickTransactionsButton();
 
