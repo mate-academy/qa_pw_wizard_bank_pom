@@ -1,7 +1,45 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+const { test, expect } = require('@playwright/test');
+const { faker } = require('@faker-js/faker');
+const { BankManagerMainPage } = require('../../../src/pages/manager/BankManagerMainPage.js');
+const { AddCustomerPage } = require('../../../src/pages/manager/AddCustomerPage.js');
+const { CustomersListPage } = require('../../../src/pages/manager/CustomersListPage.js');
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Manager can add new customer', async ({ page }) => {
+  const managerMainPage = new BankManagerMainPage(page);
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
+  
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode('#####');
+
+  await test.step('1. Open add customer page', async () => {
+    await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+    await expect(page).toHaveURL(/addCust$/);
+  });
+
+  await test.step('2-5. Fill customer form and submit', async () => {
+    await addCustomerPage.fillCustomerForm(firstName, lastName, postCode);
+    await addCustomerPage.submitCustomerForm();
+    await page.waitForTimeout(1000); 
+  });
+
+  await test.step('6. Reload page to close popup', async () => {
+    await page.reload();
+  });
+
+  await test.step('7. Navigate to customers list', async () => {
+    await managerMainPage.clickCustomersTab();
+  });
+
+  await test.step('8-11. Verify customer in table', async () => {
+    const lastRow = customersListPage.customerRows.last();
+    await expect(lastRow.locator('td:nth-child(1)')).toHaveText(firstName);
+    await expect(lastRow.locator('td:nth-child(2)')).toHaveText(lastName);
+    await expect(lastRow.locator('td:nth-child(3)')).toHaveText(postCode);
+    await expect(lastRow.locator('td:nth-child(4)')).toBeEmpty();
+  });
+});
 /* 
 Test:
 1. Open add customer page by link https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust
@@ -25,4 +63,3 @@ usage:
 
  2. Do not rely on the customer row id for the steps 8-11. Use the ".last()" locator to get the last row.
 */
-});
