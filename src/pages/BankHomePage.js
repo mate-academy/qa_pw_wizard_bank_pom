@@ -1,16 +1,20 @@
 const { expect } = require('@playwright/test');
 
-export class BankHomePage {
+class BankHomePage {
   constructor(page) {
-    this.page = page; 
-    this.customerLoginButton = page.getByRole('button', { name: 'Customer Login' });
+    this.page = page;
+    this.customerLoginBtn = page.locator('button[ng-click="customer()"]');
+    this.managerLoginBtn = page.locator('button[ng-click="manager()"]');
+    this.homeBtn = page.locator('button.home');
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/login');
+    await this.page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
   }
 
-  async clickCustomerLoginButton() {
-    await this.customerLoginButton.click();
+  async navigateToManagerLogin() {
+    await this.managerLoginBtn.click();
   }
 }
+
+module.exports = { BankHomePage };  // Експорт для CommonJS
