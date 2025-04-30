@@ -1,4 +1,5 @@
 import { test } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
 
 test('Assert manager can Login ', async ({ page }) => {
 /* 
@@ -9,4 +10,19 @@ Test:
 4. Assert button [Open Account] is visible
 5. Assert button [Customers] is visible
 */
+const home = new BankHomePage(page);
+
+await home.open();
+
+await home.expectBtnCustomerLoginVisible();
+
+//await home.clickCustomerLoginButton();
+
+await home.clickBankManagerLoginButton();
+
+await home.expectAddCustomerBtnVisible();
+await home.expectCustomersBtnVisible();
+await home.expectOpenAccountBtnVisible();
+
+
 });

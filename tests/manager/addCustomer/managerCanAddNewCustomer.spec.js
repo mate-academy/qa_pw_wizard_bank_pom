@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
 /* 
@@ -25,4 +26,31 @@ usage:
 
  2. Do not rely on the customer row id for the steps 8-11. Use the ".last()" locator to get the last row.
 */
+const addCustomer = new AddCustomerPage(page);
+
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
+const postCode = faker.location.zipCode();
+
+await addCustomer.open();
+
+await addCustomer.fillField(addCustomer.firstNameField, firstName);
+await addCustomer.fillField(addCustomer.lastNameField, lastName);
+await addCustomer.fillField(addCustomer.postalCodeField, postCode);
+
+await addCustomer.clickBtn(addCustomer.btnAddCustomer);
+
+await addCustomer.reloadPage();
+
+await addCustomer.clickBtn(addCustomer.tabBtnCustomers);
+
+await addCustomer.expectText(addCustomer.myLocator, firstName); //getByRole('cell').nth(0)
+await addCustomer.expectText(addCustomer.myLocator, lastName);  //getByRole('cell').nth(1)
+await addCustomer.expectText(addCustomer.myLocator, postCode);  //getByRole('cell').nth(2)
+
+await addCustomer.expectText(addCustomer.myLocator, '');
+
+await addCustomer.expectText(addCustomer.myLocator.getByRole('cell').nth(3), '');
+await addCustomer.expectText(addCustomer.myLocator.getByRole('cell').nth(4), 'Delete');
+//await addCustomer.expectText(addCustomer.myLocator.getByRole('cell').nth(4), 'Create'); this check wrong input
 });
