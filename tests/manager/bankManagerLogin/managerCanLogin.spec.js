@@ -1,6 +1,17 @@
 import { test } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
 
 test('Assert manager can Login ', async ({ page }) => {
+    const loginPage = new BankHomePage(page);
+    const bankManagerMainPage = new BankManagerMainPage(page);
+
+    await loginPage.open();
+    await loginPage.clickBankManagerLoginButton();
+    await loginPage.waitForBankManagerMainPage();
+    await bankManagerMainPage.visibelAddCustomerButton();
+    await bankManagerMainPage.visibleOpenAccountButton();
+    await bankManagerMainPage.visibleCustomersButton();
 /* 
 Test:
 1. Open Wizard bank home page (https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login)
