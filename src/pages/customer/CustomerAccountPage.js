@@ -13,6 +13,7 @@ export class CustomerAccountPage {
     this.depositSuccessfulMessage = page.getByText('Deposit Successful');
     this.withdrawlFormButton = page.getByRole('form').getByRole('button', { name: 'Withdraw' });
     this.withdrawNoBalanceErrorMessage = page.getByText('Transaction Failed. You can not withdraw amount more than the balance.');
+    this.successfulWithdrawMessage = page.getByText('Transaction successful');
     this.logoutButton = page.getByRole('button', { name: 'Logout' });
   }
 
@@ -23,6 +24,10 @@ export class CustomerAccountPage {
   async assertAccountIdInDropDownHasValue(value) {
     const accountNumberInDrodown = await this.accountIdDropDown.inputValue();
     expect(accountNumberInDrodown).toBe(value);
+  }
+
+  async selectAccount(number) {
+    await this.accountIdDropDown.selectOption(number);
   }
 
   async assertAccountLineContainsText(text) {
@@ -63,5 +68,9 @@ export class CustomerAccountPage {
 
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
+  }
+
+  async assertSuccessfulWithdrawMessageIsVisible() {
+    await expect(this.successfulWithdrawMessage).toBeVisible();
   }
 }

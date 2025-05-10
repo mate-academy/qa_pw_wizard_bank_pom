@@ -19,8 +19,8 @@ export class TransactionsPage {
     await this.page.reload();
   }
 
-  async assertFirstRowAmountContainsText(amount) {
-    await expect(this.firstRowAmountCell).toContainText(amount);
+  async assertFirstRowAmountContainsText(sum) {
+    await expect(this.firstRowAmountCell).toContainText(sum);
   }
 
   async assertFirstRowTypeContainsText(type) {
