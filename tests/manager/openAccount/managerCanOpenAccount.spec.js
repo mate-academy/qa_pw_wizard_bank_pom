@@ -1,5 +1,14 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+
+test.describe('Assert manager can open account', () => {
+
+
+let customerName = {}; 
 
 test.beforeEach( async ({ page }) => {
   /* 
@@ -11,10 +20,24 @@ test.beforeEach( async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
+  const addCustomerPage = new AddCustomerPage(page); 
+  await addCustomerPage.open();
+  await addCustomerPage.waitForOpened();
+  
+  let firstName = faker.person.firstName();
+  let lastName = faker.person.lastName();
+  let postCode = faker.location.zipCode();
+  
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostCode(postCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await addCustomerPage.reload();
+  customerName = { firstName, lastName};
+  });
 
-});
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open dollar account', async ({ page }) => {
 /* 
 Test:
 1. Click [Open Account].
@@ -28,4 +51,59 @@ Test:
 Tips:
  1. Do not rely on the customer row id for the step 13. Use the ".last()" locator to get the last row.
 */
+const bankManagerMainPage = new BankManagerMainPage(page); 
+const openAccountPage = new OpenAccountPage(page); 
+const customersListPage= new CustomersListPage (page);
+
+await bankManagerMainPage.open();
+await bankManagerMainPage.clickOpenAccountButton();
+await openAccountPage.waitForOpened();
+await openAccountPage.selectCustomer(customerName);
+await openAccountPage.selectCurrency('Dollar');
+await openAccountPage.clickProcessButton();
+await openAccountPage.reload();
+await bankManagerMainPage.open();
+await bankManagerMainPage.clickCustomersButton();
+await customersListPage.waitForOpened();
+await customersListPage.assertLastRowAccountNumberContainsText('');
+
+});
+
+test('Assert manager can open pound account', async ({ page }) => {
+  const bankManagerMainPage = new BankManagerMainPage(page); 
+const openAccountPage = new OpenAccountPage(page); 
+const customersListPage= new CustomersListPage (page);
+
+await bankManagerMainPage.open();
+await bankManagerMainPage.clickOpenAccountButton();
+await openAccountPage.waitForOpened();
+await openAccountPage.selectCustomer(customerName);
+await openAccountPage.selectCurrency('Pound');
+await openAccountPage.clickProcessButton();
+await openAccountPage.reload();
+await bankManagerMainPage.open();
+await bankManagerMainPage.clickCustomersButton();
+await customersListPage.waitForOpened();
+await customersListPage.assertLastRowAccountNumberContainsText('');
+
+});
+
+test('Assert manager can open rupee account', async ({ page }) => {
+const bankManagerMainPage = new BankManagerMainPage(page); 
+const openAccountPage = new OpenAccountPage(page); 
+const customersListPage= new CustomersListPage (page);
+
+await bankManagerMainPage.open();
+await bankManagerMainPage.clickOpenAccountButton();
+await openAccountPage.waitForOpened();
+await openAccountPage.selectCustomer(customerName);
+await openAccountPage.selectCurrency('Rupee');
+await openAccountPage.clickProcessButton();
+await openAccountPage.reload();
+await bankManagerMainPage.open();
+await bankManagerMainPage.clickCustomersButton();
+await customersListPage.waitForOpened();
+await customersListPage.assertLastRowAccountNumberContainsText('');
+
+});
 });

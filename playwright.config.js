@@ -3,6 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
@@ -16,6 +18,8 @@ export default defineConfig({
     baseURL: 'https://www.globalsqa.com/',
     testIdAttribute: 'id'
   },
+      timeout: 60000,  // Global timeout for all tests ***
+     //  retries: 2,  // ***
 
   /* Configure projects for major browsers */
   projects: [
