@@ -1,5 +1,11 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+  
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
+const postCode = faker.location.zipCode(); 
 
 test.beforeEach( async ({ page }) => {
   /* 
@@ -11,6 +17,13 @@ test.beforeEach( async ({ page }) => {
   5. Click [Add Customer].
   */
 
+  const addCustomerPage = new AddCustomerPage(page); 
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstNameInputField(firstName);
+  await addCustomerPage.fillLastNameInputField(lastName);
+  await addCustomerPage.fillPostCodeInputField(postCode);
+  await addCustomerPage.clickAddCustomerButton();
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
@@ -22,6 +35,12 @@ Test:
 4. Reload the page.
 5. Assert customer row is not present in the table. 
 */
+const customersListPage = new CustomersListPage(page); 
+const fullName = firstName + ' ' + lastName + ' ' + postCode;
 
-
+await customersListPage.open();
+await customersListPage.clickDeleteButton(fullName);
+await customersListPage.assertCustomerRowIsNotPresentInTable(fullName);
+await customersListPage.reload();
+await customersListPage.assertCustomerRowIsNotPresentInTable(fullName);
 });
