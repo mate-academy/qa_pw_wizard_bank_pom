@@ -1,11 +1,34 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { BankHomePage } from '../../../src/pages//BankHomePage';
 
 let firstName;
 let lastName;
-let postalCode;
+let postCode;
+let fullName;
 
 test.beforeEach(async ({ page }) => {
+
+      const customerPage = new AddCustomerPage (page);
+      const managerMainPage = new BankManagerMainPage (page);
+      const listPage = new CustomersListPage (page);
+      const accountPage = new OpenAccountPage (page);
+      const homePage = new BankHomePage (page);
+
+    firstName = faker.person.firstName();
+    lastName = faker.person.lastName();
+    postCode = faker.location.zipCode();  
+    fullName = `${firstName} ${lastName} ${postCode}`;
+  
+    await customerPage.open();
+    await customerPage.firstNameFieldFill(firstName);
+    await customerPage.lastNameFieldFill(lastName);
+    await customerPage.postCodeFieldFill(postCode);
+    await customerPage.AddCustomerButtonClick();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -14,12 +37,21 @@ test.beforeEach(async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
+
 });
 
 test('Assert manager can search customer by Last Name', async ({ page }) => {
+      const customerPage = new AddCustomerPage (page);
+      const managerMainPage = new BankManagerMainPage (page);
+      const listPage = new CustomersListPage (page);
+      const accountPage = new OpenAccountPage (page);
+      const homePage = new BankHomePage (page);
+
+  await listPage.open();
+  await listPage.searchFieldFill(lastName);
+  
+  await listPage.userTableContain(fullName);
+  await listPage.userTableHasOnlyOneRow();
   /* 
   Test:
   1. Open Customers page

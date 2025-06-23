@@ -1,7 +1,32 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { BankHomePage } from '../../../src/pages//BankHomePage';
+
+let fullName;
 
 test.beforeEach(async ({ page }) => {
+    const customerPage = new AddCustomerPage (page);
+    const managerMainPage = new BankManagerMainPage (page);
+    const listPage = new CustomersListPage (page);
+    const accountPage = new OpenAccountPage (page);
+    const homePage = new BankHomePage (page);
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const postCode = faker.location.zipCode();
+
+    fullName = `${firstName} ${lastName} ${postCode}`;
+    
+  
+  await customerPage.open();
+  await customerPage.firstNameFieldFill(firstName);
+  await customerPage.lastNameFieldFill(lastName);
+  await customerPage.postCodeFieldFill(postCode);
+  await customerPage.AddCustomerButtonClick();
+  await page.reload();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -14,6 +39,33 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
+    const customerPage = new AddCustomerPage (page);
+    const managerMainPage = new BankManagerMainPage (page);
+    const listPage = new CustomersListPage (page);
+    const accountPage = new OpenAccountPage (page);
+    const homePage = new BankHomePage (page);
+
+
+  await  accountPage.open();
+  await accountPage.openAccountButtonClick();
+  await accountPage.customerSelecterZoneClick();
+  const lastOption = await page.locator('#userSelect option').last().getAttribute('value');
+  await accountPage.customerSelecterZone.selectOption(lastOption);
+  await accountPage.selectDollarClick();
+  await managerMainPage.processButtonClick()
+  await page.reload();
+  await managerMainPage.customersButtonClick();
+  
+  
+const accountNumberLast = page.getByRole('row', { name: fullName }).getByRole('cell').last();
+
+
+await expect(accountNumberLast).not.toBeEmpty();
+
+
+
+  
+
   /* 
   Test:
   1. Click [Open Account].
