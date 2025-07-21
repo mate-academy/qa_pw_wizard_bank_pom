@@ -1,5 +1,13 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
+const postCode = faker.location.zipCode();
 
 test.beforeEach(async ({ page }) => {
   /* 
@@ -11,6 +19,14 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
+  const addCustomerPage = new AddCustomerPage(page);
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostalCode(postCode);
+
+  await addCustomerPage.clickAddCustomerButton();
+  await addCustomerPage.reload();
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
@@ -28,4 +44,21 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
+
+  const addCustomerPage = new AddCustomerPage(page);
+  const openAccountPage = new OpenAccountPage(page);
+  const bankManagerMainPage = new BankManagerMainPage(page);
+  const customerListPage = new CustomersListPage(page);
+
+  await bankManagerMainPage.clickOpenAccountButton();
+  await openAccountPage.selectCustomer(firstName, lastName);
+  await openAccountPage.selectCurrency('Dollar');
+  await openAccountPage.clickProcessButton();
+  await openAccountPage.reload();
+  await bankManagerMainPage.clickCustomersButton();
+  await customerListPage.assertCustomerExist(firstName, lastName);
+  await customerListPage.assertAccountNumberIsNotEmpty();
+
+  await page.waitForTimeout(1000);
+
 });

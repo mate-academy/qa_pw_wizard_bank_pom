@@ -77,4 +77,8 @@ export class CustomerAccountPage {
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
   }
+
+  async clickAddCustomerButton() {
+    await this.page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
+  }
 }
