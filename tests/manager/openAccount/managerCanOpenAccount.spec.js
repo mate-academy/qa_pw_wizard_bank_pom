@@ -1,7 +1,24 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
+
+let randomFirstName;
+let randomLastName;
+let randomPostCode;
 
 test.beforeEach(async ({ page }) => {
+
+  randomFirstName = faker.person.firstName();
+  randomLastName = faker.person.lastName();
+  randomPostCode = faker.location.zipCode();
+
+  const addCustomerPage = new AddCustomerPage(page);
+  
+  await addCustomerPage.open();
+  await addCustomerPage.fillUserFirstNameField(randomFirstName);
+  await addCustomerPage.fillUserLastNameField(randomLastName);
+  await addCustomerPage.fillPostCodeField(randomPostCode);
+  await addCustomerPage.clickAddCustomerSubmitButton();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -13,7 +30,20 @@ test.beforeEach(async ({ page }) => {
   */
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open an account for a new customer', async ({ page }) => {
+
+  const addCustomerPage = new AddCustomerPage(page);
+  const fullName = `${randomFirstName} ${randomLastName}`
+
+  await addCustomerPage.clickOpenAccountTabButton();
+  await addCustomerPage.waitForLoadingAccountPage();
+  await addCustomerPage.selectCustomerNameDropDown(fullName);
+  await addCustomerPage.selectCurrencyDropDown('Dollar');
+  await addCustomerPage.clickProcessButton();
+  await addCustomerPage.clickCustomersTabButton();
+  await addCustomerPage.assertCustomerIsPresent(randomFirstName, randomLastName, randomPostCode);
+  await addCustomerPage.assertCustomerAccountNumberHasNumberValue(randomFirstName, randomLastName, randomPostCode);
+
   /* 
   Test:
   1. Click [Open Account].
