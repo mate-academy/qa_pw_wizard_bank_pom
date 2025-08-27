@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
 let firstName;
@@ -17,14 +17,31 @@ test.beforeEach(async ({ page }) => {
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
   postalCode = faker.location.zipCode();
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+
+  await page.getByPlaceholder('First Name').fill(firstName);
+  await page.getByPlaceholder('Last Name').fill(lastName);
+  await page.getByPlaceholder('Post Code').fill(postalCode);
+
+  await page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
+
+  await page.reload();
 });
 
 test('Assert manager can search customer by Postal Code', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Customers page.
-  2. Fill the postalCode to the search field
-  3. Assert customer row is present in the table. 
-  4. Assert no other rows is present in the table.
+  /*
+    Test:
+    1. Open Customers page.
+    2. Fill the postalCode to the search field
+    3. Assert customer row is present in the table.
+    4. Assert no other rows is present in the table.
   */
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/list');
+
+  const search = page.getByPlaceholder('Search Customer');
+  await search.fill(postalCode);
+
+  const rows = page.locator('table tbody tr');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText(postalCode);
 });

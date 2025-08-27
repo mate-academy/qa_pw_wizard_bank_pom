@@ -13,8 +13,11 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://www.globalsqa.com/',
-    testIdAttribute: 'id'
+    baseURL: 'https://www.globalsqa.com',
+    testIdAttribute: 'id',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */
@@ -28,4 +31,7 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'] },
     },
   ],
+   expect: {
+    timeout: 15000,
+  },
 });
