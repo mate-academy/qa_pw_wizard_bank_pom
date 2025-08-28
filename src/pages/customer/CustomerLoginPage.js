@@ -18,7 +18,7 @@ export class CustomerLoginPage {
   }
 
   async selectCustomer(customerName) {
-    await this.customerDropDown.selectOption(customerName);
+    await this.customerDropDown.selectOption({ label: customerName });
   }
 
   async clickLoginButton() {

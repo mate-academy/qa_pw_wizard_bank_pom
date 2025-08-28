@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
 test('Assert manager can choose currencies for account', async ({ page }) => {
@@ -13,4 +13,17 @@ test('Assert manager can choose currencies for account', async ({ page }) => {
   6. Select currency Rupee
   7. Assert the drop-dwon has value Rupee
   */
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/openAccount');
+
+  const currencySelect = page.locator('select#currency');
+  const selectedOption = currencySelect.locator('option:checked');
+
+  await currencySelect.selectOption({ label: 'Dollar' });
+  await expect(selectedOption).toHaveText('Dollar');
+
+  await currencySelect.selectOption({ label: 'Pound' });
+  await expect(selectedOption).toHaveText('Pound');
+
+  await currencySelect.selectOption({ label: 'Rupee' });
+  await expect(selectedOption).toHaveText('Rupee');
 });
