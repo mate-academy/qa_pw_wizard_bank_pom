@@ -12,9 +12,7 @@ export class CustomerLoginPage {
   }
 
   async waitForOpened() {
-    await this.page.waitForURL(
-      '/angularJs-protractor/BankingProject/#/customer',
-    );
+    await this.page.waitForURL('/angularJs-protractor/BankingProject/#/customer');
   }
 
   async selectCustomer(customerName) {
