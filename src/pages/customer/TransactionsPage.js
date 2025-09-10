@@ -15,6 +15,7 @@ export class TransactionsPage {
   async open() {
     await this.page.goto('/angularJs-protractor/BankingProject/#/listTx');
   }
+  
   async reload() {
     await this.page.reload();
   }
