@@ -19,7 +19,8 @@ test('Assert correct customer Logout', async ({ page }) => {
   const customerLoginPage = new CustomerLoginPage(page);
   const accountPage = new CustomerAccountPage(page);
 
-  await bankHomePage.open();
+  await bankHomePage.openLoginPage();
+  await bankHomePage.waitLoginPage()
   await bankHomePage.clickCustomerLoginButton();
   await customerLoginPage.selectCustomer('Neville Longbottom');
   await customerLoginPage.clickLoginButton();
