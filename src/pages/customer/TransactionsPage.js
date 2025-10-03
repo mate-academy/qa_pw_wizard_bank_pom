@@ -7,9 +7,9 @@ export class TransactionsPage {
     this.headerFirstCell = this.tableHeader.getByRole('cell').nth(0);
     this.headerSecondCell = this.tableHeader.getByRole('cell').nth(1);
     this.headerThirdCell = this.tableHeader.getByRole('cell').nth(2);
-    this.firstRow = page.getByRole('row').nth(1);
-    this.firstRowAmountCell = this.firstRow.getByRole('cell').nth(1);
-    this.firstRowTypeCell = this.firstRow.getByRole('cell').nth(2);
+    this.lastRow = page.locator('tbody tr').last()
+    this.lastRowAmountCell = this.lastRow.locator('td').nth(1)
+    this.lastRowTypeCell = this.lastRow.locator('td').nth(2)
   }
 
   async open() {
@@ -20,15 +20,15 @@ export class TransactionsPage {
   }
 
   async assertFirstRowAmountContainsText(amount) {
-    await expect(this.firstRowAmountCell).toContainText(amount);
+    await expect(this.lastRowAmountCell).toContainText(amount);
   }
 
   async assertFirstRowTypeContainsText(type) {
-    await expect(this.firstRowTypeCell).toContainText(type);
+    await expect(this.lastRowTypeCell).toContainText(type);
   }
 
   async assertFirstRowIsHidden() {
-    await expect(this.firstRow).toBeHidden();
+    await expect(this.lastRow).toBeHidden();
   }
 
   async assertHeaderIsVisible() {
@@ -46,4 +46,10 @@ export class TransactionsPage {
   async assertHeaderThirdCellContainsText(text) {
     await expect(this.headerThirdCell).toContainText(text);
   }
+
+  async assertLastRowAmountVisible() {
+    await this.page.waitForSelector('tbody tr')
+    await expect(this.lastRowAmountCell).toBeVisible();
+  }
+
 }
