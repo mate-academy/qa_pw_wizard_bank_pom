@@ -19,14 +19,7 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillLastNameField(lastName);
   await addCustomerPage.fillPostCodeField(postCode);
   await addCustomerPage.clickOnAddCustomerButton();
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page.
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
+
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
@@ -37,12 +30,5 @@ test('Assert manager can delete customer', async ({ page }) => {
   await customerListPage.assertCustomerRowIsHidden(firstName, lastName, postCode);
   await page.reload();
   await customerListPage.assertCustomerRowIsHidden(firstName, lastName, postCode);
-  /* 
-  Test:
-  1. Open Customers page.
-  2. Click [Delete] for the row with customer name.
-  3. Assert customer row is not present in the table. 
-  4. Reload the page.
-  5. Assert customer row is not present in the table. 
-  */
+
 });
