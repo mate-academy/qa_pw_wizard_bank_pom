@@ -17,7 +17,7 @@ export class CustomersListPage {
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list');
+    await this.page.goto('#/manager/list');
   }
 
   async deleteCustomer(firstName, lastName, postCode) {

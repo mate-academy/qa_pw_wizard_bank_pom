@@ -9,7 +9,7 @@ export class BankManagerMainPage {
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager');
+    await this.page.goto('#/manager');
   }
 
   async clickOnAddCustomerButton() {

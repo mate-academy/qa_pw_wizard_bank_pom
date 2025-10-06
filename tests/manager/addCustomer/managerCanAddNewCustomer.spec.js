@@ -1,4 +1,5 @@
 import { test } from '@playwright/test';
+
 import { faker } from '@faker-js/faker';
 import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';

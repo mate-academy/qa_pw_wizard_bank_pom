@@ -11,7 +11,7 @@ export class AddCustomerPage {
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/addCust');
+    await this.page.goto('#/manager/addCust');
   }
 
   async fillFirstNameField(firstName) {
@@ -27,6 +27,7 @@ export class AddCustomerPage {
   }
 
   async clickOnAddCustomerButton() {
+    this.page.once('dialog', async (dialog) => { await dialog.accept(); });
     await this.addCustomerButton.click();
   }
 
