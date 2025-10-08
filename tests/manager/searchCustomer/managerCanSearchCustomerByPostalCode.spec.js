@@ -1,30 +1,35 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
-let firstName;
-let lastName;
-let postalCode;
+test('Assert manager can search customer by first name', async ({ page }) => {
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page.
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
-});
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
+  await expect(page.getByRole('button', { name: 'Bank Manager Login' })).toBeVisible();
+  await page.getByRole('button', { name: 'Bank Manager Login' }).click();
 
-test('Assert manager can search customer by Postal Code', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Customers page.
-  2. Fill the postalCode to the search field
-  3. Assert customer row is present in the table. 
-  4. Assert no other rows is present in the table.
-  */
+  await page.getByRole('button', { name: 'Add Customer' }).click();
+  await page.locator('input[ng-model="fName"]').fill(firstName);
+  await page.locator('input[ng-model="lName"]').fill(lastName);
+  await page.locator('input[ng-model="postCd"]').fill(postCode);
+
+  page.once('dialog', dialog => {
+    expect(dialog.message()).toContain('Customer added successfully');
+    dialog.accept();
+  });
+  await page.locator('button[type="submit"]').click();
+
+  await page.getByRole('button', { name: 'Customers' }).click();
+  await expect(page.locator('table tbody')).toBeVisible();
+  await expect(page.locator('[placeholder="Search Customer"]')).toBeVisible();
+
+  await page.locator('[placeholder="Search Customer"]').fill(postCode);
+  await expect(page.locator('table tbody tr', { hasText: postCode })).toHaveCount(1);
+
+  const row = page.locator('table tbody tr', { hasText: postCode }).first();
+  await expect(row).toContainText(firstName);
+  await expect(row).toContainText(lastName);
+  await expect(row).toContainText(postCode);
 });

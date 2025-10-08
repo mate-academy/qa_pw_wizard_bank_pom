@@ -1,24 +1,35 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page.
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-});
-
 test('Assert manager can delete customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Customers page.
-  2. Click [Delete] for the row with customer name.
-  3. Assert customer row is not present in the table. 
-  4. Reload the page.
-  5. Assert customer row is not present in the table. 
-  */
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
+  await expect(page.getByRole('button', { name: 'Bank Manager Login' })).toBeVisible();
+  await page.getByRole('button', { name: 'Bank Manager Login' }).click();
+
+  await expect(page.getByRole('button', { name: 'Add Customer' })).toBeVisible();
+  await page.getByRole('button', { name: 'Add Customer' }).click();
+
+  await page.locator('input[ng-model="fName"]').fill(firstName);
+  await page.locator('input[ng-model="lName"]').fill(lastName);
+  await page.locator('input[ng-model="postCd"]').fill(postCode);
+
+  page.once('dialog', dialog => {
+    expect(dialog.message()).toContain('Customer added successfully');
+    dialog.accept();
+  });
+  await page.locator('button[type="submit"]').click();
+
+  await page.getByRole('button', { name: 'Customers' }).click();
+  await expect(page.locator('table tbody')).toBeVisible();
+
+  const customerRow = page.locator('table tbody tr', { hasText: `${firstName} ${lastName}` });
+  await expect(customerRow).toBeVisible();
+
+  await customerRow.getByRole('button', { name: 'Delete' }).click();
+
+  await expect(page.locator('table tbody tr', { hasText: `${firstName} ${lastName}` })).toHaveCount(0);
 });

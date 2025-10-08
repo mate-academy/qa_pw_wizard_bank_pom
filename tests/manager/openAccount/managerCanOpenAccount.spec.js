@@ -1,31 +1,49 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
-});
+test('Assert manager can open account', async ({ page }) => {
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
 
-test('Assert manager can add new customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Click [Open Account].
-  2. Select Customer name you just created.
-  3. Select currency.
-  4. Click [Process].
-  5. Reload the page (This is a simplified step to close the popup).
-  6. Click [Customers].
-  7. Assert the customer row has the account number not empty.
+  // Add customer
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
+  await expect(page.getByRole('button', { name: 'Bank Manager Login' })).toBeVisible();
+  await page.getByRole('button', { name: 'Bank Manager Login' }).click();
 
-  Tips:
-  1. Do not rely on the customer row id for the step 13. 
-    Use the ".last()" locator to get the last row.
-  */
+  await page.getByRole('button', { name: 'Add Customer' }).click();
+  await page.locator('input[ng-model="fName"]').fill(firstName);
+  await page.locator('input[ng-model="lName"]').fill(lastName);
+  await page.locator('input[ng-model="postCd"]').fill(postCode);
+
+  page.once('dialog', dialog => {
+    expect(dialog.message()).toContain('Customer added successfully');
+    dialog.accept();
+  });
+  await page.locator('button[type="submit"]').click();
+
+
+  await page.getByRole('button', { name: 'Open Account' }).click();
+  await expect(page.locator('#userSelect')).toBeVisible();
+  await expect(page.locator('#currency')).toBeVisible();
+
+  await page.selectOption('#userSelect', { label: `${firstName} ${lastName}` });
+  await page.selectOption('#currency', { label: 'Dollar' });
+
+  page.once('dialog', dialog => {
+    expect(dialog.message()).toContain('Account created successfully');
+    dialog.accept();
+  });
+  await page.locator('button[type="submit"]').click();
+
+
+  await page.getByRole('button', { name: 'Customers' }).click();
+  await expect(page.locator('table tbody')).toBeVisible();
+
+  const customerRow = page.locator('table tbody tr', { hasText: `${firstName} ${lastName}` });
+  await expect(customerRow).toBeVisible();
+
+  const accountCell = customerRow.locator('td').nth(3);
+
+  await expect(accountCell).toHaveText(/^\s*\d+\s*$/);
 });
