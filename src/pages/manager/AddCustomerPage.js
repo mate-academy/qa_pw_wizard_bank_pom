@@ -26,6 +26,9 @@ export class AddCustomerPage {
   }
 
   async clickSubmitAddCustomerButton() {
+    this.page.once('dialog', async (dialog) => {
+      await dialog.accept();
+    });
     await this.submitAddCustomerButton.click();
   }
 }

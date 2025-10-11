@@ -13,6 +13,9 @@ export class OpenAccountPage {
   }
 
   async clickProcessButton() {
+    this.page.once('dialog', async (dialog) => {
+      await dialog.accept();
+    });
     await this.processButton.click();
   }
 
