@@ -36,38 +36,34 @@ export class CustomersListPage {
   }
 
   async assertCustomerRowIsAbsent(firstName,lastName,postCode) {
-    const userRow = this.page.locator('tbody tr', {
-      has: this.page.locator('td', { hasText: firstName }),
-      has: this.page.locator('td', { hasText: lastName }),
-      has: this.page.locator('td', { hasText: postCode }),
-    });
+    const userRow = this.page.locator('tbody tr')
+      .filter({ has: this.page.locator('td', { hasText: firstName }) })
+      .filter({ has: this.page.locator('td', { hasText: lastName }) })
+      .filter({ has: this.page.locator('td', { hasText: postCode }) });
   await expect(userRow).toBeHidden();
   }
 
   async assertCustomerRowIsPresent(firstName,lastName,postCode) {
-    const userRow = this.page.locator('tbody tr', {
-      has: this.page.locator('td', { hasText: firstName }),
-      has: this.page.locator('td', { hasText: lastName }),
-      has: this.page.locator('td', { hasText: postCode }),
-    });
+    const userRow = this.page.locator('tbody tr')
+      .filter({ has: this.page.locator('td', { hasText: firstName }) })
+      .filter({ has: this.page.locator('td', { hasText: lastName }) })
+      .filter({ has: this.page.locator('td', { hasText: postCode }) });
   await expect(userRow).toBeVisible();
   }
 
   async assertCustomerRowIsUnique(firstName,lastName,postCode) {
-  const userRow = this.page.locator('tbody tr', {
-    has: this.page.locator('td', { hasText: firstName }),
-    has: this.page.locator('td', { hasText: lastName }),
-    has: this.page.locator('td', { hasText: postCode }),
-  });
+    const userRow = this.page.locator('tbody tr')
+      .filter({ has: this.page.locator('td', { hasText: firstName }) })
+      .filter({ has: this.page.locator('td', { hasText: lastName }) })
+      .filter({ has: this.page.locator('td', { hasText: postCode }) });
   await expect(userRow).toHaveCount(1);
 }
 
   async assertCustomerAccountNumberIsNotEmpty(firstName,lastName,postCode) {
-    const userRow = this.page.locator('tbody tr', {
-      has: this.page.locator('td', { hasText: firstName }),
-      has: this.page.locator('td', { hasText: lastName }),
-      has: this.page.locator('td', { hasText: postCode }),
-    });
+    const userRow = this.page.locator('tbody tr')
+      .filter({ has: this.page.locator('td', { hasText: firstName }) })
+      .filter({ has: this.page.locator('td', { hasText: lastName }) })
+      .filter({ has: this.page.locator('td', { hasText: postCode }) });
     await expect(userRow.getByRole('cell').nth(3)).not.toBeEmpty();
   }
 
@@ -76,11 +72,11 @@ export class CustomersListPage {
   }
 
   async deleteCustomer(firstName,lastName,postCode) {
-    const userRow = this.page.locator('tbody tr', {
-      has: this.page.locator('td', { hasText: firstName }),
-      has: this.page.locator('td', { hasText: lastName }),
-      has: this.page.locator('td', { hasText: postCode }),
-    });
-  await userRow.getByRole('button', { name: 'Delete' }).click();
+    const userRow = this.page.locator('tbody tr')
+      .filter({ has: this.page.locator('td', { hasText: firstName }) })
+      .filter({ has: this.page.locator('td', { hasText: lastName }) })
+      .filter({ has: this.page.locator('td', { hasText: postCode }) });
+    await userRow.getByRole('button', { name: 'Delete' }).click();
+    await expect(userRow).toBeHidden();
   }
 }

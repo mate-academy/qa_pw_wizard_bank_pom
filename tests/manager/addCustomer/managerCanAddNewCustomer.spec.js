@@ -18,7 +18,6 @@ test('Assert manager can add new customer', async ({ page }) => {
   await addCustomerPage.fillLastName(lastName);
   await addCustomerPage.fillPostCode(postCode);
   await addCustomerPage.clickSubmitAddCustomerButton();
-  await page.reload();
   await bankManagerMainPage.clickCustomersButton();
   await customersListPage.assertFirstNameIsOnLastRow(firstName);
   await customersListPage.assertLastNameIsOnLastRow(lastName);

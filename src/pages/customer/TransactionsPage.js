@@ -20,7 +20,9 @@ export class TransactionsPage {
   }
 
   async assertFirstRowAmountContainsText(amount) {
-    await expect(this.firstRowAmountCell).toContainText(amount);
+    const firstDataRow = this.page.locator('table tbody tr').first();
+    await expect(firstDataRow).toBeVisible();
+    await expect(firstDataRow.locator('td').nth(1)).toContainText(amount);
   }
 
   async assertFirstRowTypeContainsText(type) {
