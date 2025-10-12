@@ -1,6 +1,15 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
+let addCustomerPage;
+let openAccountPage;
+let customersListPage;
+let customerFirstName;
+let customerLastName;
+let postCode;
 test.beforeEach(async ({ page }) => {
   /* 
   Pre-conditons:
@@ -11,6 +20,18 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
+addCustomerPage = new AddCustomerPage(page);
+ 
+  await addCustomerPage.open();
+  customerFirstName = faker.person.firstName(); 
+  customerLastName = faker.person.lastName();
+  postCode = faker.location.zipCode();
+  await addCustomerPage.fillFirstNameField(customerFirstName);
+  await addCustomerPage.fillLastNameField(customerLastName);
+  await addCustomerPage.fillPostCodeField(postCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await page.reload();
+
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
@@ -28,4 +49,24 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
+openAccountPage = new OpenAccountPage(page);
+await addCustomerPage.clickOpenAccountsButton();
+await openAccountPage.waitForLoading();
+const customerName = `${customerFirstName} ${customerLastName}`;
+await openAccountPage.selectCustomerName(customerName);
+
+const currency = faker.helpers.arrayElement(['Dollar', 'Pound', 'Rupee']);
+await openAccountPage.selectCurrency(currency);
+
+//await openAccountPage.selectCurrency('Dollar');
+await openAccountPage.clickProcessButton();
+await page.reload();
+await openAccountPage.clickCustomersButton();
+customersListPage = new CustomersListPage(page);
+  await customersListPage.waitForLoading();
+  await customersListPage.checkCustomerLastName(customerLastName);
+
+
 });
+
+
