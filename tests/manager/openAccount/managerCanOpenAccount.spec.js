@@ -21,19 +21,19 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillLastName(lastName);
   await addCustomerPage.fillPostCode(postCode);
   await addCustomerPage.clickAddCustomerButton();
-  await page.reload();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open new account', async ({ page }) => {
   const managerHomePage = new ManagerHomePage(page);
   const openAccountPage = new OpenAccountPage(page);
   const customersPage = new CustomersPage(page);
 
+  await managerHomePage.open();
   await managerHomePage.clickOpenAccountButton();
   await openAccountPage.selectCustomer(`${firstName} ${lastName}`);
   await openAccountPage.selectCurrency('Dollar');
   await openAccountPage.clickProcessButton();
-  await page.reload();
-  await managerHomePage.clickCustomersButton();
+
+  await customersPage.open();
   await customersPage.assertLastRowAccountNumberIsNotEmpty();
 });
