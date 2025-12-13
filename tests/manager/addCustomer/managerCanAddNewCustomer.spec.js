@@ -27,7 +27,7 @@ test('Assert manager can add new customer', async ({ page }) => {
   const postCode = faker.location.zipCode();
 
   await addCustomer.open();
-  await addCustomer.fillFistName(firstName);
+  await addCustomer.fillFirstName(firstName);
   await addCustomer.fillLastName(lastName);
   await addCustomer.fillPostalCode(postCode);
   await addCustomer.clickAddCustomerButton();

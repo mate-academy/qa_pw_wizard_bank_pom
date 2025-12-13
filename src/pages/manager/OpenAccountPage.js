@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-export class OpenCustomerPage {
+export class OpenAccountPage {
   constructor(page) {
     this.page = page;
     this.dropdownCurrency = this.page.locator('#currency');

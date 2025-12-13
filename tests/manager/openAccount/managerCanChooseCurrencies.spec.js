@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-import { OpenCustomerPage } from '../../../src/pages/manager/OpenAccountPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
 test('Assert manager can choose currencies for account', async ({ page }) => {
   /* 
@@ -14,7 +14,7 @@ test('Assert manager can choose currencies for account', async ({ page }) => {
   6. Select currency Rupee
   7. Assert the drop-dwon has value Rupee
   */
-  const customerPage = new OpenCustomerPage(page);
+  const customerPage = new OpenAccountPage(page);
 
   await customerPage.open();
   await customerPage.selectCurrency();

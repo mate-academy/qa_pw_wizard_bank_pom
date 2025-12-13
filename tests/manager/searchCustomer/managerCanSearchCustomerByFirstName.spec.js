@@ -24,7 +24,7 @@ test.beforeEach(async ({ page }) => {
   lastName = faker.person.lastName();
   postalCode = faker.location.zipCode();
 
-  await customerPage.fillFistName(firstName);
+  await customerPage.fillFirstName(firstName);
   await customerPage.fillLastName(lastName);
   await customerPage.fillPostalCode(postalCode);
 

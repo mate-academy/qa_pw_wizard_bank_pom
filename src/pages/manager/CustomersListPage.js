@@ -1,4 +1,3 @@
-import { th } from '@faker-js/faker';
 import { expect } from '@playwright/test';
 
 export class CustomersListPage {
@@ -25,8 +24,8 @@ export class CustomersListPage {
     await this.page.getByRole('button', { name: 'Delete' }).last().click();
   }
 
-  async assertCustomerDeleted (custome) {
-    const row = page.locator('table tbody tr').filter({ hasText: customerName });
+  async assertCustomerDeleted (customerName) {
+    const row = this.page.locator('table tbody tr').filter({ hasText: customerName });
     await expect(row).toBeHidden();
   }
 

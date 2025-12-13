@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
-import { OpenCustomerPage } from '../../../src/pages/manager/OpenAccountPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 import { CustomersListPage} from '../../../src/pages/manager/CustomersListPage';
 
 let firstName;
@@ -26,7 +26,7 @@ test.beforeEach(async ({ page }) => {
   lastName = faker.person.lastName();
   postalCode = faker.location.zipCode();
 
-  await customerPage.fillFistName(firstName);
+  await customerPage.fillFirstName(firstName);
   await customerPage.fillLastName(lastName);
   await customerPage.fillPostalCode(postalCode);
 
@@ -45,7 +45,7 @@ test('Assert manager can add new customer', async ({ page }) => {
   6. Click [Customers].
   7. Assert the customer row has the account number not empty.
   */
-  const openAccount = new OpenCustomerPage(page);
+  const openAccount = new OpenAccountPage(page);
   const customerListPage = new CustomersListPage(page);
   await openAccount.open();
   

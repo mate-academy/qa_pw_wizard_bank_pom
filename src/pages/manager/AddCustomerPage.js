@@ -17,7 +17,7 @@ export class AddCustomerPage {
     await this.addCustomerButton.click();
   }
 
-  async fillFistName (value) {
+  async fillFirstName (value) {
     await this.page.getByRole('textbox', { name: 'First Name' }).fill(value);
   }
 
