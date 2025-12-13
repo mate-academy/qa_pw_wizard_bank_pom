@@ -1,3 +1,4 @@
+import { th } from '@faker-js/faker';
 import { expect } from '@playwright/test';
 
 export class BankHomePage {
@@ -6,6 +7,8 @@ export class BankHomePage {
     this.customerLoginButton = page.getByRole('button', {
       name: 'Customer Login',
     });
+    this.customerBankManagerLoginButton = page.getByRole('button', {
+       name: 'Bank Manager Login' });
   }
 
   async open() {
@@ -14,5 +17,9 @@ export class BankHomePage {
 
   async clickCustomerLoginButton() {
     await this.customerLoginButton.click();
+  }
+
+  async clickCustomerBankManagerLoginButton() {
+    await this.customerBankManagerLoginButton.click();
   }
 }
