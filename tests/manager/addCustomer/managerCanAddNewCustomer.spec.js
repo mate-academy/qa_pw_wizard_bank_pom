@@ -1,5 +1,7 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
   /* 
@@ -16,14 +18,23 @@ test('Assert manager can add new customer', async ({ page }) => {
   9. Assert the customer Last Name is present in the table in the last row. 
   10. Assert the customer Postal Code is present in the table in the last row. 
   11. Assert there is no account number for the new customer in the last row. 
-
-  Tips:
-  1. Use faker for test data generation, example usage:
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.LastName();
-    const postCode = faker.location.zipCode(); 
-
-  2. Do not rely on the customer row id for the steps 8-11. 
-    Use the ".last()" locator to get the last row.
   */
+
+  const addCustomer = new AddCustomerPage(page);
+  const customerList = new CustomersListPage(page);
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await addCustomer.open();
+  await addCustomer.fillFirstName(firstName);
+  await addCustomer.fillLastName(lastName);
+  await addCustomer.fillPostalCode(postCode);
+  await addCustomer.clickAddCustomerButton();
+  await addCustomer.reloadPage();
+  await addCustomer.goToCustomerPage();
+  await customerList.lastClientHaveFirstName(firstName);
+  await customerList.lastClientHaveLastName(lastName);
+  await customerList.lastClientHavePostCode(postCode);
+  await customerList.checkAccountNumberEmpty();
 });
