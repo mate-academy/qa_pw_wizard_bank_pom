@@ -34,7 +34,7 @@ test.beforeEach(async ({ page }) => {
   await customerPage.reloadPage();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open an account for new customer', async ({ page }) => {
   /* 
   Test:
   1. Click [Open Account].
