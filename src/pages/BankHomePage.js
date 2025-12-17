@@ -5,7 +5,11 @@ export class BankHomePage {
     this.page = page;
     this.customerLoginButton = page.getByRole('button', {
       name: 'Customer Login',
-    });
+      });
+    this.bankManagerLoginButton = page.getByRole('button', { name: 'Bank Manager Login' });
+    this.addCustomerButton = page.getByRole('button', { name: 'Add Customer' });
+    this.openAccountButton = page.getByRole('button', { name: 'Open Account' });
+    this.customersButton = page.getByRole('button', { name: 'Customers' });
   }
 
   async open() {
@@ -14,5 +18,21 @@ export class BankHomePage {
 
   async clickCustomerLoginButton() {
     await this.customerLoginButton.click();
+  }
+
+  async clickBankManagerLoginButton() {
+    await this.bankManagerLoginButton.click();
+  }
+
+  async expectAddCustomerButtonIsVisible() {
+    await expect(this.addCustomerButton).toBeVisible();
+  }
+
+  async expectOpenAccountButtonIsVisible() {
+    await expect(this.openAccountButton).toBeVisible();
+  }
+
+  async expectCustomersButtonIsVisible() {
+    await expect(this.customersButton).toBeVisible();
   }
 }

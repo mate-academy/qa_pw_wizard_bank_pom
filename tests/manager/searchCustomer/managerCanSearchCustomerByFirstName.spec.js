@@ -1,11 +1,23 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 let firstName;
 let lastName;
-let postalCode;
+let postCode;
 
 test.beforeEach(async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostCode(postCode);
+  await addCustomerPage.clickAddCustomerButton();
   /* 
   Pre-conditons:
   1. Open Add Customer page.
@@ -14,12 +26,17 @@ test.beforeEach(async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
+  
 });
 
 test('Assert manager can search customer by First Name', async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
+  await addCustomerPage.clickCustomersButton();
+  await customersListPage.fillFirstName(firstName);
+  await customersListPage.assertCustomerDataInRow(firstName, lastName, postCode);
+  await customersListPage.assertNumberOfRows(1);
+
   /* 
   Test:
   1. Open Customers page.
