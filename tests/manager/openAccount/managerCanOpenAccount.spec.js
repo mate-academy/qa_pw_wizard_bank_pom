@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
 test.beforeEach(async ({ page }) => {
@@ -11,9 +11,26 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
+
+  // 1. Open Add Customer page
+  await page.goto(
+    'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust'
+  );
+
+  // 2–4. Fill customer data
+  await page.locator('input[ng-model="fName"]').fill('Sam');
+  await page.locator('input[ng-model="lName"]').fill('Som');
+  await page.locator('input[ng-model="postCd"]').fill('1234567');
+
+  // 5. Click Add Customer
+  await page.locator('[type="submit"]').click();
+
+  // 6. Reload page to close alert
+  await page.reload();
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
+
   /* 
   Test:
   1. Click [Open Account].
@@ -28,4 +45,31 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
+
+      // 1. Click [Open Account]
+  await page.getByRole('button', { name: 'Open Account' }).click();
+
+  // 2. Select newly created customer
+  await page.locator('#userSelect').selectOption({
+    label: `${'Sam'} ${'Som'}`,
+  });
+
+  // 3. Select currency
+  await page.locator('#currency').selectOption('Dollar');
+
+  // 4. Click [Process]
+  await page.getByRole('button', { name: 'Process' }).click();
+
+  // 5. Reload page to close alert
+  await page.reload();
+
+  // 6. Click [Customers]
+  await page.getByRole('button', { name: 'Customers' }).click();
+
+  // 7. Assert account number is not empty in the last row
+  const lastRow = page.locator('table tbody tr').last();
+  const accountNumberCell = lastRow.locator('td').nth(3);
+
+  await expect(accountNumberCell).not.toHaveText('');
+
 });

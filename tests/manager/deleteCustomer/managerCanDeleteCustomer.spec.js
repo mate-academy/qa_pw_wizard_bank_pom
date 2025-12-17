@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 
 test.beforeEach(async ({ page }) => {
@@ -10,6 +10,20 @@ test.beforeEach(async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await page.goto(
+    'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust'
+  );
+
+  await page.getByPlaceholder('First Name').fill('Mona');
+  await page.getByPlaceholder('Last Name').fill(lastName);
+  await page.getByPlaceholder('Post Code').fill(postCode);
+
+  await page.locator('[type="submit"]').click();
+
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
@@ -21,4 +35,11 @@ test('Assert manager can delete customer', async ({ page }) => {
   4. Reload the page.
   5. Assert customer row is not present in the table. 
   */
+  await page.getByRole('button', { name: 'Customers' }).click();
+
+  const lastRow = page.locator('table tbody tr').last();
+  await lastRow.locator('button', { hasText: 'Delete' }).click();
+  await expect(page.getByText('Mona')).not.toBeVisible();
+  await page.reload();
+  await expect(lastRow.locator('Mona')).not.toBeVisible();
 });
