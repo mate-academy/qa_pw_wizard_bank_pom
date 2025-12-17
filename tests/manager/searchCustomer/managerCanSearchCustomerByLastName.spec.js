@@ -36,7 +36,7 @@ test('Assert manager can search customer by Last Name', async ({ page }) => {
 
   await customersListPage.open();
   await customersListPage.fillSearchField(lastName);
-  await customersListPage.secondRowContainsTheLastName(lastName);
+  await customersListPage.customerRowVisible(firstName, lastName, postalCode);
   await customersListPage.thirdRowIsNotVisible();
   /* 
   Test:

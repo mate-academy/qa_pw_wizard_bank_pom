@@ -29,20 +29,19 @@ test.beforeEach(async ({ page }) => {
   */
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open an account for a new customer', async ({ page }) => {
   const addCustomerPage = new AddCustomerPage(page);
   const customersListPage = new CustomersListPage(page);
   const openAccountPage = new OpenAccountPage(page);
 
   await addCustomerPage.clickOpenAccountButton();
   await openAccountPage.waitForLoading();
-  await openAccountPage.selectCustomerDropDown();
   await openAccountPage.selectNeededCustomer(fullName);
   await openAccountPage.selectCurrencyDropDown('Pound');
   await openAccountPage.clickProcessButton();
   await openAccountPage.reloadThePage();
   await openAccountPage.clickCustomersButton();
-  await customersListPage.checkAccountNumberCellNotEmpty();
+  await customersListPage.checkAccountNumberCellNotEmpty(fullName, postCode);
   /* 
   Test:
   1. Click [Open Account].

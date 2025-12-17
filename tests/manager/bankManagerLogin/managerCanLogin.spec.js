@@ -9,9 +9,9 @@ test('Assert manager can Login', async ({ page }) => {
   await bankHomePage.open();
   await bankHomePage.clickManagerLoginButton();
   await bankMangerMainPage.waitForLoading();
-  await bankMangerMainPage.addCustomerButtonVisable();
-  await bankMangerMainPage.openAccountButtonVisable();
-  await bankMangerMainPage.customersButtonVisable();
+  await bankMangerMainPage.addCustomerButtonVisible();
+  await bankMangerMainPage.openAccountButtonVisible();
+  await bankMangerMainPage.customersButtonVisible();
   /* 
   Test:
   1. Open Wizard bank home page 

@@ -35,7 +35,7 @@ test('Assert manager can search customer by Postal Code', async ({ page }) => {
   
   await customersListPage.open();
   await customersListPage.fillSearchField(postalCode);
-  await customersListPage.secondRowContainsPostalCode(postalCode);
+  await customersListPage.customerRowVisible(firstName, lastName, postalCode);
   await customersListPage.thirdRowIsNotVisible();
   /* 
   Test:

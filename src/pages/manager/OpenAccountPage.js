@@ -3,13 +3,10 @@ import { expect } from '@playwright/test';
 export class OpenAccountPage {
   constructor(page) {
     this.page = page;
-    this.currencyDropDown = page.getByRole('combobox').nth(1);
-    this.customerDropDown = page.getByRole('combobox').nth(0);
+    this.currencyDropDown = page.locator('select').nth(1);
+    this.customerDropDown = page.locator('select').nth(0);
     this.processButton = page.getByRole('button', { name: 'Process'});
     this.customersButton = page.getByRole('button', { name: 'Customers'});
-    this.comboxList = page.getByRole('MenuListPopup').nth(0);
-
-    this.neededCustomer = page.locator('select').nth(0);
   }
 
   async open() {
@@ -30,12 +27,8 @@ export class OpenAccountPage {
     await expect(this.currencyDropDown).toHaveValue(value);
   }
 
-  async selectCustomerDropDown() {
-    await this.customerDropDown.click();
-  }
-
   async selectNeededCustomer(fullName) {
-    await this.neededCustomer.selectOption({ label: fullName });
+    await this.customerDropDown.selectOption({ label: fullName });
   }
 
   async clickProcessButton() {
@@ -43,7 +36,8 @@ export class OpenAccountPage {
   }
 
   async reloadThePage() {
-    await this.page.reload();
+    //await this.page.reload();
+    await this.page.on('dialog', dialog => dialog.accept());
   }
 
   async clickCustomersButton() {

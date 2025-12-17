@@ -18,15 +18,15 @@ export class BankManagerMainPage {
     );
   }
 
-  async addCustomerButtonVisable() {
+  async addCustomerButtonVisible() {
     await expect(this.addCustomerButton).toBeVisible();
   }
 
-  async openAccountButtonVisable() {
+  async openAccountButtonVisible() {
     await expect(this.openAccountButton).toBeVisible();
   }
 
-  async customersButtonVisable() {
+  async customersButtonVisible() {
     await expect(this.customersButton).toBeVisible();
   }
 }
