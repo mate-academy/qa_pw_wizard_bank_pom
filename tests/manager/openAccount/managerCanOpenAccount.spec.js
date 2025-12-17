@@ -12,10 +12,6 @@ test.beforeEach(async ({ page }) => {
   6. Reload the page (This is a simplified step to close the popup).
   */
 
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
-  const postCode = faker.location.zipCode();
-
   // 1. Open Add Customer page
   await page.goto(
     'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust'

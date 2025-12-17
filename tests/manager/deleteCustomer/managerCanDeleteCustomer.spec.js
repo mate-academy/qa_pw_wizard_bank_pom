@@ -39,7 +39,7 @@ test('Assert manager can delete customer', async ({ page }) => {
 
   const lastRow = page.locator('table tbody tr').last();
   await lastRow.locator('button', { hasText: 'Delete' }).click();
-  await expect(lastRow.locator('td').nth(0)).not.toContainText('Mona');
+  await expect(page.getByText('Mona')).not.toBeVisible();
   await page.reload();
-  await expect(lastRow.locator('td').nth(0)).not.toContainText('Mona');
+  await expect(lastRow.locator('Mona')).not.toBeVisible();
 });
