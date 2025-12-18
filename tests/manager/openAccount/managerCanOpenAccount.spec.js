@@ -1,7 +1,21 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
 test.beforeEach(async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillCustomerFirstName(firstName);
+  await addCustomerPage.fillCustomerLastName(lastName);
+  await addCustomerPage.fillPostalCodeField(postCode);
+  await addCustomerPage.clickCustomerButton();
+  await addCustomerPage.reloadPage();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -14,6 +28,19 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
+  const openAccountPage = new OpenAccountPage(page);
+  await openAccountPage.open();
+  await openAccountPage.selectCreatedCustomer();
+  await openAccountPage.selectCurrencyDollar();
+  await openAccountPage.clickProcessButton();
+  await openAccountPage.reloadOpenAccountPage();
+  await openAccountPage.assertSelectedCustomerHaveNumberAccount();
+
+
+
+
+
+
   /* 
   Test:
   1. Click [Open Account].
