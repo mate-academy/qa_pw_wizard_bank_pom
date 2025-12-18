@@ -9,6 +9,7 @@ export class CustomersListPage {
     this.searchFunctionality = page.getByPlaceholder('Search Customer');
     this.wholeTable = page.locator('.marTop');
     this.tableRows = page.locator('table tbody tr');
+    this.lastRow = page.locator('.marTop').last();
     
 
   }
@@ -58,6 +59,12 @@ export class CustomersListPage {
 
  async searchCustomerByPostalCodeFunction(customerPostalCode){
   await this.searchFunctionality.fill(customerPostalCode);
+ }
+
+
+
+ async assertLastRow(customerInfo){
+  await expect(this.lastRow).toContainText(customerInfo);
  }
 
 

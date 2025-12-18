@@ -1,9 +1,11 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage'
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
   const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
   const postCode = faker.location.zipCode(); 
@@ -13,10 +15,16 @@ test('Assert manager can add new customer', async ({ page }) => {
   await addCustomerPage.fillPostalCodeField(postCode);
   await addCustomerPage.clickCustomerButton();
   await addCustomerPage.clickCustomerListButton();
-  await addCustomerPage.waitForCustomerListURL();
-  const rows = page.locator('First Name');
-  const lastRow = rows.last();
-  await expect(lastRow.locator('cell').first()).toHaveText(firstName);
+  await customersListPage.open();
+  await customersListPage.assertLastRow(firstName);
+  await customersListPage.assertLastRow(lastName);
+  await customersListPage.assertLastRow(postCode);
+
+  
+
+
+ 
+
 
 
 
