@@ -5,7 +5,7 @@ import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccount
 import { TransactionsPage } from '../../../src/pages/customer/TransactionsPage';
 
 test('Assert the deposit can be opened', async ({ page }) => {
-  /* 
+  /*
   Test:
   1. Open Wizard bank login for Customer
   2. Select "Harry Potter"
@@ -13,8 +13,8 @@ test('Assert the deposit can be opened', async ({ page }) => {
   4. Click [Deposit]
   5. Fill deposit value
   6. Click [Deposit]
-  7. Assert 'Deposit Successful' message is visible
-  8. Assert Balance
+  7. Assert "Deposit Successful" message is visible
+  8. Assert Balance is updated
   9. Click [Transactions]
   10. Assert Deposit transaction
   */
@@ -23,19 +23,29 @@ test('Assert the deposit can be opened', async ({ page }) => {
   const accountPage = new CustomerAccountPage(page);
   const transactionsPage = new TransactionsPage(page);
 
+  // Login
   await customerLoginPage.open();
   await customerLoginPage.selectCustomer('Harry Potter');
   await customerLoginPage.clickLoginButton();
+
+  // Deposit
   await accountPage.clickDepositButton();
 
-  const amount = faker.number.int(100).toString();
+  const amount = faker.number.int({ min: 10, max: 100 }).toString();
 
   await accountPage.fillAmountInputField(amount);
   await accountPage.clickDepositFormButton();
+
+  // Assertions on Account page
   await accountPage.assertDepositSuccessfulMessageIsVisible();
+  await accountPage.assertBalanceContainsAmount(amount);
+
+  // Transactions
   await accountPage.clickTransactionsButton();
+
   await transactionsPage.assertHeaderIsVisible();
   await transactionsPage.reload();
+
   await transactionsPage.assertFirstRowAmountContainsText(amount);
   await transactionsPage.assertFirstRowTypeContainsText('Credit');
 });

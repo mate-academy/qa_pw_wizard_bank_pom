@@ -3,9 +3,36 @@ import { expect } from '@playwright/test';
 export class BankManagerMainPage {
   constructor(page) {
     this.page = page;
+    this.addCustomerButton = page.getByRole('button', { name: 'Add Customer' });
+    this.openAccountButton = page.getByRole('button', { name: 'Open Account' });
+    this.customersButton = page.getByRole('button', { name: 'Customers' });
   }
 
   async open() {
     await this.page.goto('/angularJs-protractor/BankingProject/#/manager');
+  }
+
+  async assertAddCustomerButtonToBeVisible() {
+    await expect(this.addCustomerButton).toBeVisible();
+  }
+
+  async assertOpenAccountButtonToBeVisible() {
+    await expect(this.openAccountButton).toBeVisible();
+  }
+
+  async assertCustomersButtonToBeVisible() {
+    await expect(this.customersButton).toBeVisible();
+  }
+
+   async clickAddCustomerButton() {
+    await this.addCustomerButton.click();
+  }
+
+   async clickOpenAccountButton() {
+    await this.openAccountButton.click();
+  }
+
+  async clickCustomersButton() {
+    await this.customersButton.click();
   }
 }
