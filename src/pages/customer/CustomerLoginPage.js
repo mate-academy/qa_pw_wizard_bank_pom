@@ -33,4 +33,5 @@ export class CustomerLoginPage {
     const currentOptionText = this.customerDropDown;
     await expect(currentOptionText).toHaveValue(value);
   }
+
 }
