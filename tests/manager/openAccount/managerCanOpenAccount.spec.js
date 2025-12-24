@@ -2,13 +2,18 @@ import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
+let firstName;
+let lastName;
+let postCode;
 
 test.beforeEach(async ({ page }) => {
   const addCustomerPage = new AddCustomerPage(page);
   
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
-  const postCode = faker.location.zipCode();
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postCode = faker.location.zipCode();
 
   await addCustomerPage.open();
   await addCustomerPage.fillCustomerFirstName(firstName);
@@ -27,14 +32,17 @@ test.beforeEach(async ({ page }) => {
   */
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open new Account', async ({ page }) => {
   const openAccountPage = new OpenAccountPage(page);
+  const customersListPage = new CustomersListPage(page);
   await openAccountPage.open();
   await openAccountPage.selectCreatedCustomer();
   await openAccountPage.selectCurrencyDollar();
   await openAccountPage.clickProcessButton();
   await openAccountPage.reloadOpenAccountPage();
-  await openAccountPage.assertSelectedCustomerHaveNumberAccount();
+  await customersListPage.open();
+  await customersListPage.assertAccountNumberIsAvailable();
+  
 
 
 

@@ -3,15 +3,10 @@ import { expect } from '@playwright/test';
 export class CustomersListPage {
   constructor(page) {
     this.page = page;
-    this.customerFirstNameList = page.getByRole('cell', { name: 'First Name' });
-    this.deleteByNameButton = page.getByRole('row', { name: 'Ron Weasly E55555 1007 1008' }).getByRole('button');
-    this.deletedUserName = page.getByRole('cell', { name: 'Ron' });
     this.searchFunctionality = page.getByPlaceholder('Search Customer');
     this.wholeTable = page.locator('.marTop');
     this.tableRows = page.locator('table tbody tr');
     this.lastRow = page.locator('.marTop').last();
-    
-
   }
 
   async open() {
@@ -19,12 +14,16 @@ export class CustomersListPage {
   }
 
 
-  async clickDeleteButtonByUsername(){
-    await this.deleteByNameButton.click();
+  async clickDeleteButtonByUsername(firstName){
+    await this.page
+    .getByRole('row', { name: firstName })
+    .getByRole('button')
+    .click();
   }
 
- async assertDeletedUserIsNotVisible(){
-    await expect(this.deletedUserName).not.toBeVisible();
+ async assertDeletedUserIsNotVisible(firstName){
+    const userCell = this.page.getByRole('cell', { name: firstName });
+    await expect(userCell).not.toBeVisible();
  }
 
 
@@ -67,9 +66,23 @@ export class CustomersListPage {
   await expect(this.lastRow).toContainText(customerInfo);
  }
 
+ async assertAccountNumberIsEmpty(){
+  const accountNumberField = this.page.getByRole('cell').filter({ hasText: /^$/ })
+  await expect(accountNumberField).toBeEmpty();
+ }
 
 
+ async assertAccountNumberIsAvailable() {
+  // 1. Wybieramy ostatni wiersz (tam jest nasz nowy user)
+  const lastRow = this.tableRows.last(); 
   
+  // 2. W tym wierszu szukamy komórki z numerem konta (indeks 3, czyli 4. kolumna)
+  const accountCell = lastRow.locator('td').nth(3);
 
-
+  // 3. Sprawdzamy czy NIE jest pusta (bo właśnie założyliśmy konto)
+  await expect(accountCell).not.toBeEmpty();
+  
+  // Opcjonalnie: sprawdź czy to faktycznie numer (minimum 1 cyfra)
+  await expect(accountCell).toHaveText(/\d+/);
+}
 }

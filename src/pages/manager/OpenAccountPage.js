@@ -8,8 +8,6 @@ export class OpenAccountPage {
     this.customerSelectLocator = page.locator('#userSelect');
     this.processButton = page.getByRole('button', { name: 'Process' });
     this.customersButton = page.getByRole('button', { name: 'Customers' });
-    this.selectedCustomerAccountNumberField = page.getByRole('cell', { name: '1018' });
-
   }
 
   async open() {
@@ -77,17 +75,5 @@ export class OpenAccountPage {
   async clickCustomersButton(){
     await this.customersButton.click();
   }
-
-
-
-  async assertSelectedCustomerHaveNumberAccount(){
-    await expect(this.selectedCustomerAccountNumberField).not.toBe(null);
-  }
-
-
-
-
-  
-
 
 }
