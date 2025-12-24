@@ -8,7 +8,8 @@
     "playwright-core": "^1"
   },
   "devDependencies": {
-    "@playwright/test": "^1"
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.3"
   },
   "scripts": {},
   "keywords": [],
