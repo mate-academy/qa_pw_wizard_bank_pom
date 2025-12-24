@@ -66,23 +66,23 @@ export class CustomersListPage {
   await expect(this.lastRow).toContainText(customerInfo);
  }
 
- async assertAccountNumberIsEmpty(){
-  const accountNumberField = this.page.getByRole('cell').filter({ hasText: /^$/ })
-  await expect(accountNumberField).toBeEmpty();
+ async assertAccountNumberIsEmpty() {
+  const lastRow = this.tableRows.last();
+  
+  const accountCell = lastRow.locator('td').nth(3);
+
+  await expect(accountCell).toBeEmpty();
  }
 
 
  async assertAccountNumberIsAvailable() {
-  // 1. Wybieramy ostatni wiersz (tam jest nasz nowy user)
+
   const lastRow = this.tableRows.last(); 
   
-  // 2. W tym wierszu szukamy komórki z numerem konta (indeks 3, czyli 4. kolumna)
   const accountCell = lastRow.locator('td').nth(3);
 
-  // 3. Sprawdzamy czy NIE jest pusta (bo właśnie założyliśmy konto)
   await expect(accountCell).not.toBeEmpty();
   
-  // Opcjonalnie: sprawdź czy to faktycznie numer (minimum 1 cyfra)
   await expect(accountCell).toHaveText(/\d+/);
 }
 }
