@@ -5,6 +5,7 @@ export class BankHomePage {
     this.page = page;
     this.bankManagerLoginButton = page.getByRole('button', { 
       name: 'Bank Manager Login' });
+    this.customerLoginButton = page.getByRole('button', { name: 'Customer Login' });
   }
 
   async open() {
@@ -13,5 +14,9 @@ export class BankHomePage {
 
   async clickBankManagerLoginButton() {
     await this.bankManagerLoginButton.click();
+  }
+
+  async clickCustomerLoginButton() {
+    await this.customerLoginButton.click();
   }
 }
