@@ -35,6 +35,7 @@ export class CustomerAccountPage {
 
   async assertAccountIdInDropDownHasValue(value) {
     const accountNumberInDrodown = this.accountIdDropDown;
+    await expect(accountNumberInDrodown).toBeVisible();
     await expect(accountNumberInDrodown).toHaveValue(value);
   }
 

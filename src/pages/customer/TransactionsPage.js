@@ -20,10 +20,12 @@ export class TransactionsPage {
   }
 
   async assertFirstRowAmountContainsText(amount) {
+    await expect(this.firstRow).toBeVisible();
     await expect(this.firstRowAmountCell).toContainText(amount);
   }
 
   async assertFirstRowTypeContainsText(type) {
+    await expect(this.firstRow).toBeVisible();
     await expect(this.firstRowTypeCell).toContainText(type);
   }
 
