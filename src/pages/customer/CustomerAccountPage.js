@@ -26,6 +26,7 @@ export class CustomerAccountPage {
     this.withdrawNoBalanceErrorMessage = page.getByText(
       'Transaction Failed. You can not withdraw amount more than the balance.',
     );
+    this.withdrawSuccessfulMessage = page.getByText(/Transaction successful/i);
     this.logoutButton = page.getByRole('button', { name: 'Logout' });
   }
 
@@ -33,13 +34,17 @@ export class CustomerAccountPage {
     await this.page.goto('/angularJs-protractor/BankingProject/#/account');
   }
 
+  async selectAccount(accountId) {
+    await this.accountIdDropDown.selectOption(accountId);
+  }
+
   async assertAccountIdInDropDownHasValue(value) {
     const accountNumberInDrodown = this.accountIdDropDown;
     await expect(accountNumberInDrodown).toHaveValue(value);
   }
 
-  async assertAccountLineContainsText(text) {
-    await expect(this.accountDataLine).toContainText(text);
+  async assertAccountLineContainsText(text, options = {}) {
+    await expect(this.accountDataLine).toContainText(text, options);
   }
 
   async clickDepositButton() {
@@ -76,5 +81,9 @@ export class CustomerAccountPage {
 
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
+  }
+
+  async assertWithdrawSuccessfulMessageIsVisible() {
+    await expect(this.withdrawSuccessfulMessage).toBeVisible({ timeout: 10000 });
   }
 }
