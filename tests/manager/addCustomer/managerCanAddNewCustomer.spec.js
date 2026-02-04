@@ -20,13 +20,13 @@ test('Assert manager can add new customer', async ({ page }) => {
   await addCustomerPage.fillCustomerFirstName(firstName);
   await addCustomerPage.fillCustomerLastName(lastName);
   await addCustomerPage.fillCustomerPostalCode(postalCode);
+  await addCustomerPage.assertDialogWindowUserCreated();
   await addCustomerPage.clickAddCustomerButton();
-  await addCustomerPage.reload();
 
   // переходимо на сторінку всіх кастомерів і перевіряємо чи наш користувач відображається у списку всіх користувачів
   await customerListPage.open();
-  await customerListPage.checkFirstName(firstName);
-  await customerListPage.checkLastName(lastName);
-  await customerListPage.checkPostalCode(postalCode);
+  await customerListPage.checkFirstName(firstName, lastName, postalCode);
+  await customerListPage.checkLastName(firstName, lastName, postalCode);
+  await customerListPage.checkPostalCode(firstName, lastName, postalCode);
 
 });

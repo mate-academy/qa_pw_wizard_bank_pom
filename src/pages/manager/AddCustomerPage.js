@@ -7,7 +7,6 @@ export class AddCustomerPage {
     this.lastName = page.getByPlaceholder('Last Name');
     this.postCode = page.getByPlaceholder('Post Code');
     this.addCustomerButton = page.getByRole('button', {name: 'Add Customer'}).nth(1);
-    this.lastTableRow = page.getByRole('row').last();
   }
 
   // відкриття сторінки реєстрації кастомера
@@ -37,9 +36,13 @@ export class AddCustomerPage {
     await this.addCustomerButton.click();
   }
 
-  // перезавантаження сторінки
-  async reload() {
-    await this.page.reload();
+  // перевірка появи діалогового вікна
+  async assertDialogWindowUserCreated() {
+    this.page.once('dialog', async dialog => {
+      expect(dialog.message()).toContain('Customer added successfully with customer id');
+  
+      await dialog.accept();
+    })
   }
 
 }

@@ -15,9 +15,13 @@ export class OpenAccountPage {
     );
   }
 
-  // перезавантаження сторінки
-  async reload() {
-    await this.page.reload();
+  // перевірка появи діалогового вікна
+  async assertDialogWindowAccountOpen() {
+    this.page.once('dialog', async dialog => {
+      expect(dialog.message()).toContain('Account created successfully with account Number');
+  
+      await dialog.accept();
+    })
   }
 
   // перевіряємо наявність валюти у випадаючому списку

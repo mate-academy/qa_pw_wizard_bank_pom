@@ -3,8 +3,6 @@ import { expect } from '@playwright/test';
 export class CustomersListPage {
   constructor(page) {
     this.page = page;
-    this.customerDeleteButton = page.getByRole('button');
-    this.lastTableRow = page.getByRole('row').last();
     this.searchField = page.getByPlaceholder('Search Customer');
   }
 
@@ -19,24 +17,31 @@ export class CustomersListPage {
   }
 
   // перевірка імені користувача
-  async checkFirstName(firstName) {
-    const cellWithFirstName = this.lastTableRow.getByRole('cell').nth(0);
+  async checkFirstName(customerFirstName, customerLastName, customerPostalCode) {
+    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode}`});
+
+    const firstName = customerRow.getByRole('cell').nth(0);
   
-    await expect(cellWithFirstName).toContainText(firstName);
+    await expect(firstName).toContainText(customerFirstName);
   }
     
   // перевірка прізвища користувача
-  async checkLastName(lastName) {
-    const cellWithLastName = this.lastTableRow.getByRole('cell').nth(1);
+  async checkLastName(customerFirstName, customerLastName, customerPostalCode) {
+    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode}`});
+
+    const lastName = customerRow.getByRole('cell').nth(1);
   
-    await expect(cellWithLastName).toContainText(lastName);
+    await expect(lastName).toContainText(customerLastName);
   }
-  
+
+
   // перевірка поштового індексу
-  async checkPostalCode(postalCode) {
-    const cellWithPostalCode = this.lastTableRow.getByRole('cell').nth(2);
+  async checkPostalCode(customerFirstName, customerLastName, customerPostalCode) {
+    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode}`});
+
+    const postalCode = customerRow.getByRole('cell').nth(2);
   
-    await expect(cellWithPostalCode).toContainText(postalCode);
+    await expect(postalCode).toContainText(customerPostalCode);
   }
 
   // видалення користувача
@@ -54,9 +59,11 @@ export class CustomersListPage {
   }
 
   // перевіряємо, що Account Number користувача видимий
-  async assertCustomerAccountNumber(){
-    const accountNumber = this.lastTableRow.getByRole('cell').nth(3);
+  async assertCustomerAccountNumber(customerFirstName, customerLastName, customerPostalCode){
+    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode}`});
 
+    const accountNumber = customerRow.getByRole('cell').nth(3);
+  
     await expect(accountNumber).toBeVisible();
   }
 

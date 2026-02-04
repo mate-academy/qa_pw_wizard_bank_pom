@@ -8,6 +8,7 @@ import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage'
 // оголошуємо змінні для збереження імені та прізвища користувача
 let firstName;
 let lastName;
+let zipCode;
 
 test.beforeEach(async ({ page }) => {
   
@@ -17,18 +18,18 @@ test.beforeEach(async ({ page }) => {
   // генеруємо випадкові дані імені користувача
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
+  zipCode = faker.location.zipCode();
 
   // процес створення користувача
   await addCustomerPage.open();
   await addCustomerPage.fillCustomerFirstName(firstName);
   await addCustomerPage.fillCustomerLastName(lastName);
-  await addCustomerPage.fillCustomerPostalCode(faker.location.zipCode());
+  await addCustomerPage.fillCustomerPostalCode(zipCode);
+  await addCustomerPage.assertDialogWindowUserCreated();
   await addCustomerPage.clickAddCustomerButton();
-  await addCustomerPage.reload();
-
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open new account for a customer', async ({ page }) => {
   
   // створюємо екземпляри класів OpenAccountPage та CustomersListPage
   const openAccountPage = new OpenAccountPage(page);
@@ -40,13 +41,13 @@ test('Assert manager can add new customer', async ({ page }) => {
   // відкриваємо аккаунт
   await openAccountPage.selectCustomer(firstName, lastName);
   await openAccountPage.selectCurrency('Dollar');
+  await openAccountPage.assertDialogWindowAccountOpen();
   await openAccountPage.clickProcessButton();
-  await openAccountPage.reload();
 
   // переходимо на список всіх користувачів
   await customerListPage.open();
 
   // перевіряємо наявність Account Number у користувача
-  await customerListPage.assertCustomerAccountNumber();
+  await customerListPage.assertCustomerAccountNumber(firstName, lastName, zipCode);
 
 });
