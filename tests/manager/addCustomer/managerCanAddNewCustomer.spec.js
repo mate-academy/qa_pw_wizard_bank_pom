@@ -1,29 +1,28 @@
 import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
+import { faker, fi } from '@faker-js/faker';   
+let addCustomerPage;
+let customersListPage;
 
 test('Assert manager can add new customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Open add customer page by link
-    https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup)
-  7. Click [Customers] button.
-  8. Assert the customer First Name is present in the table in the last row. 
-  9. Assert the customer Last Name is present in the table in the last row. 
-  10. Assert the customer Postal Code is present in the table in the last row. 
-  11. Assert there is no account number for the new customer in the last row. 
-
-  Tips:
-  1. Use faker for test data generation, example usage:
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.LastName();
-    const postCode = faker.location.zipCode(); 
-
-  2. Do not rely on the customer row id for the steps 8-11. 
-    Use the ".last()" locator to get the last row.
-  */
+  addCustomerPage = new AddCustomerPage(page);
+  customersListPage = new CustomersListPage(page);
+  await addCustomerPage.open();
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postalCode = faker.location.zipCode();
+  await addCustomerPage.firstNameField.fill(firstName);
+  await addCustomerPage.lastNameField.fill(lastName);
+  await addCustomerPage.postalCodeField.fill(postalCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await addCustomerPage.reload();//This is a simplified step to close the popup
+  await addCustomerPage.clickCustomersButton();
+  await customersListPage.awaitPageLoad();
+  const lastCustomerRow = await customersListPage.getLastCustomerRow();
+  await customersListPage.assureRowHasFirstName(lastCustomerRow, firstName);
+  await customersListPage.assureRowHasLastName(lastCustomerRow, lastName);
+  await customersListPage.assureRowHasPostalCode(lastCustomerRow, postalCode);
+  await customersListPage.assureUserHasNoAccountNumber(lastCustomerRow);
 });
