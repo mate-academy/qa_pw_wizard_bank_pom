@@ -31,18 +31,19 @@ export class AddCustomerPage {
     await this.postCode.fill(postalCode);
   }
 
-  // клік на кнопку реєстрації користувача
-  async clickAddCustomerButton() {
-    await this.addCustomerButton.click();
-  }
-
   // перевірка появи діалогового вікна
-  async assertDialogWindowUserCreated() {
-    this.page.once('dialog', async dialog => {
-      expect(dialog.message()).toContain('Customer added successfully with customer id');
-  
-      await dialog.accept();
-    })
+  async clickAddCustomerButtonAndHandleDialog() {
+    const dialogPromise = this.page.waitForEvent('dialog');
+
+    const clickPromise = this.addCustomerButton.click();
+
+    const dialog = await dialogPromise;
+
+    expect(dialog.message()).toContain('Customer added successfully');
+
+    await dialog.accept();
+
+    await clickPromise;
   }
 
 }

@@ -25,8 +25,7 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillCustomerFirstName(firstName);
   await addCustomerPage.fillCustomerLastName(lastName);
   await addCustomerPage.fillCustomerPostalCode(zipCode);
-  await addCustomerPage.assertDialogWindowUserCreated();
-  await addCustomerPage.clickAddCustomerButton();
+  await addCustomerPage.clickAddCustomerButtonAndHandleDialog();
 });
 
 test('Assert manager can open new account for a customer', async ({ page }) => {
@@ -41,8 +40,7 @@ test('Assert manager can open new account for a customer', async ({ page }) => {
   // відкриваємо аккаунт
   await openAccountPage.selectCustomer(firstName, lastName);
   await openAccountPage.selectCurrency('Dollar');
-  await openAccountPage.assertDialogWindowAccountOpen();
-  await openAccountPage.clickProcessButton();
+  await openAccountPage.clickProcessButtonAndHandleDialog();
 
   // переходимо на список всіх користувачів
   await customerListPage.open();

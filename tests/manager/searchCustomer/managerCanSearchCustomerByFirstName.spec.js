@@ -24,8 +24,7 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillCustomerFirstName(firstName);
   await addCustomerPage.fillCustomerLastName(lastName);
   await addCustomerPage.fillCustomerPostalCode(postalCode);
-  await addCustomerPage.assertDialogWindowUserCreated();
-  await addCustomerPage.clickAddCustomerButton();
+  await addCustomerPage.clickAddCustomerButtonAndHandleDialog();
 
 });
 

@@ -17,50 +17,45 @@ export class CustomersListPage {
   }
 
   // перевірка імені користувача
-  async checkFirstName(customerFirstName, customerLastName, customerPostalCode) {
-    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode}`});
+  async createdUserIsVisible(customerFirstName, customerLastName, customerPostalCode) {
+    const customerRow = this.page
+    .getByRole('row')
+    .filter({hasText: customerFirstName })
+    .filter({hasText: customerLastName })
+    .filter({hasText: customerPostalCode });
 
-    const firstName = customerRow.getByRole('cell').nth(0);
-  
-    await expect(firstName).toContainText(customerFirstName);
-  }
-    
-  // перевірка прізвища користувача
-  async checkLastName(customerFirstName, customerLastName, customerPostalCode) {
-    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode}`});
-
-    const lastName = customerRow.getByRole('cell').nth(1);
-  
-    await expect(lastName).toContainText(customerLastName);
-  }
-
-
-  // перевірка поштового індексу
-  async checkPostalCode(customerFirstName, customerLastName, customerPostalCode) {
-    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode}`});
-
-    const postalCode = customerRow.getByRole('cell').nth(2);
-  
-    await expect(postalCode).toContainText(customerPostalCode);
+    await expect(customerRow).toBeVisible();
   }
 
   // видалення користувача
   async deleteCustomer(customerFirstName, customerLastName, customerPostalCode) {
-    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode} Delete`});
+    const customerRow = this.page
+    .getByRole('row')
+    .filter({hasText: customerFirstName })
+    .filter({hasText: customerLastName })
+    .filter({hasText: customerPostalCode });
     
     await customerRow.getByRole('button').click();
   }
   
   // переревіряємо, що видалений користувач не відображається в таблиці
   async assertCustomerNotPresent(customerFirstName, customerLastName, customerPostalCode) {
-    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode} Delete`});
+    const customerRow = this.page
+    .getByRole('row')
+    .filter({hasText: customerFirstName })
+    .filter({hasText: customerLastName })
+    .filter({hasText: customerPostalCode });
     
     await expect(customerRow).toBeHidden();
   }
 
   // перевіряємо, що Account Number користувача видимий
   async assertCustomerAccountNumber(customerFirstName, customerLastName, customerPostalCode){
-    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode}`});
+    const customerRow = this.page
+    .getByRole('row')
+    .filter({hasText: customerFirstName })
+    .filter({hasText: customerLastName })
+    .filter({hasText: customerPostalCode });
 
     const accountNumber = customerRow.getByRole('cell').nth(3);
   
@@ -74,7 +69,11 @@ export class CustomersListPage {
 
   // перевіряємо наявність рядка з користувачем в таблиці
   async assertCustomerPresentInTable(customerFirstName, customerLastName, customerPostalCode) {
-    const customerRow = this.page.getByRole('row', {name: `${customerFirstName} ${customerLastName} ${customerPostalCode} Delete`});
+    const customerRow = this.page
+    .getByRole('row')
+    .filter({hasText: customerFirstName })
+    .filter({hasText: customerLastName })
+    .filter({hasText: customerPostalCode });
     
     await expect(customerRow).toBeVisible();
   }
