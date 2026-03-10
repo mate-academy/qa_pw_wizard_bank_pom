@@ -29,6 +29,7 @@ test('Assert the deposit can be opened', async ({ page }) => {
   await accountPage.clickDepositButton();
 
   const amount = faker.number.int(100).toString();
+  const type = 'Credit';
 
   await accountPage.fillAmountInputField(amount);
   await accountPage.clickDepositFormButton();
@@ -37,5 +38,5 @@ test('Assert the deposit can be opened', async ({ page }) => {
   await transactionsPage.assertHeaderIsVisible();
   await transactionsPage.reload();
   await transactionsPage.assertFirstRowAmountContainsText(amount);
-  await transactionsPage.assertFirstRowTypeContainsText('Credit');
+  await transactionsPage.assertFirstRowTypeContainsText(type);
 });
