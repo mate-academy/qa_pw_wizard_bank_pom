@@ -1,9 +1,11 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 let firstName;
 let lastName;
-let postalCode;
+let postCode;
 
 test.beforeEach(async ({ page }) => {
   /* 
@@ -14,9 +16,15 @@ test.beforeEach(async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
+    const addCustomerPage = new AddCustomerPage(page);
+    await addCustomerPage.open();
+    firstName = faker.person.firstName();
+    lastName = faker.person.lastName();
+    postCode = faker.location.zipCode();
+    await addCustomerPage.fillTheFirstName(firstName);
+    await addCustomerPage.fillTheLastName(lastName);
+    await addCustomerPage.fillThePostCode(postCode);
+    await addCustomerPage.clickAddCustomerButton();
 });
 
 test('Assert manager can search customer by Postal Code', async ({ page }) => {
@@ -27,4 +35,9 @@ test('Assert manager can search customer by Postal Code', async ({ page }) => {
   3. Assert customer row is present in the table. 
   4. Assert no other rows is present in the table.
   */
+    const customerListPage = new CustomersListPage(page);
+    await customerListPage.open();
+    await customerListPage.fillSearchField(postCode);
+    await expect(page.locator('tbody').locator('tr').nth(0)).toContainText(firstName, lastName, postCode);
+    await expect(page.locator('tbody').locator('tr').nth(1)).toBeHidden();
 });

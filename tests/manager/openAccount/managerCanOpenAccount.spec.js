@@ -1,7 +1,20 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
 test.beforeEach(async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  await addCustomerPage.open();
+  
+  const postCode = faker.location.zipCode();
+  await addCustomerPage.fillTheFirstName(firstName);
+  await addCustomerPage.fillTheLastName(lastName);
+  await addCustomerPage.fillThePostCode(postCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await addCustomerPage.reload();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -14,6 +27,17 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
+  const openAccountPage = new OpenAccountPage(page);
+  await openAccountPage.clickOpenAccountButton();
+  let customer = firstName +' ' +lastName;
+  await openAccountPage.selectCustomer(customer);
+  const dollar = 'Dollar';
+  await openAccountPage.selectDollar(dollar);
+  await openAccountPage.clickProcessButton();
+  await openAccountPage.reload();
+  await openAccountPage.clickCustomersButton();
+  await openAccountPage.assertAccountNumberIsNotEmpty();
+
   /* 
   Test:
   1. Click [Open Account].
@@ -29,3 +53,4 @@ test('Assert manager can add new customer', async ({ page }) => {
     Use the ".last()" locator to get the last row.
   */
 });
+

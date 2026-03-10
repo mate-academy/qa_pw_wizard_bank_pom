@@ -1,7 +1,17 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 
 test.beforeEach(async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  await addCustomerPage.open();
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+  await addCustomerPage.fillTheFirstName(firstName);
+  await addCustomerPage.fillTheLastName(lastName);
+  await addCustomerPage.fillThePostCode(postCode);
+  await addCustomerPage.clickAddCustomerButton();
   /* 
   Pre-conditons:
   1. Open Add Customer page.
@@ -13,6 +23,16 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  
+  await addCustomerPage.openCustomersPage();
+  await page.waitForTimeout(1000);
+  let countBeforeDeletion = await addCustomerPage.countRows();
+  await addCustomerPage.clickDeleteLastCustomerButton();
+  let countAfterDeletion = await addCustomerPage.countRows();
+  await addCustomerPage.reload();
+  countAfterDeletion = await addCustomerPage.countRows();
+   expect(countAfterDeletion).toEqual(countBeforeDeletion-1);
   /* 
   Test:
   1. Open Customers page.
