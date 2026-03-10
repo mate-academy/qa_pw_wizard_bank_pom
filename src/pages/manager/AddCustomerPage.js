@@ -12,6 +12,7 @@ export class AddCustomerPage {
     this.accountNumberLocator = page.locator('tbody').locator('tr').last().locator('td').nth(3);
     this.deleteLastCustomerButton = page.locator('tbody').locator('tr').last().locator('td').nth(4).getByText('delete');
     this.lastCustomerRow = page.locator('tbody').locator('tr').nth(5);
+    this.rows = page.locator('tbody').locator('tr');
   }
   async open() {
     await this.page.goto(
@@ -60,5 +61,7 @@ export class AddCustomerPage {
     async assertlastCustomerRowIsHidden(){
       await expect(this.lastCustomerRow).toBeHidden();
     }
-    
+    async countRows(){
+      return await this.rows.count();
+    }
 }

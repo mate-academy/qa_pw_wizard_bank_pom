@@ -6,6 +6,9 @@ export class OpenAccountPage {
     this.dropdown = page.getByTestId('currency');
     this.openAccountButton = page.getByRole('button', { name: 'Open Account' });
     this.customerDropdown = page.getByTestId('userSelect');
+    this.accountNumberLocator = page.locator('tbody').locator('tr').last().locator('td').nth(3);
+    this.processButton = page.getByRole('button', { name: 'Process' });
+    this.customersButton = page.getByRole('button', { name: 'Customers' });
   }
 
   async open() {
@@ -34,7 +37,19 @@ async selectDollar(dollar) {
   async clickOpenAccountButton (){
       await this.openAccountButton.click();
     }
+    async clickProcessButton (){
+      await this.processButton.click();
+    }
+    async clickCustomersButton (){
+      await this.customersButton.click();
+    }
     async selectCustomer(customer) {
     await this.customerDropdown.selectOption(customer);
+  }
+  async assertAccountNumberIsNotEmpty(){
+    await expect(this.accountNumberLocator).not.toBeEmpty();
+  }
+  async reload(){
+    await this.page.reload();
   }
 }

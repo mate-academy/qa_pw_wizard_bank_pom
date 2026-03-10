@@ -24,11 +24,15 @@ test.beforeEach(async ({ page }) => {
 
 test('Assert manager can delete customer', async ({ page }) => {
   const addCustomerPage = new AddCustomerPage(page);
+  
   await addCustomerPage.openCustomersPage();
+  await page.waitForTimeout(1000);
+  let countBeforeDeletion = await addCustomerPage.countRows();
   await addCustomerPage.clickDeleteLastCustomerButton();
-  await addCustomerPage.assertlastCustomerRowIsHidden();
+  let countAfterDeletion = await addCustomerPage.countRows();
   await addCustomerPage.reload();
-  await addCustomerPage.assertlastCustomerRowIsHidden();
+  countAfterDeletion = await addCustomerPage.countRows();
+   expect(countAfterDeletion).toEqual(countBeforeDeletion-1);
   /* 
   Test:
   1. Open Customers page.

@@ -29,9 +29,14 @@ test.beforeEach(async ({ page }) => {
 test('Assert manager can add new customer', async ({ page }) => {
   const openAccountPage = new OpenAccountPage(page);
   await openAccountPage.clickOpenAccountButton();
-  await page.waitForTimeout(3000);
   let customer = firstName +' ' +lastName;
   await openAccountPage.selectCustomer(customer);
+  const dollar = 'Dollar';
+  await openAccountPage.selectDollar(dollar);
+  await openAccountPage.clickProcessButton();
+  await openAccountPage.reload();
+  await openAccountPage.clickCustomersButton();
+  await openAccountPage.assertAccountNumberIsNotEmpty();
 
   /* 
   Test:

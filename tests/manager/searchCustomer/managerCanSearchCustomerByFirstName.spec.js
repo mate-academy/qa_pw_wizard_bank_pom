@@ -31,7 +31,6 @@ test.beforeEach(async ({ page }) => {
 test('Assert manager can search customer by First Name', async ({ page }) => {
   const customerListPage = new CustomersListPage(page);
   await customerListPage.open();
-  await page.waitForTimeout(3000);
   await customerListPage.fillSearchField(firstName);
   await expect(page.locator('tbody').locator('tr').nth(0)).toContainText(firstName, lastName, postCode);
   await expect(page.locator('tbody').locator('tr').nth(1)).toBeHidden();
