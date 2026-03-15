@@ -1,7 +1,29 @@
-import { test } from '@playwright/test';
+import { test,expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillZipCode(postCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await page.reload();
+  await addCustomerPage.clickCustomersButton();
+
+  const lastRow = page.locator('tr').last();
+  await expect(lastRow).toContainText(firstName);   
+  await expect(lastRow).toContainText(lastName);    
+  await expect(lastRow).toContainText(postCode);
+
+  const accountNumber = lastRow.locator('td').nth(3);
+  await expect(accountNumber).toBeEmpty();
+
   /* 
   Test:
   1. Open add customer page by link
