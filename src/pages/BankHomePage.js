@@ -6,13 +6,26 @@ export class BankHomePage {
     this.customerLoginButton = page.getByRole('button', {
       name: 'Customer Login',
     });
+    this.managerLoginButton = page.getByRole('button', {
+      name: 'Bank Manager Login',
+    });
+
+    
+
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/login');
+    await this.page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
+  }
+
+  async waitForLoading() {
+    await this.page.waitForURL('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager');
   }
 
   async clickCustomerLoginButton() {
     await this.customerLoginButton.click();
+  }
+  async clickManagerLoginButton() {
+    await this.managerLoginButton.click();
   }
 }
