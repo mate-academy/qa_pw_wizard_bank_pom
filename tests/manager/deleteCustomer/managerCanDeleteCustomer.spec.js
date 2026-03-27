@@ -1,7 +1,23 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test.beforeEach(async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstNameField(firstName);
+  await addCustomerPage.fillLastNameField(lastName);
+  await addCustomerPage.fillPostCodeField(postCode);
+  await addCustomerPage.clickSubmitButton();
+  await page.reload();
+
   /* 
   Pre-conditons:
   1. Open Add Customer page.
@@ -13,6 +29,14 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
+  const customersListPage = new CustomersListPage(page);
+  await customersListPage.open();
+  await customersListPage.clickDeleteLastCustomerButton();
+
+ 
+
+  await customersListPage.assertRowLastCustomerToBeHidden();
+  
   /* 
   Test:
   1. Open Customers page.
