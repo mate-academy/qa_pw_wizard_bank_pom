@@ -1,5 +1,14 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage} from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
+
+let addCustomerPage;
+let customersListPage;
+let firstName;
+let lastName;
+let postCode;
 
 test.beforeEach(async ({ page }) => {
   /* 
@@ -10,6 +19,14 @@ test.beforeEach(async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
+addCustomerPage = new AddCustomerPage(page);
+customersListPage = new CustomersListPage(page);
+firstName = faker.person.firstName();
+lastName = faker.person.lastName();
+postCode = faker.location.zipCode();
+await addCustomerPage.open();
+await addCustomerPage.fillForm(firstName, lastName, postCode);
+await addCustomerPage.submitForm();
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
@@ -21,4 +38,10 @@ test('Assert manager can delete customer', async ({ page }) => {
   4. Reload the page.
   5. Assert customer row is not present in the table. 
   */
+ await customersListPage.open();
+ await customersListPage.deleteCustomer(firstName);
+ await expect(customersListPage.getCustomerRow(firstName)).not.toBeVisible();
+ await page.reload();
+
+
 });

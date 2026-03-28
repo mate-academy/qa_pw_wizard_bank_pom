@@ -1,4 +1,6 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
 
 test('Assert manager can Login', async ({ page }) => {
   /* 
@@ -10,4 +12,14 @@ test('Assert manager can Login', async ({ page }) => {
   4. Assert button [Open Account] is visible
   5. Assert button [Customers] is visible
   */
+ 
+  const loginPage = new BankHomePage(page);
+  const bankManagerPage = new BankManagerMainPage(page);
+
+  await loginPage.open();
+  await loginPage.bankLoginButton.click();
+  await expect(bankManagerPage.addCustomerButton).toBeVisible();
+  await expect(bankManagerPage.openAccountButton).toBeVisible();
+  await expect(bankManagerPage.customersButton).toBeVisible();
+
 });
