@@ -1,7 +1,11 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { expect, test } from "@playwright/test";
+import { faker } from "@faker-js/faker";
 
-test('Assert manager can add new customer', async ({ page }) => {
+import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
+import { CustomersListPage } from "../../../src/pages/manager/CustomersListPage";
+import { BankManagerMainPage } from "../../../src/pages/manager/BankManagerMainPage";
+
+test("Assert manager can add new customer", async ({ page }) => {
   /* 
   Test:
   1. Open add customer page by link
@@ -26,4 +30,23 @@ test('Assert manager can add new customer', async ({ page }) => {
   2. Do not rely on the customer row id for the steps 8-11. 
     Use the ".last()" locator to get the last row.
   */
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
+  const bankManagerMainPage = new BankManagerMainPage(page);
+
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.addCustomer(firstName, lastName, postCode);
+
+  await page.reload();
+
+  await bankManagerMainPage.customersButtonClick();
+
+  await expect(customersListPage.getLastRowCell(0)).toHaveText(firstName);
+  await expect(customersListPage.getLastRowCell(1)).toHaveText(lastName);
+  await expect(customersListPage.getLastRowCell(2)).toHaveText(postCode);
+  await expect(customersListPage.getLastRowCell(3)).toHaveText("");
 });
