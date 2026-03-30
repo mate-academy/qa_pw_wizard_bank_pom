@@ -3,7 +3,7 @@ import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 import { TransactionsPage } from '../../../src/pages/customer/TransactionsPage';
 
-test('Assert the empty transactions list has correct values', async ({
+test('Assert the empty transaction list has correct value', async ({
   page,
 }) => {
   /* 
