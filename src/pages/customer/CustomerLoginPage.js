@@ -3,7 +3,7 @@ import { expect } from '@playwright/test';
 export class CustomerLoginPage {
   constructor(page) {
     this.page = page;
-    this.customerDropDown = page.getByTestId('userSelect');
+    this.customersDropDown = page.getByTestId('userSelect');
     this.loginButton = page.getByRole('button', { name: 'Login' });
   }
 
@@ -18,7 +18,7 @@ export class CustomerLoginPage {
   }
 
   async selectCustomer(customerName) {
-    await this.customerDropDown.selectOption(customerName);
+    await this.customersDropDown.selectOption(customerName);
   }
 
   async clickLoginButton() {
@@ -26,11 +26,11 @@ export class CustomerLoginPage {
   }
 
   async assertSelectCustomerDropdownIsVisible() {
-    await expect(this.customerDropDown).toBeVisible();
+    await expect(this.customersDropDown).toBeVisible();
   }
 
   async assertSelectCustomerDropdownContainsValue(value) {
-    const currentOptionText = this.customerDropDown;
+    const currentOptionText = this.customersDropDown;
     await expect(currentOptionText).toHaveValue(value);
   }
 }

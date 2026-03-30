@@ -4,7 +4,7 @@ import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 import { TransactionsPage } from '../../../src/pages/customer/TransactionsPage';
 
-test('Assert the deposit can be opened', async ({ page }) => {
+test('Assertion that the deposit can be opened', async ({ page }) => {
   /* 
   Test:
   1. Open Wizard bank login for Customer

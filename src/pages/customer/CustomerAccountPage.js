@@ -23,7 +23,7 @@ export class CustomerAccountPage {
     this.withdrawlFormButton = page.getByRole('form').getByRole('button', {
       name: 'Withdraw',
     });
-    this.withdrawNoBalanceErrorMessage = page.getByText(
+    this.withdrawNoBalanceErrMessage = page.getByText(
       'Transaction Failed. You can not withdraw amount more than the balance.',
     );
     this.logoutButton = page.getByRole('button', { name: 'Logout' });
@@ -75,6 +75,6 @@ export class CustomerAccountPage {
   }
 
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
-    await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
+    await expect(this.withdrawNoBalanceErrMessage).toBeVisible();
   }
 }

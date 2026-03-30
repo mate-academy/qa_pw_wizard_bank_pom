@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 
-test('Assert the customer cannot withdraw money with empty balance', async ({
+test('Assert the customer cannot withdraw money with empty balance = 0', async ({
   page,
 }) => {
   /* 
