@@ -3,7 +3,7 @@ import { expect } from '@playwright/test';
 export class BankManagerMainPage {
   constructor(page) {
     this.page = page;
-    this.addCustomersButton = page.getByRole('button', { name: 'Add Customer' });
+    this.addCustomersButton = page.getByRole('button', { name: 'Add Customer' }).first();
     this.openAccountButton = page.getByRole('button', { name: 'Open Account' });
     this.customersButton = page.getByRole('button', { name: 'Customers' });
   }

@@ -41,7 +41,6 @@ test("Assert manager can delete customer", async ({ page }) => {
   5. Assert customer row is not present in the table. 
   */
 
-  addCustomerPage = new AddCustomerPage(page);
   customersListPage = new CustomersListPage(page);
   bankManagerMainPage = new BankManagerMainPage(page);
 

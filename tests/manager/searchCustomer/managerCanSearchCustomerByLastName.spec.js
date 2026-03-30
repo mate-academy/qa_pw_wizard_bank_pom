@@ -27,8 +27,6 @@ test.beforeEach(async ({ page }) => {
   lastName = faker.person.lastName();
   postalCode = faker.location.zipCode();
 
-  addCustomerPage = new AddCustomerPage(page);
-
   await addCustomerPage.open();
   await addCustomerPage.addCustomer(firstName, lastName, postalCode);
 
