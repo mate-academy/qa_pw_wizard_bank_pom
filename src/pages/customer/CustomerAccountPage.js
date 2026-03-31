@@ -77,4 +77,10 @@ export class CustomerAccountPage {
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
   }
+
+  async assertCorrectCustomerNameIsVisible(customerName) {
+    const welcomeMessage = this.page.getByText('Welcome');
+
+    await expect(welcomeMessage).toContainText(customerName);
+  }
 }
