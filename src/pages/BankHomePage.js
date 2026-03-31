@@ -15,4 +15,20 @@ export class BankHomePage {
   async clickCustomerLoginButton() {
     await this.customerLoginButton.click();
   }
+
+  async clickBankManagerLoginButton() {
+    await this.page.getByRole('button', { name: 'Bank Manager Login' }).click();
+  }
+
+  async addCustomerButtonIsVisible() {
+    await expect(this.page.getByRole('button', { name: 'Add Customer' })).toBeVisible();
+  }
+
+  async openAccountButtonIsVisible() {
+    await expect(this.page.getByRole('button', { name: 'Open Account' })).toBeVisible();
+  }
+
+  async customersButtonIsVisible() {
+    await expect(this.page.getByRole('button', { name: 'Customers' })).toBeVisible();
+  }
 }
