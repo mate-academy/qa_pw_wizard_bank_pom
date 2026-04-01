@@ -1,7 +1,35 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage'; 
+
 
 test('Assert manager can add new customer', async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersPage = new CustomersListPage(page);
+  const bankHomePage = new BankHomePage(page);
+  const managerPage = new BankManagerMainPage(page);
+
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await bankHomePage.open();
+  await bankHomePage.clickManagerLoginButton();
+  await managerPage.clickAddCustomerButton();
+  await addCustomerPage.fillFirstNameInput(firstName);
+  await addCustomerPage.fillLastNameInput(lastName);
+  await addCustomerPage.fillPostCodeInput(postCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await page.reload();
+  await managerPage.clickCustomersButton();
+  await customersPage.assertFirstTableRowContainsText(firstName)
+  await customersPage.assertFirstTableRowContainsText(lastName)
+  await customersPage.assertFirstTableRowContainsText(postCode);
+  await customersPage.assertLastRowAccountNumberIsEmpty();
+
   /* 
   Test:
   1. Open add customer page by link
@@ -26,4 +54,5 @@ test('Assert manager can add new customer', async ({ page }) => {
   2. Do not rely on the customer row id for the steps 8-11. 
     Use the ".last()" locator to get the last row.
   */
+
 });

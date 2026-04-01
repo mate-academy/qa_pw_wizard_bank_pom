@@ -1,13 +1,32 @@
 import { expect } from '@playwright/test';
 
 export class AddCustomerPage {
-  constructor(page) {
-    this.page = page;
-  }
+constructor(page) {
+  this.page = page;
+  this.firstNameInput = page.getByPlaceholder('First Name');
+  this.lastNameInput = page.getByPlaceholder('Last Name');
+  this.postCodeInput = page.getByPlaceholder('Post Code');
+  this.addCustomerButton = page.getByRole('form').getByRole('button', {
+    name: 'Add Customer',
+  });
+}
 
   async open() {
     await this.page.goto(
       '/angularJs-protractor/BankingProject/#/manager/addCust',
     );
   }
+  async fillFirstNameInput(firstName) {
+    await this.firstNameInput.fill(firstName);
+  }
+  async fillLastNameInput(lastName) {
+    await this.lastNameInput.fill(lastName);
+  }
+  async fillPostCodeInput(postCode) {
+    await this.postCodeInput.fill(postCode);
+  }
+  async clickAddCustomerButton() {
+    await this.addCustomerButton.click();
+  }
+  
 }
