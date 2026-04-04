@@ -3,13 +3,7 @@ import { expect } from '@playwright/test';
 export class TransactionsPage {
   constructor(page) {
     this.page = page;
-    this.tableHeader = page.getByRole('row').first();
-    this.headerFirstCell = this.tableHeader.getByRole('cell').nth(0);
-    this.headerSecondCell = this.tableHeader.getByRole('cell').nth(1);
-    this.headerThirdCell = this.tableHeader.getByRole('cell').nth(2);
-    this.firstRow = page.getByRole('row').nth(1);
-    this.firstRowAmountCell = this.firstRow.getByRole('cell').nth(1);
-    this.firstRowTypeCell = this.firstRow.getByRole('cell').nth(2);
+    this.tableRows = page.getByRole('row');
   }
 
   async open() {
@@ -19,31 +13,40 @@ export class TransactionsPage {
     await this.page.reload();
   }
 
+  async waitForPageToLoad() {
+    await this.page.waitForURL('**/listTx');
+  }
+
   async assertFirstRowAmountContainsText(amount) {
-    await expect(this.firstRowAmountCell).toContainText(amount);
+    const amountCell = this.tableRows.nth(1).getByRole('cell').nth(1);
+    await expect(amountCell).toContainText(amount);
   }
 
   async assertFirstRowTypeContainsText(type) {
-    await expect(this.firstRowTypeCell).toContainText(type);
+  const typeCell = this.tableRows.nth(1).getByRole('cell').nth(2);
+  await expect(typeCell).toContainText(type);
   }
 
   async assertFirstRowIsHidden() {
-    await expect(this.firstRow).toBeHidden();
+    await expect(this.tableRows.nth(1)).toBeHidden();
   }
 
   async assertHeaderIsVisible() {
-    await expect(this.tableHeader).toBeVisible();
+    await expect(this.tableRows.first()).toBeVisible();
   }
 
   async assertHeaderFirstCellContainsText(text) {
-    await expect(this.headerFirstCell).toContainText(text);
+    const headerCell = this.tableRows.first().getByRole('cell').nth(0);
+    await expect(headerCell).toContainText(text);
   }
 
   async assertHeaderSecondCellContainsText(text) {
-    await expect(this.headerSecondCell).toContainText(text);
+    const headerCell = this.tableRows.first().getByRole('cell').nth(1);
+    await expect(headerCell).toContainText(text);
   }
 
   async assertHeaderThirdCellContainsText(text) {
-    await expect(this.headerThirdCell).toContainText(text);
+    const headerCell = this.tableRows.first().getByRole('cell').nth(2);
+    await expect(headerCell).toContainText(text);
   }
 }
