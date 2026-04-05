@@ -1,31 +1,41 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test, expect } from "@playwright/test";
+import { faker } from "@faker-js/faker";
+import { OpenAccountPage } from "../../../src/pages/manager/OpenAccountPage";
+import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
+import { BankManagerMainPage } from "../../../src/pages/manager/BankManagerMainPage";
+
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
+const fullName = `${firstName} ${lastName}`;
+const postCode = faker.location.zipCode();
 
 test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
+  const addCustomerPage = new AddCustomerPage(page);
+
+  await addCustomerPage.open();
+  page.once("dialog", (dialog) => dialog.accept());
+  await addCustomerPage.fillForm(firstName, lastName, postCode);
+  await addCustomerPage.submit();
+  await page.reload();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Click [Open Account].
-  2. Select Customer name you just created.
-  3. Select currency.
-  4. Click [Process].
-  5. Reload the page (This is a simplified step to close the popup).
-  6. Click [Customers].
-  7. Assert the customer row has the account number not empty.
+test("Assert manager can open account", async ({ page }) => {
+  const openAccountPage = new OpenAccountPage(page);
+  const managerMainPage = new BankManagerMainPage(page);
 
-  Tips:
-  1. Do not rely on the customer row id for the step 13. 
-    Use the ".last()" locator to get the last row.
-  */
+  await openAccountPage.open();
+
+  await openAccountPage.selectCustomer(fullName);
+  await openAccountPage.selectCurrency("Dollar");
+
+  page.on("dialog", (dialog) => dialog.accept());
+  await openAccountPage.clickProcess();
+
+  await page.reload();
+  await managerMainPage.clickCustomersTab();
+
+  const lastRow = page.locator("table tbody tr").last();
+  const accountCell = lastRow.locator("td").nth(3);
+
+  await expect(accountCell).not.toBeEmpty();
 });

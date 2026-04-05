@@ -1,30 +1,29 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test, expect } from "@playwright/test";
+import { faker } from "@faker-js/faker";
+import { CustomersListPage } from "../../../src/pages/manager/CustomersListPage";
+import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
 
-let firstName;
-let lastName;
-let postalCode;
+let firstName = faker.person.firstName();
+let lastName = faker.person.lastName();
+let postalCode = faker.location.zipCode();
 
 test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page.
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
+  const addCustomerPage = new AddCustomerPage(page);
+  await addCustomerPage.open();
+  page.once("dialog", (d) => d.accept());
+  await addCustomerPage.fillForm(firstName, lastName, postalCode);
+  await addCustomerPage.submit();
 });
 
-test('Assert manager can search customer by First Name', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Customers page.
-  2. Fill the firstName to the search field
-  3. Assert customer row is present in the table. 
-  4. Assert no other rows is present in the table.
-  */
+test("Assert manager can search customer by First Name", async ({ page }) => {
+  const customersPage = new CustomersListPage(page);
+  await customersPage.open();
+
+  await customersPage.search(firstName);
+
+  await expect(customersPage.tableRows).toHaveCount(1);
+
+  await expect(customersPage.tableRows.first().locator("td").nth(0)).toHaveText(
+    firstName,
+  );
 });
