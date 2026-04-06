@@ -6,7 +6,7 @@ import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainP
 import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-let user; //
+let user; 
 
 test.beforeEach(async ({ page }) => {
   /* 
@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
   */
  const addCustomerPage = new AddCustomerPage(page);
  
-   user = { //
+   user = { 
    firstName: faker.person.firstName(),
    lastName: faker.person.lastName(),
    postCode: faker.location.zipCode()
