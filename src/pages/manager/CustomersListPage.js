@@ -39,4 +39,8 @@ export class CustomersListPage {
   async customerFirstNameIsNotPresent(firstName){
     await expect(this.page.getByRole('cell', { name: firstName })).toBeHidden();
   }
+
+  async newCustomerHasAccountNumber(firstName){
+    await expect(this.page.getByRole('row', { name: firstName }).getByRole('cell').nth(3)).toBeVisible();
+  }
 }

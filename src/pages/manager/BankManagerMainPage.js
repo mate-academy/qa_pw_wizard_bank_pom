@@ -6,6 +6,7 @@ export class BankManagerMainPage {
     this.addCustomerButton = page.getByRole('button', { name: 'Add Customer' });
     this.openAccountButton = page.getByRole('button', { name: 'Open Account' });
     this.customersButton = page.getByRole('button', { name: 'Customers' });
+    
   }
 
   async open() {
@@ -22,4 +23,15 @@ export class BankManagerMainPage {
   async customersButtonIsVisible(){
     await expect(this.customersButton).toBeVisible();
   }
+
+  async addCustomerButtonClick(){
+    await this.addCustomerButton.click();
+  }
+  async openAccountButtonClick(){
+    await this.openAccountButton.click();
+  }
+  async customersButtonClick(){
+    await this.customersButton.click();
+  }
+  
 }

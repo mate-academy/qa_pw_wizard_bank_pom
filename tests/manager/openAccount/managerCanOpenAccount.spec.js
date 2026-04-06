@@ -1,5 +1,12 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
+let user; //
 
 test.beforeEach(async ({ page }) => {
   /* 
@@ -11,6 +18,21 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
+ const addCustomerPage = new AddCustomerPage(page);
+ 
+   user = { //
+   firstName: faker.person.firstName(),
+   lastName: faker.person.lastName(),
+   postCode: faker.location.zipCode()
+  }
+ 
+  await addCustomerPage.open();
+  await addCustomerPage.firstNameHolderFill(user.firstName);
+  await addCustomerPage.lastNameHolderFill(user.lastName);
+  await addCustomerPage.postCodeHolderFill(user.postCode);
+  await addCustomerPage.createCastomerButtonClick();
+  await addCustomerPage.reload();
+
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
@@ -28,4 +50,21 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
+ const bankHomePage = new BankHomePage(page);
+ const bankManagerMainPage = new BankManagerMainPage(page)
+ const openAccountPage = new OpenAccountPage(page);
+
+ await bankHomePage.open();
+ await bankHomePage.clickBankManagerLoginButton();
+ await bankManagerMainPage.openAccountButtonClick();
+
+ await openAccountPage.selectTargetUser(user.firstName, user.lastName);
+ await openAccountPage.selectCurrencyValue('Dollar')
+ await openAccountPage.processButtonClick();
+ await openAccountPage.reload();
+ 
+ await bankManagerMainPage.customersButtonClick();
+
+ const customersListPage = new CustomersListPage(page);
+ await customersListPage.newCustomerHasAccountNumber(user.firstName);
 });
