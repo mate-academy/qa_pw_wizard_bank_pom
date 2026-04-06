@@ -1,36 +1,42 @@
-import { expect } from '@playwright/test';
+import { expect } from "@playwright/test";
 
 export class CustomerAccountPage {
   constructor(page) {
     this.page = page;
-    this.accountIdDropDown = page.getByTestId('accountSelect');
+    this.accountIdDropDown = page.getByTestId("accountSelect");
     this.accountDataLine = page
-      .locator('div')
+      .locator("div")
       .filter({
-        hasText: 'Account Number',
+        hasText: "Account Number",
       })
       .first();
-    this.depositButton = page.getByRole('button', { name: 'Deposit' });
-    this.transactionsButton = page.getByRole('button', {
-      name: 'Transactions',
+    this.depositButton = page.getByRole("button", { name: "Deposit" });
+    this.transactionsButton = page.getByRole("button", {
+      name: "Transactions",
     });
-    this.withdrawlButton = page.getByRole('button', { name: 'Withdraw' });
-    this.amountInputField = page.getByPlaceholder('amount');
-    this.depositFormButton = page.getByRole('form').getByRole('button', {
-      name: 'Deposit',
+    this.withdrawlButton = page.getByRole("button", { name: "Withdraw" });
+    this.depositAmountInputField = page
+      .locator('[ng-submit="deposit()"]')
+      .getByPlaceholder("amount");
+    this.withdrawlAmountInputField = page
+      .locator('[ng-submit="withdrawl()"]')
+      .getByPlaceholder("amount");
+    this.depositFormButton = page.getByRole("form").getByRole("button", {
+      name: "Deposit",
     });
-    this.depositSuccessfulMessage = page.getByText('Deposit Successful');
-    this.withdrawlFormButton = page.getByRole('form').getByRole('button', {
-      name: 'Withdraw',
+    this.depositSuccessfulMessage = page.getByText("Deposit Successful");
+    this.withdrawlFormButton = page.getByRole("form").getByRole("button", {
+      name: "Withdraw",
     });
     this.withdrawNoBalanceErrorMessage = page.getByText(
-      'Transaction Failed. You can not withdraw amount more than the balance.',
+      "Transaction Failed. You can not withdraw amount more than the balance.",
     );
-    this.logoutButton = page.getByRole('button', { name: 'Logout' });
+    this.withdrawSuccessMessage = page.getByText("Transaction successful");
+    this.logoutButton = page.getByRole("button", { name: "Logout" });
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/account');
+    await this.page.goto("/angularJs-protractor/BankingProject/#/account");
   }
 
   async assertAccountIdInDropDownHasValue(value) {
@@ -54,8 +60,12 @@ export class CustomerAccountPage {
     await this.withdrawlButton.click();
   }
 
-  async fillAmountInputField(amount) {
-    await this.amountInputField.fill(amount);
+  async fillDepositAmountInputField(amount) {
+    await this.depositAmountInputField.fill(amount);
+  }
+
+  async fillWithdrawlAmountInputField(amount) {
+    await this.withdrawlAmountInputField.fill(amount);
   }
 
   async clickDepositFormButton() {
@@ -76,5 +86,9 @@ export class CustomerAccountPage {
 
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
+  }
+
+  async assertWithdrawSuccessMessageIsVisible() {
+    await expect(this.withdrawSuccessMessage).toBeVisible();
   }
 }
