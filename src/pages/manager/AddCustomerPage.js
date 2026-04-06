@@ -3,6 +3,10 @@ import { expect } from '@playwright/test';
 export class AddCustomerPage {
   constructor(page) {
     this.page = page;
+    this.firstNameField = page.getByPlaceholder('First Name');
+    this.lastNameField = page.getByPlaceholder('Last Name');
+    this.postCodeField = page.getByPlaceholder('Post Code');
+
   }
 
   async open() {
@@ -14,23 +18,23 @@ export class AddCustomerPage {
     await this.page.reload();
   }
 
-  async firstNameHolderFill(firstName){
-    await this.page.getByPlaceholder('First Name').fill(firstName);
+  async fillFirstNameField(firstName){
+    await this.firstNameField.fill(firstName);
   }
 
-  async lastNameHolderFill(lastName){
-    await this.page.getByPlaceholder('Last Name').fill(lastName);
+  async fillLastNameField(lastName){
+    await this.lastNameField.fill(lastName);
   }
 
-  async postCodeHolderFill(postCode){
-    await this.page.getByPlaceholder('Post Code').fill(postCode);
+  async fillPostCodeField(postCode){
+    await this.postCodeField.fill(postCode);
   }
 
-  async createCastomerButtonClick(){
+  async createCustomer(){
     await this.page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
   }
 
-  async customerButtonClick(){
+  async clickCustomerButton(){
     await this.page.getByRole('button', { name: 'Customers' }).click();
   }
 }

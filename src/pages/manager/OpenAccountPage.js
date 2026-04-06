@@ -25,11 +25,11 @@ export class OpenAccountPage {
     await expect(this.currencySelector).toContainText(value);
   }
 
-  async selectTargetUser(firstName, lastName){
+  async selectCustomer(firstName, lastName){
     await this.customerSelector.selectOption(`${firstName} ${lastName}` );
   }
 
-  async processButtonClick(){
+  async clickProcessButton(){
     await this.processButton.click();
   }
 }

@@ -23,10 +23,10 @@ test.beforeEach(async ({ page }) => {
  }
 
  await addCustomerPage.open();
- await addCustomerPage.firstNameHolderFill(user.firstName);
- await addCustomerPage.lastNameHolderFill(user.lastName);
- await addCustomerPage.postCodeHolderFill(user.postCode);
- await addCustomerPage.createCastomerButtonClick();
+ await addCustomerPage.fillFirstNameField(user.firstName);
+ await addCustomerPage.fillLastNameField(user.lastName);
+ await addCustomerPage.fillPostCodeField(user.postCode);
+ await addCustomerPage.createCustomer();
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
@@ -41,9 +41,9 @@ test('Assert manager can delete customer', async ({ page }) => {
  const addCustomerPage = new AddCustomerPage(page);
  const castomersListPage = new CustomersListPage(page);
 
- await addCustomerPage.customerButtonClick();
+ await addCustomerPage.clickCustomerButton();
  await castomersListPage.deleteCustomer(user.firstName);
- await castomersListPage.customerFirstNameIsNotPresent(user.firstName);
+ await castomersListPage.assertCustomerIsNotPresent(user.firstName);
  await castomersListPage.reload();
- await castomersListPage.customerFirstNameIsNotPresent(user.firstName)
+ await castomersListPage.assertCustomerIsNotPresent(user.firstName)
 });

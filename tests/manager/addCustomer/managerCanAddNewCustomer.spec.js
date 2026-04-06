@@ -38,22 +38,18 @@ test('Assert manager can add new customer', async ({ page }) => {
  }
  
  await addCustomerPage.open();
- await addCustomerPage.firstNameHolderFill(user.firstName);
- await addCustomerPage.lastNameHolderFill(user.lastName);
- await addCustomerPage.postCodeHolderFill(user.postCode);
+ await addCustomerPage.fillFirstNameField(user.firstName);
+ await addCustomerPage.fillLastNameField(user.lastName);
+ await addCustomerPage.fillPostCodeField(user.postCode);
 
  
- await addCustomerPage.createCastomerButtonClick();
+ await addCustomerPage.createCustomer();
  await addCustomerPage.reload();
- await addCustomerPage.customerButtonClick();
+ await addCustomerPage.clickCustomerButton();
 
-//  await castomersListPage.customerFirstNameIsPresent(user.firstName);
-//  await castomersListPage.customerLastNameIsPresent(user.lastName);
-//  await castomersListPage.customerPostCodeIsPresent(user.postCode);
-//  await castomersListPage.newCustomerNoAccountNumber(user.firstName);
- await castomersListPage.cellIsPresent(user.firstName);
- await castomersListPage.cellIsPresent(user.lastName);
- await castomersListPage.cellIsPresent(user.postCode);
- await castomersListPage.newCustomerNoAccountNumber(user.firstName);
+ await castomersListPage.assertCellIsVisible(user.firstName);
+ await castomersListPage.assertCellIsVisible(user.lastName);
+ await castomersListPage.assertCellIsVisible(user.postCode);
+ await castomersListPage.assertCustomerHasNoAccountNumber(user.firstName);
 
 });

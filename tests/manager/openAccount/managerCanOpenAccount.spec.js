@@ -27,10 +27,10 @@ test.beforeEach(async ({ page }) => {
   }
  
   await addCustomerPage.open();
-  await addCustomerPage.firstNameHolderFill(user.firstName);
-  await addCustomerPage.lastNameHolderFill(user.lastName);
-  await addCustomerPage.postCodeHolderFill(user.postCode);
-  await addCustomerPage.createCastomerButtonClick();
+  await addCustomerPage.fillFirstNameField(user.firstName);
+  await addCustomerPage.fillLastNameField(user.lastName);
+  await addCustomerPage.fillPostCodeField(user.postCode);
+  await addCustomerPage.createCustomer();
   await addCustomerPage.reload();
 
 });
@@ -58,13 +58,13 @@ test('Assert manager can add new customer', async ({ page }) => {
  await bankHomePage.clickBankManagerLoginButton();
  await bankManagerMainPage.openAccountButtonClick();
 
- await openAccountPage.selectTargetUser(user.firstName, user.lastName);
+ await openAccountPage.selectCustomer(user.firstName, user.lastName);
  await openAccountPage.selectCurrencyValue('Dollar')
- await openAccountPage.processButtonClick();
+ await openAccountPage.clickProcessButton();
  await openAccountPage.reload();
  
  await bankManagerMainPage.customersButtonClick();
 
  const customersListPage = new CustomersListPage(page);
- await customersListPage.newCustomerHasAccountNumber(user.firstName);
+ await customersListPage.assertCustomerHasAccountNumber(user.firstName);
 });

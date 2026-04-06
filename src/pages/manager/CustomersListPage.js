@@ -14,11 +14,11 @@ export class CustomersListPage {
     await this.page.reload();
   }
 
-   async cellIsPresent(value){
+   async assertCellIsVisible(value){
     await expect(this.page.getByRole('cell', { name: value })).toBeVisible();
    }
 
-  async newCustomerNoAccountNumber(firstName){
+  async assertCustomerHasNoAccountNumber(firstName){
     await expect(this.page.getByRole('row', { name: firstName }).getByRole('cell').nth(3)).toBeEmpty();
   }
 
@@ -26,15 +26,15 @@ export class CustomersListPage {
     await this.page.getByRole('row', { name: firstName }).getByRole('button').click();
   }
 
-  async customerFirstNameIsNotPresent(firstName){
+  async assertCustomerIsNotPresent(firstName){
     await expect(this.page.getByRole('cell', { name: firstName })).toBeHidden();
   }
 
-  async newCustomerHasAccountNumber(firstName){
+  async assertCustomerHasAccountNumber(firstName){
     await expect(this.page.getByRole('row', { name: firstName }).getByRole('cell').nth(3)).toBeVisible();
   }
 
-  async searchCastomerByFirstName(firstName){
+  async searchCastomer(firstName){
     await this.searchCastomerField.fill(firstName);
   }
   async assertHowManyRowIsPresent(value){

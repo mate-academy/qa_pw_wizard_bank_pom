@@ -22,10 +22,10 @@ test.beforeEach(async ({ page }) => {
      }
     
      await addCustomerPage.open();
-     await addCustomerPage.firstNameHolderFill(user.firstName);
-     await addCustomerPage.lastNameHolderFill(user.lastName);
-     await addCustomerPage.postCodeHolderFill(user.postCode);
-     await addCustomerPage.createCastomerButtonClick();
+     await addCustomerPage.fillFirstNameField(user.firstName);
+     await addCustomerPage.fillLastNameField(user.lastName);
+     await addCustomerPage.fillPostCodeField(user.postCode);
+     await addCustomerPage.createCustomer();
 });
 
 test('Assert manager can search customer by Postal Code', async ({ page }) => {
@@ -39,7 +39,7 @@ test('Assert manager can search customer by Postal Code', async ({ page }) => {
   const castomersListPage = new CustomersListPage(page);
  
   await castomersListPage.open();
-  await castomersListPage.searchCastomerByFirstName(user.postCode)
-  await castomersListPage.cellIsPresent(user.postCode);
+  await castomersListPage.searchCastomer(user.postCode)
+  await castomersListPage.assertCellIsVisible(user.postCode);
   await castomersListPage.assertHowManyRowIsPresent(1);
 });
