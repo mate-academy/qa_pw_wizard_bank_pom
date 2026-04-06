@@ -1,5 +1,7 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
   /* 
@@ -26,4 +28,32 @@ test('Assert manager can add new customer', async ({ page }) => {
   2. Do not rely on the customer row id for the steps 8-11. 
     Use the ".last()" locator to get the last row.
   */
+ const addCustomerPage = new AddCustomerPage(page);
+ const castomersListPage = new CustomersListPage(page);
+
+ const user = {
+  firstName: faker.person.firstName(),
+  lastName: faker.person.lastName(),
+  postCode: faker.location.zipCode()
+ }
+ 
+ await addCustomerPage.open();
+ await addCustomerPage.firstNameHolderFill(user.firstName);
+ await addCustomerPage.lastNameHolderFill(user.lastName);
+ await addCustomerPage.postCodeHolderFill(user.postCode);
+
+ 
+ await addCustomerPage.createCastomerButtonClick();
+ await addCustomerPage.reload();
+ await addCustomerPage.customerButtonClick();
+
+//  await castomersListPage.customerFirstNameIsPresent(user.firstName);
+//  await castomersListPage.customerLastNameIsPresent(user.lastName);
+//  await castomersListPage.customerPostCodeIsPresent(user.postCode);
+//  await castomersListPage.newCustomerNoAccountNumber(user.firstName);
+ await castomersListPage.cellIsPresent(user.firstName);
+ await castomersListPage.cellIsPresent(user.lastName);
+ await castomersListPage.cellIsPresent(user.postCode);
+ await castomersListPage.newCustomerNoAccountNumber(user.firstName);
+
 });
