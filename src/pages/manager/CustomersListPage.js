@@ -13,7 +13,6 @@ export class CustomersListPage {
       hasText: `${firstName} ${lastName} ${postCode}`, 
     });
     this.searchField = page.getByRole('textbox', { name: 'Search Customer' });
-
   }
 
   async open() {
