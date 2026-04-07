@@ -4,7 +4,6 @@ export class OpenAccountPage {
   constructor(page) {
     this.page = page;
 
-    this.openAccountButton = page.getByRole("button", { name: "Open Account" });
     this.processButton = page.getByRole("button", { name: "Process" });
 
     this.customerDropDown = page.getByTestId("userSelect");
@@ -15,10 +14,6 @@ export class OpenAccountPage {
     await this.page.goto(
       "/angularJs-protractor/BankingProject/#/manager/openAccount",
     );
-  }
-
-  async clickOpenAccountButton() {
-    await this.openAccountButton.click();
   }
 
   async clickProcessButton() {
