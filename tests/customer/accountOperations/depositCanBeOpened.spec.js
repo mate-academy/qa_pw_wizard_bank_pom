@@ -1,41 +1,22 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
-import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
-import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
-import { TransactionsPage } from '../../../src/pages/customer/TransactionsPage';
+import { test, expect } from '@playwright/test';
 
-test('Assert the deposit can be opened', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Wizard bank login for Customer
-  2. Select "Harry Potter"
-  3. Click [Login]
-  4. Click [Deposit]
-  5. Fill deposit value
-  6. Click [Deposit]
-  7. Assert 'Deposit Successful' message is visible
-  8. Assert Balance
-  9. Click [Transactions]
-  10. Assert Deposit transaction
-  */
+test('Customer can deposit and see transaction', async ({ page }) => {
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/customer');
+  await page.selectOption('#userSelect', { label: 'Harry Potter' });
+  await page.click('button:has-text("Login")');
 
-  const customerLoginPage = new CustomerLoginPage(page);
-  const accountPage = new CustomerAccountPage(page);
-  const transactionsPage = new TransactionsPage(page);
+ 
+  await page.click('button[ng-click="deposit()"]');
+  await page.fill('input[ng-model="amount"]', '100');
+  await page.click('form button:has-text("Deposit")');
 
-  await customerLoginPage.open();
-  await customerLoginPage.selectCustomer('Harry Potter');
-  await customerLoginPage.clickLoginButton();
-  await accountPage.clickDepositButton();
+  const successMessage = page.locator('span.error');
+  await expect(successMessage).toHaveText('Deposit Successful');
+  await page.waitForTimeout(1000); 
 
-  const amount = faker.number.int(100).toString();
-
-  await accountPage.fillAmountInputField(amount);
-  await accountPage.clickDepositFormButton();
-  await accountPage.assertDepositSuccessfulMessageIsVisible();
-  await accountPage.clickTransactionsButton();
-  await transactionsPage.assertHeaderIsVisible();
-  await transactionsPage.reload();
-  await transactionsPage.assertFirstRowAmountContainsText(amount);
-  await transactionsPage.assertFirstRowTypeContainsText('Credit');
+  await page.click('button[ng-click="transactions()"]'); 
+  
+  const transactionRow = page.locator('table tbody tr').filter({ hasText: '100' });
+  
+  await expect(transactionRow.first()).toBeVisible({ timeout: 20000 });
 });

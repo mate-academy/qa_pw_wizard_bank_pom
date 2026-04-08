@@ -1,18 +1,23 @@
-import { expect } from '@playwright/test';
-
-export class BankHomePage {
+class BankHomePage {
   constructor(page) {
     this.page = page;
-    this.customerLoginButton = page.getByRole('button', {
-      name: 'Customer Login',
-    });
+    
+    this.consentButton = page.getByRole('button', { name: 'Consent' });
   }
 
-  async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/login');
+  async handleConsent() {
+   
+    if (await this.consentButton.isVisible()) {
+      await this.consentButton.click();
+    }
   }
 
-  async clickCustomerLoginButton() {
-    await this.customerLoginButton.click();
+  async clickCustomerLogin() {
+    await this.page.click('button[ng-click="customer()"]');
+  }
+
+  async clickBankManagerLogin() {
+    await this.page.click('button[ng-click="manager()"]');
   }
 }
+

@@ -1,11 +1,10 @@
-import { expect } from '@playwright/test';
-
 export class CustomersListPage {
   constructor(page) {
     this.page = page;
+    this.searchInput = page.locator('input[ng-model="searchCustomer"]');
   }
 
-  async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list');
+  async search(value) {
+    await this.searchInput.fill(value);
   }
 }
