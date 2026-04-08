@@ -17,8 +17,6 @@ test("Assert the deposit can be opened", async ({ page }) => {
 
   await accountPage.clickDepositButton();
 
-  await page.waitForTimeout(500);
-
   const amount = faker.number.int(100).toString();
   await accountPage.fillAmountInputField(amount);
 

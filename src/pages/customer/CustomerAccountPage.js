@@ -11,7 +11,6 @@ export class CustomerAccountPage {
     this.withdrawlButton = page.locator('button[ng-click="withdrawl()"]');
 
     this.amountInputField = page.getByPlaceholder("amount");
-
     this.depositFormButton = page.locator(
       'form button[type="submit"]:has-text("Deposit")',
     );
@@ -26,13 +25,8 @@ export class CustomerAccountPage {
     this.logoutButton = page.getByRole("button", { name: "Logout" });
   }
 
-  async open() {
-    await this.page.goto("/angularJs-protractor/BankingProject/#/account");
-  }
-
   async assertAccountIdInDropDownHasValue(value) {
-    const accountNumberInDrodown = this.accountIdDropDown;
-    await expect(accountNumberInDrodown).toHaveValue(value);
+    await expect(this.accountIdDropDown).toHaveValue(value);
   }
 
   async assertAccountLineContainsText(text) {
@@ -63,10 +57,6 @@ export class CustomerAccountPage {
     await this.withdrawlFormButton.click();
   }
 
-  async clickLogoutButton() {
-    await this.logoutButton.click();
-  }
-
   async assertDepositSuccessfulMessageIsVisible() {
     await expect(this.depositSuccessfulMessage).toBeVisible();
   }
@@ -75,13 +65,7 @@ export class CustomerAccountPage {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
   }
 
-  async clickDepositFormButton() {
-    await this.depositFormButton.waitFor({ state: "visible" });
-    await this.depositFormButton.click();
-  }
-
-  async clickWithdrawlFormButton() {
-    await this.withdrawlFormButton.waitFor({ state: "visible" });
-    await this.withdrawlFormButton.click();
+  async clickLogoutButton() {
+    await this.logoutButton.click();
   }
 }

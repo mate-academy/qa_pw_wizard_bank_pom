@@ -20,8 +20,6 @@ test("Assert the customer cannot withdraw money with empty balance", async ({
 
   await accountPage.clickWithdrawlButton();
 
-  await page.waitForTimeout(500);
-
   const amount = faker.number.int({ min: 1, max: 100 }).toString();
   await accountPage.fillAmountInputField(amount);
 
