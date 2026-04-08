@@ -1,18 +1,21 @@
-import { expect } from '@playwright/test';
+import { expect } from "@playwright/test";
 
 export class BankHomePage {
   constructor(page) {
     this.page = page;
-    this.customerLoginButton = page.getByRole('button', {
-      name: 'Customer Login',
-    });
+
+    this.customerLoginBtn = page.locator('button:has-text("Customer Login")');
+
+    this.bankManagerLoginBtn = page.locator(
+      'button:has-text("Bank Manager Login")',
+    );
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/login');
+    await this.page.goto("/angularJs-protractor/BankingProject/#/login");
   }
 
-  async clickCustomerLoginButton() {
-    await this.customerLoginButton.click();
+  async clickBankManagerLogin() {
+    await this.bankManagerLoginBtn.click();
   }
 }

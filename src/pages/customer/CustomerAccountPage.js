@@ -1,41 +1,32 @@
-import { expect } from '@playwright/test';
+import { expect } from "@playwright/test";
 
 export class CustomerAccountPage {
   constructor(page) {
     this.page = page;
-    this.accountIdDropDown = page.getByTestId('accountSelect');
-    this.accountDataLine = page
-      .locator('div')
-      .filter({
-        hasText: 'Account Number',
-      })
-      .first();
-    this.depositButton = page.getByRole('button', { name: 'Deposit' });
-    this.transactionsButton = page.getByRole('button', {
-      name: 'Transactions',
-    });
-    this.withdrawlButton = page.getByRole('button', { name: 'Withdraw' });
-    this.amountInputField = page.getByPlaceholder('amount');
-    this.depositFormButton = page.getByRole('form').getByRole('button', {
-      name: 'Deposit',
-    });
-    this.depositSuccessfulMessage = page.getByText('Deposit Successful');
-    this.withdrawlFormButton = page.getByRole('form').getByRole('button', {
-      name: 'Withdraw',
-    });
-    this.withdrawNoBalanceErrorMessage = page.getByText(
-      'Transaction Failed. You can not withdraw amount more than the balance.',
-    );
-    this.logoutButton = page.getByRole('button', { name: 'Logout' });
-  }
+    this.accountIdDropDown = page.getByTestId("accountSelect");
+    this.accountDataLine = page.locator(".borderM > div:nth-child(3)");
 
-  async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/account');
+    this.depositButton = page.locator('button[ng-click="deposit()"]');
+    this.transactionsButton = page.locator('button[ng-click="transactions()"]');
+    this.withdrawlButton = page.locator('button[ng-click="withdrawl()"]');
+
+    this.amountInputField = page.getByPlaceholder("amount");
+    this.depositFormButton = page.locator(
+      'form button[type="submit"]:has-text("Deposit")',
+    );
+    this.withdrawlFormButton = page.locator(
+      'form button[type="submit"]:has-text("Withdraw")',
+    );
+
+    this.depositSuccessfulMessage = page.getByText("Deposit Successful");
+    this.withdrawNoBalanceErrorMessage = page.getByText(
+      "Transaction Failed. You can not withdraw amount more than the balance.",
+    );
+    this.logoutButton = page.getByRole("button", { name: "Logout" });
   }
 
   async assertAccountIdInDropDownHasValue(value) {
-    const accountNumberInDrodown = this.accountIdDropDown;
-    await expect(accountNumberInDrodown).toHaveValue(value);
+    await expect(this.accountIdDropDown).toHaveValue(value);
   }
 
   async assertAccountLineContainsText(text) {
@@ -66,15 +57,15 @@ export class CustomerAccountPage {
     await this.withdrawlFormButton.click();
   }
 
-  async clickLogoutButton() {
-    await this.logoutButton.click();
-  }
-
   async assertDepositSuccessfulMessageIsVisible() {
     await expect(this.depositSuccessfulMessage).toBeVisible();
   }
 
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
+  }
+
+  async clickLogoutButton() {
+    await this.logoutButton.click();
   }
 }
