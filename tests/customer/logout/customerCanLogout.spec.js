@@ -27,4 +27,4 @@ test('Assert correct customer Logout', async ({ page }) => {
   await customerLoginPage.waitForOpened();
   await customerLoginPage.assertSelectCustomerDropdownIsVisible();
   await customerLoginPage.assertSelectCustomerDropdownContainsValue('');
-});
+}); 
