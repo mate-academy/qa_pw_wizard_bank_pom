@@ -29,4 +29,4 @@ test('Assert the empty transactions list has correct values', async ({
   await transactionsPage.assertHeaderSecondCellContainsText('Amount');
   await transactionsPage.assertHeaderThirdCellContainsText('Transaction Type');
   await transactionsPage.assertFirstRowIsHidden();
-});
+}); 
