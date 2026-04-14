@@ -13,6 +13,7 @@ test.beforeEach(async ({ page }) => {
   zipCode = faker.location.zipCode();
   await addCustomerPage.open();
   await addCustomerPage.fillCustomerForm(firstName, lastName, zipCode);
+  await addCustomerPage.reloadPage();
 });
   /* 
   Pre-conditons:
