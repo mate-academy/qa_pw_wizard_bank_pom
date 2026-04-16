@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
-import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
+import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage.js';
+import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage.js';
 
 test('Assert customer has correct bank data', async ({ page }) => {
   /* 
@@ -13,7 +13,6 @@ test('Assert customer has correct bank data', async ({ page }) => {
   5. Assert Balance text
   6. Assert Currency text
   */
-
   const loginPage = new CustomerLoginPage(page);
   const accountPage = new CustomerAccountPage(page);
 

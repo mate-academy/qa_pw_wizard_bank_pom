@@ -1,8 +1,8 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
-import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
-import { TransactionsPage } from '../../../src/pages/customer/TransactionsPage';
+import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage.js';
+import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage.js';
+import { TransactionsPage } from '../../../src/pages/customer/TransactionsPage.js';
 
 test('Assert the deposit can be opened', async ({ page }) => {
   /* 
@@ -18,7 +18,6 @@ test('Assert the deposit can be opened', async ({ page }) => {
   9. Click [Transactions]
   10. Assert Deposit transaction
   */
-
   const customerLoginPage = new CustomerLoginPage(page);
   const accountPage = new CustomerAccountPage(page);
   const transactionsPage = new TransactionsPage(page);
