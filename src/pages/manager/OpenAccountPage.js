@@ -1,8 +1,10 @@
-import { expect } from '@playwright/test';
+import { expect } from "@playwright/test";
 
-export class AddCustomerPage {
+export class OpenAccountPage { 
   constructor(page) {
     this.page = page;
+    this.option = page.locator("#currency");
+    
   }
 
   async open() {
@@ -10,4 +12,7 @@ export class AddCustomerPage {
       '/angularJs-protractor/BankingProject/#/manager/openAccount',
     );
   }
+  async selectCurrency (currency) {
+    await this.option.selectOption(currency);
+await expect(this.option).toHaveValue(currency);  }
 }
