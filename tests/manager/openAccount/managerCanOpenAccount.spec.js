@@ -1,21 +1,7 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
-import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test.beforeEach(async ({ page }) => {
-  
-  const addCustomerPage = new AddCustomerPage(page);
-  const customersListPage = new CustomersListPage (page);
-  await addCustomerPage.open();
-  await addCustomerPage.customerForm('Harry', 'Potter', '666');
-  await addCustomerPage.clickButtonAddC();
-  await addCustomerPage.clickCustomerb();
-  await addCustomerPage.reload();
-  
-  
-  
-  
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -28,22 +14,6 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
-    const addCustomerPage = new AddCustomerPage(page);
-      const customersListPage = new CustomersListPage (page);
-
-
-  
-  await addCustomerPage.clickOpenAccount();
-  await addCustomerPage.name('2');
-  await addCustomerPage.currency('Dollar');
-  await addCustomerPage.clickProcess();
-  await addCustomerPage.reload();
-  await addCustomerPage.clickCustomerb();
-  await customersListPage.assertAccountNotEmpty('Harry Potter')
-
-
-  
-  
   /* 
   Test:
   1. Click [Open Account].

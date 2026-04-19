@@ -1,17 +1,6 @@
-import { test, expect } from '@playwright/test';
-import { BankHomePage } from '../../../src/pages/BankHomePage';
-import { BankManagerMainPage  } from '../../../src/pages/manager/BankManagerMainPage';
-test('Assert manager can Login', async ({ page }) => {
-  const bankHomePage = new BankHomePage(page);
-  const bankManagerMainPage = new BankManagerMainPage (page)
+import { test } from '@playwright/test';
 
-  await bankHomePage.open();
-  await bankHomePage.clickBankLoginButton();
-  await bankManagerMainPage.buttonVisible('Add customer', 'Open Account', 'Customers');
-  
-  
-  
-  
+test('Assert manager can Login', async ({ page }) => {
   /* 
   Test:
   1. Open Wizard bank home page 

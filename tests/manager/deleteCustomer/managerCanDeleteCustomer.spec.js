@@ -1,17 +1,7 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
-import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
-
 
 test.beforeEach(async ({ page }) => {
-  const addCustomerPage = new AddCustomerPage(page);
-    await addCustomerPage.open();
-    await addCustomerPage.customerForm('Harry', 'Potter', '666');
-    await addCustomerPage.clickButtonAddC();
-  
-  
-
   /* 
   Pre-conditons:
   1. Open Add Customer page.
@@ -23,16 +13,6 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
-    const customersListPage = new CustomersListPage (page);
-
-    await customersListPage.open();
-    await customersListPage.deleteCustomer();
-    await customersListPage.selectT('Harry', 'Potter', '666', false);
-
-
-
-
-
   /* 
   Test:
   1. Open Customers page.

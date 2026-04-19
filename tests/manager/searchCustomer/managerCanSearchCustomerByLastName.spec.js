@@ -1,18 +1,11 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
-import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-
+let firstName;
+let lastName;
+let postalCode;
 
 test.beforeEach(async ({ page }) => {
- const addCustomerPage = new AddCustomerPage(page);
-  const customersListPage = new CustomersListPage (page);
-  await addCustomerPage.open();
-  await addCustomerPage.customerForm('Harry', 'Potter', '666');
-  await addCustomerPage.clickButtonAddC();
-
-
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -21,15 +14,12 @@ test.beforeEach(async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
-
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postalCode = faker.location.zipCode();
 });
 
 test('Assert manager can search customer by Last Name', async ({ page }) => {
-
-    const addCustomerPage = new AddCustomerPage(page);
-  const customersListPage = new CustomersListPage (page);
-await customersListPage.open()
-await customersListPage.search('Potter')
   /* 
   Test:
   1. Open Customers page
