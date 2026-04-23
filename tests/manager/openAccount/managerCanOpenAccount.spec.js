@@ -1,7 +1,32 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { expect } from '@playwright/test';
+
+let firstName;
+let lastName;
+let postCode;
+
+
 
 test.beforeEach(async ({ page }) => {
+  
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postCode = faker.location.zipCode();
+    
+  const addCustomerPage = new AddCustomerPage(page);
+      
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostCode(postCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await page.reload();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -14,6 +39,25 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
+
+  const bankManagerMainPage = new BankManagerMainPage(page);
+  const openAccountPage = new OpenAccountPage(page);
+  const customersListPage = new CustomersListPage(page);
+  const bankHomePage = new BankHomePage(page);
+
+  await bankHomePage.open();
+  await bankHomePage.clickBankManagerLoginButton();
+  await bankManagerMainPage.clickOpenAccountButton();
+  await expect(openAccountPage.customerName).toContainText(`${firstName} ${lastName}`);
+  await openAccountPage.selectCustomerName(firstName, lastName);
+  await openAccountPage.selectDollarCurrency();
+  await openAccountPage.clickProcessButton();
+  await page.reload();
+  await customersListPage.clickCustomersButton();
+  await customersListPage.verifyCustomerAccountNumberIsNotEmpty();
+  
+
+
   /* 
   Test:
   1. Click [Open Account].

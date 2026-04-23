@@ -1,7 +1,20 @@
 import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
 test('Assert manager can choose currencies for account', async ({ page }) => {
+
+
+  const openAccountPage = new OpenAccountPage(page);
+
+  await openAccountPage.open();
+  await openAccountPage.selectDollarCurrency();
+  await expect(openAccountPage.currencyField).toHaveValue('Dollar')
+  await openAccountPage.selectPoundCurrency();
+  await expect(openAccountPage.currencyField).toHaveValue('Pound')
+  await openAccountPage.selectRupeeCurrency();
+  await expect(openAccountPage.currencyField).toHaveValue('Rupee')
+
+
   /* 
   Test:
   1. Open the Open account page 
