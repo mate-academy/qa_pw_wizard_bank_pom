@@ -26,7 +26,7 @@ test.beforeEach(async ({ page }) => {
   await page.getByPlaceholder('Post Code').fill(postalCode);
   page.once('dialog', dialog => {
     console.log(`Dialog message: ${dialog.message()}`);
-    dialog.dismiss().catch(() => {});
+    dialog.accept().catch(() => {});
   });
   await page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
 });

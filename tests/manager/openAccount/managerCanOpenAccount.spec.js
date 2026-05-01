@@ -18,14 +18,14 @@ test.beforeEach(async ({ page }) => {
   */
   await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
   await page.getByPlaceholder('First Name').click();
-  await page.getByPlaceholder('First Name').fill('firstName');
+  await page.getByPlaceholder('First Name').fill(firstName);
   await page.getByPlaceholder('Last Name').click();
-  await page.getByPlaceholder('Last Name').fill('lastName');
+  await page.getByPlaceholder('Last Name').fill(lastName);
   await page.getByPlaceholder('Post Code').click();
-  await page.getByPlaceholder('Post Code').fill('zipCode');
+  await page.getByPlaceholder('Post Code').fill(postCode);
   page.once('dialog', dialog => {
     console.log(`Dialog message: ${dialog.message()}`);
-    dialog.dismiss().catch(() => {});
+    dialog.accept().catch(() => {});
   });
   await page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
 });
@@ -47,13 +47,16 @@ test('Assert manager can add new customer', async ({ page }) => {
     Use the ".last()" locator to get the last row.
   */
   await page.getByRole('button', { name: 'Open Account' }).click();
-  await page.locator('#userSelect').selectOption('6');
+  await page.locator('#userSelect').selectOption(`${firstName} ${lastName}`);
   await page.locator('#currency').selectOption('Dollar');
+  await expect(page.locator('#currency')).toHaveValue('Dollar');
   page.once('dialog', dialog => {
     console.log(`Dialog message: ${dialog.message()}`);
-    dialog.dismiss().catch(() => {});
+    dialog.accept().catch(() => {});
   });
   await page.getByRole('button', { name: 'Process' }).click();
   await page.getByRole('button', { name: 'Customers' }).click();
-  await expect(page.locator('tbody')).toContainText('1016');
+  const lastRow = page.locator('tbody tr').last();
+  const accountCell = lastRow.locator('td').nth(3);
+  await expect(accountCell).not.toBeEmpty();
 });
