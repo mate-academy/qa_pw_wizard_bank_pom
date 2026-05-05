@@ -30,10 +30,10 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillLastNameField(customer.lastName);
   await addCustomerPage.fillPostCodeField(customer.postCode);
   await addCustomerPage.clickAddCustomerButton();
-  await addCustomerPage.reload()
+  await addCustomerPage.reload();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open account for customer', async ({ page }) => {
   /* 
   Test:
   1. Click [Open Account].
@@ -53,7 +53,7 @@ test('Assert manager can add new customer', async ({ page }) => {
   const customersListPage = new CustomersListPage(page);
 
   await openAccountPage.clickOpenAccountTabButton();
-  await openAccountPage.selectCustmerFromDropdown(customer.firstName, customer.lastName);
+  await openAccountPage.selectCustomerFromDropdown(customer.firstName, customer.lastName);
   await openAccountPage.selectCurrency('Dollar');
   await openAccountPage.clickProcessButton();
   await openAccountPage.reload();

@@ -38,8 +38,8 @@ export class CustomersListPage extends BankManagerMainPage {
     await expect(this.lastRowFirstNameCell).toContainText(firstName);
   }
 
-  async assertLastNameInLastRow(lasName) {
-    await expect(this.lastRowLastNameCell).toContainText(lasName);
+  async assertLastNameInLastRow(lastName) {
+    await expect(this.lastRowLastNameCell).toContainText(lastName);
   }
 
   async assertPostCodeInLastRow(postCode) {

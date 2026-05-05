@@ -16,8 +16,8 @@ export class OpenAccountPage extends BankManagerMainPage {
   }
 
   async selectCurrency(currency) {
-    const currencyNameFormated = currency.charAt(0).toUpperCase() + currency.toLowerCase().slice(1);
-    await this.currencyDropdownField.selectOption(currencyNameFormated);
+    const currencyNameFormatted = currency.charAt(0).toUpperCase() + currency.toLowerCase().slice(1);
+    await this.currencyDropdownField.selectOption(currencyNameFormatted);
   }
 
   async assertCurrencyDropdownValue(expectedValue) {
@@ -25,7 +25,7 @@ export class OpenAccountPage extends BankManagerMainPage {
     expect(currentValue.toLowerCase()).toBe(expectedValue.toLowerCase());
   }
 
-  async selectCustmerFromDropdown(firstName, lastName) {
+  async selectCustomerFromDropdown(firstName, lastName) {
     await this.customerDropdownField.selectOption(`${firstName} ${lastName}`);
   }
 

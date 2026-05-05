@@ -4,8 +4,8 @@ export class BankManagerMainPage {
   constructor(page) {
     this.page = page;
     this.addCustomerTabButton = page.getByRole('button', { name: 'Add Customer' }).first();
-    this.openAccountTabButton = page.getByRole('button', { name: 'Open Account' })
-    this.customersTabButton = page.getByRole('button', { name: 'Customers' })
+    this.openAccountTabButton = page.getByRole('button', { name: 'Open Account' });
+    this.customersTabButton = page.getByRole('button', { name: 'Customers' });
   }
 
   async open() {
@@ -29,7 +29,7 @@ export class BankManagerMainPage {
   }
 
   async assertAddCustomerTabButtonIsVisible() {
-    await expect(this.addCustomerTabButton).toBeVisible()
+    await expect(this.addCustomerTabButton).toBeVisible();
   }
 
   async assertOpenAccountTabButtonIsVisible() {
