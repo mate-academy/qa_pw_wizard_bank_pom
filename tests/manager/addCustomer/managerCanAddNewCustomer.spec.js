@@ -30,25 +30,28 @@ test('Assert manager can add new customer', async ({ page }) => {
   2. Do not rely on the customer row id for the steps 8-11. 
     Use the ".last()" locator to get the last row.
   */
-  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
   await page.getByPlaceholder('First Name').click();
   await page.getByPlaceholder('First Name').fill(firstName);
   await page.getByPlaceholder('Last Name').click();
   await page.getByPlaceholder('Last Name').fill(lastName);
   await page.getByPlaceholder('Post Code').click();
   await page.getByPlaceholder('Post Code').fill(postCode);
-        page.on('dialog', dialog => {
-        dialog.accept();
-    });
+  
+  page.on('dialog', dialog => {
+      dialog.accept();
+  });
+  
   await page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
+  
+  
   await page.reload();
   await page.getByRole('button', { name: 'Customers' }).click();
-  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
-  await page.getByRole('button', { name: 'Customers' }).click();
+  
+  
   const lastRow = page.locator('tbody tr').last();
   await expect(lastRow).toContainText(firstName);
   await expect(lastRow).toContainText(lastName);
   await expect(lastRow).toContainText(postCode);
-  await expect(page.locator('tbody tr').last()).not.toContainText('Account Number');
+  await expect(lastRow).not.toContainText('Account Number');
 });
-

@@ -13,11 +13,17 @@ test('Assert manager can choose currencies for account', async ({ page }) => {
   6. Select currency Rupee
   7. Assert the drop-dwon has value Rupee
   */
-  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/openAccount');
+await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/openAccount');
+  
+  // Seleciona Dollar e verifica se o valor ativo mudou para Dollar
   await page.locator('#currency').selectOption('Dollar');
-  await expect(page.locator('#currency')).toContainText('---Currency--- Dollar Pound Rupee');
+  await expect(page.locator('#currency')).toHaveValue('Dollar');
+  
+  // Seleciona Pound e verifica se o valor ativo mudou para Pound
   await page.locator('#currency').selectOption('Pound');
-  await expect(page.locator('#currency')).toContainText('---Currency--- Dollar Pound Rupee');
+  await expect(page.locator('#currency')).toHaveValue('Pound');
+  
+  // Seleciona Rupee e verifica se o valor ativo mudou para Rupee
   await page.locator('#currency').selectOption('Rupee');
-  await expect(page.locator('#currency')).toContainText('---Currency--- Dollar Pound Rupee');
+  await expect(page.locator('#currency')).toHaveValue('Rupee');
 });
