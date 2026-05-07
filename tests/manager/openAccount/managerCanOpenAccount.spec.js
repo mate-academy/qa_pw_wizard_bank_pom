@@ -1,7 +1,12 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
-
+let firstName;
+let lastName;
+let postCode;
 test.beforeEach(async ({ page }) => {
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postCode = faker.location.zipCode();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -11,9 +16,22 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust');
+  await page.getByPlaceholder('First Name').click();
+  await page.getByPlaceholder('First Name').fill(firstName);
+  await page.getByPlaceholder('Last Name').click();
+  await page.getByPlaceholder('Last Name').fill(lastName);
+  await page.getByPlaceholder('Post Code').click();
+  await page.getByPlaceholder('Post Code').fill(postCode);
+  page.once('dialog', dialog => {
+    console.log(`Dialog message: ${dialog.message()}`);
+    dialog.accept().catch(() => {});
+  });
+  await page.getByRole('form').getByRole('button', { name: 'Add Customer' }).click();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+
+test('Assert manager can open account', async ({ page }) => {
   /* 
   Test:
   1. Click [Open Account].
@@ -28,4 +46,17 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
+  await page.getByRole('button', { name: 'Open Account' }).click();
+  await page.locator('#userSelect').selectOption(`${firstName} ${lastName}`);
+  await page.locator('#currency').selectOption('Dollar');
+  await expect(page.locator('#currency')).toHaveValue('Dollar');
+  page.once('dialog', dialog => {
+    console.log(`Dialog message: ${dialog.message()}`);
+    dialog.accept().catch(() => {});
+  });
+  await page.getByRole('button', { name: 'Process' }).click();
+  await page.getByRole('button', { name: 'Customers' }).click();
+  const lastRow = page.locator('tbody tr').last();
+  const accountCell = lastRow.locator('td').nth(3);
+  await expect(accountCell).not.toBeEmpty();
 });
