@@ -1,31 +1,44 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage.js';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage.js';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage.js';
+
+let customerFullName;
 
 test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
+  const customerPage = new AddCustomerPage(page);
+  await customerPage.open();
+
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  customerFullName = `${firstName} ${lastName}`;
+
+  await customerPage.fillFirstName(firstName);
+  await customerPage.fillSecondName(lastName);
+  await customerPage.fillPostalCode(faker.location.zipCode());
+  await customerPage.clickAddCustomersButton();
+  await customerPage.reloadPage();
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Click [Open Account].
-  2. Select Customer name you just created.
-  3. Select currency.
-  4. Click [Process].
-  5. Reload the page (This is a simplified step to close the popup).
-  6. Click [Customers].
-  7. Assert the customer row has the account number not empty.
+  const accountPage = new OpenAccountPage(page);
+  await accountPage.open();
+  await accountPage.waitForLoadURL();
 
-  Tips:
-  1. Do not rely on the customer row id for the step 13. 
-    Use the ".last()" locator to get the last row.
-  */
+  // Select the customer we just created
+  await accountPage.selectCustomer(customerFullName);
+
+  // Select currency and process
+  await accountPage.selectCurrencyDollar();
+  await accountPage.clickProcess();
+  await accountPage.reloadPage();
+  // Go to customers list and assert account number is not empty
+  const customersListPage = new CustomersListPage(page);
+  await customersListPage.open();
+  await customersListPage.clickCustomerButton();
+
+  const lastRow = customersListPage.lastRow;
+  const accountNumber = await lastRow.getByRole('cell').nth(2).textContent();
+  expect(accountNumber.trim()).not.toBe('');
 });
