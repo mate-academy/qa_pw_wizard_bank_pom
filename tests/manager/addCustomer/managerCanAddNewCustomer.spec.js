@@ -1,7 +1,30 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test, expect } from "@playwright/test";
+import { faker } from "@faker-js/faker";
+import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
 
-test('Assert manager can add new customer', async ({ page }) => {
+test("Assert manager can add new customer", async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+  await addCustomerPage.open();
+  await addCustomerPage.inputFirstNameField(firstName);
+  await addCustomerPage.inputLastNameField(lastName);
+  await addCustomerPage.inputPostCodeField(postCode);
+  await addCustomerPage.clickAddCustomerSubmitButton();
+  await page.reload();
+  await addCustomerPage.clickCustomersButton();
+  const lastRow = page.locator("tbody tr").last();
+  await expect(lastRow.locator("td").nth(0)).toContainText(firstName);
+  await expect(lastRow.locator("td").nth(1)).toContainText(lastName);
+  await expect(lastRow.locator("td").nth(2)).toContainText(postCode);
+  await expect(lastRow.locator("td").nth(3)).toHaveText("");
+  await addCustomerPage.assertAddCustomerButtonIsVisible();
+  await addCustomerPage.assertOpenAccountButtonIsVisible();
+  await addCustomerPage.assertCustomersButtonIsVisible();
+  await addCustomerPage.assertHomeButtonIsVisible();
+  await addCustomerPage.assertMainHeaderTitleIsVisible();
+
   /* 
   Test:
   1. Open add customer page by link
