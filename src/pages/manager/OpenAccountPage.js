@@ -38,13 +38,13 @@ export class OpenAccountPage {
     await expect(this.customerLabel).toBeVisible();
   }
   async assertCustomerDropDownListIsVisible() {
-    await expect(this.customerDroppDownList).toBeVisible();
+    await expect(this.customerDropDownList).toBeVisible();
   }
   async assertcurrencyLabelIsVisible() {
     await expect(this.currencyLabel).toBeVisible();
   }
   async assertCurrencyDropDownListIsVisible() {
-    await expect(this.currencyDroppDownList).toBeVisible();
+    await expect(this.currencyDropDownList).toBeVisible();
   }
   async selectCustomer(customerName) {
     await this.customerDropDownList.selectOption({ label: customerName });
