@@ -30,7 +30,7 @@ export class CustomerLoginPage {
   }
 
   async assertSelectCustomerDropdownContainsValue(value) {
-    const currentOptionText = this.customerDropDown;
-    await expect(currentOptionText).toHaveValue(value);
-  }
+    await expect(this.customerDropDown).toHaveValue(value);
+}
+
 }

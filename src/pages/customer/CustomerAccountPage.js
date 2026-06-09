@@ -34,8 +34,7 @@ export class CustomerAccountPage {
   }
 
   async assertAccountIdInDropDownHasValue(value) {
-    const accountNumberInDrodown = this.accountIdDropDown;
-    await expect(accountNumberInDrodown).toHaveValue(value);
+    await expect(this.accountIdDropDown).toHaveValue(value);
   }
 
   async assertAccountLineContainsText(text) {
