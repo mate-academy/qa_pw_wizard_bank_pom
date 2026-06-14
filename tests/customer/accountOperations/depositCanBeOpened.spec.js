@@ -28,11 +28,12 @@ test('Assert the deposit can be opened', async ({ page }) => {
   await customerLoginPage.clickLoginButton();
   await accountPage.clickDepositButton();
 
-  const amount = faker.number.int(100).toString();
+  const amount = faker.number.int({ min: 1, max: 100 }).toString();
 
   await accountPage.fillAmountInputField(amount);
   await accountPage.clickDepositFormButton();
   await accountPage.assertDepositSuccessfulMessageIsVisible();
+  await accountPage.assertBalanceContainsText(amount);
   await accountPage.clickTransactionsButton();
   await transactionsPage.assertHeaderIsVisible();
   await transactionsPage.reload();
