@@ -3,28 +3,25 @@ import { expect } from '@playwright/test';
 export class TransactionsPage {
   constructor(page) {
     this.page = page;
-    this.tableHeader = page.getByRole('row').first();
-    this.headerFirstCell = this.tableHeader.getByRole('cell').nth(0);
-    this.headerSecondCell = this.tableHeader.getByRole('cell').nth(1);
-    this.headerThirdCell = this.tableHeader.getByRole('cell').nth(2);
-    this.firstRow = page.getByRole('row').nth(1);
-    this.firstRowAmountCell = this.firstRow.getByRole('cell').nth(1);
-    this.firstRowTypeCell = this.firstRow.getByRole('cell').nth(2);
+    this.tableHeader = this.page.locator('table thead tr');
+    this.headerFirstCell = this.tableHeader.locator('td').nth(0);
+    this.headerSecondCell = this.tableHeader.locator('td').nth(1);
+    this.headerThirdCell = this.tableHeader.locator('td').nth(2);
+    this.firstRow = this.page.getByRole('row').nth(1);
+this.firstRowAmountCell = this.firstRow.getByRole('cell').nth(1);
+this.firstRowTypeCell = this.firstRow.getByRole('cell').nth(2);
   }
 
   async open() {
     await this.page.goto('/angularJs-protractor/BankingProject/#/listTx');
   }
-  async reload() {
-    await this.page.reload();
-  }
 
   async assertFirstRowAmountContainsText(amount) {
-    await expect(this.firstRowAmountCell).toContainText(amount);
+  await expect(this.firstRowAmountCell).toContainText(amount);
   }
 
   async assertFirstRowTypeContainsText(type) {
-    await expect(this.firstRowTypeCell).toContainText(type);
+    await expect(this.firstRowTypeCell).toHaveText(type);
   }
 
   async assertFirstRowIsHidden() {

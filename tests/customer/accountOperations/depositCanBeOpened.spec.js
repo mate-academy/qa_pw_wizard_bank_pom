@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect} from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
@@ -33,9 +33,24 @@ test('Assert the deposit can be opened', async ({ page }) => {
   await accountPage.fillAmountInputField(amount);
   await accountPage.clickDepositFormButton();
   await accountPage.assertDepositSuccessfulMessageIsVisible();
+  
+  const balanceLocator = page.locator('.center strong').nth(1);
+  await expect(balanceLocator).toHaveText(amount);
+
   await accountPage.clickTransactionsButton();
   await transactionsPage.assertHeaderIsVisible();
-  await transactionsPage.reload();
   await transactionsPage.assertFirstRowAmountContainsText(amount);
   await transactionsPage.assertFirstRowTypeContainsText('Credit');
+
+});
+
+test('Assert customer can logout successfully', async ({ page }) => {
+  const customerLoginPage = new CustomerLoginPage(page);
+  const accountPage = new CustomerAccountPage(page);
+
+  await customerLoginPage.open();
+  await customerLoginPage.selectCustomer('Harry Potter');
+  await customerLoginPage.clickLoginButton();
+  await accountPage.clickLogoutButton();
+  await expect(page.locator('#userSelect')).toBeVisible();
 });
