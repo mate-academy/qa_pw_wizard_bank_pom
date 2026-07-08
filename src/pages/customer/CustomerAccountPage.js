@@ -42,6 +42,16 @@ export class CustomerAccountPage {
     await expect(this.accountDataLine).toContainText(text);
   }
 
+async getBalanceValue() {
+  const balanceText = await this.page.locator('strong').nth(1).textContent();
+  return Number(balanceText.trim());
+}
+
+async assertBalanceAfterDeposit(initialBalance, amount) {
+  const newBalance = await this.getBalanceValue();
+  expect(newBalance).toBe(initialBalance + amount);
+}
+
   async clickDepositButton() {
     await this.depositButton.click();
   }
@@ -55,7 +65,7 @@ export class CustomerAccountPage {
   }
 
   async fillAmountInputField(amount) {
-    await this.amountInputField.fill(amount);
+    await this.amountInputField.fill(amount.toString());
   }
 
   async clickDepositFormButton() {

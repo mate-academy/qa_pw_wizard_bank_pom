@@ -8,25 +8,40 @@ test('Assert the empty transactions list has correct values', async ({
 }) => {
   /* 
   Test:
-  1. Open Wizard bank login for Customer 
-  2. Select "Albus Dumbledore"
-  3. Click [Login]
-  4. Click [Transactions]
-  5. Assert first column header conatins text "Date-Time"
-  6. Assert second column header conatins text "Amount"
-  7. Assert first column header conatins text "Transaction Type"
-  8. Assert the first row in table is hidden
-  */
-  const customerLoginPage = new CustomerLoginPage(page);
-  const accountPage = new CustomerAccountPage(page);
-  const transactionsPage = new TransactionsPage(page);
+  1. Open Wizard bank login for Customer */
 
+  const customerLoginPage = new CustomerLoginPage(page);
   await customerLoginPage.open();
+ 
+  // 2. Select "Albus Dumbledore"
+
   await customerLoginPage.selectCustomer('Albus Dumbledore');
+
+  // 3. Click [Login]
+
   await customerLoginPage.clickLoginButton();
+
+  // 4. Click [Transactions]
+
+  const accountPage = new CustomerAccountPage(page);
   await accountPage.clickTransactionsButton();
+
+  // 5. Assert first column header conatins text "Date-Time"
+
+  const transactionsPage = new TransactionsPage(page);
   await transactionsPage.assertHeaderFirstCellContainsText('Date-Time');
+
+  // 6. Assert second column header conatins text "Amount"
+
   await transactionsPage.assertHeaderSecondCellContainsText('Amount');
+
+  // 7. Assert first column header conatins text "Transaction Type"
+
   await transactionsPage.assertHeaderThirdCellContainsText('Transaction Type');
+
+  // 8. Assert the first row in table is hidden
+
   await transactionsPage.assertFirstRowIsHidden();
+
+  // */
 });
