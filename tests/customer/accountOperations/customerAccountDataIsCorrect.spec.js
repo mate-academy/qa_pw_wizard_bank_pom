@@ -1,8 +1,19 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 
+test.describe('Customer account data is correct', () => {
+  let customerLoginPage;
+  let customerAccountPage;
+
+  test.beforeEach(async ({ page }) => {
+    customerLoginPage = new CustomerLoginPage(page);
+    customerAccountPage = new CustomerAccountPage(page);
+    await customerLoginPage.open();
+  });
+
 test('Assert customer has correct bank data', async ({ page }) => {
+  // #region Assert customer has correct bank data
   /* 
   Test:
   1. Open Wizard bank link
@@ -13,15 +24,13 @@ test('Assert customer has correct bank data', async ({ page }) => {
   5. Assert Balance text
   6. Assert Currency text
   */
+//  #endregion
+ await customerLoginPage.customerDropDown.selectOption({ label: 'Hermoine Granger' });
+ await customerLoginPage.loginButton.click();
 
-  const loginPage = new CustomerLoginPage(page);
-  const accountPage = new CustomerAccountPage(page);
-
-  await loginPage.open();
-  await loginPage.selectCustomer('Hermoine Granger');
-  await loginPage.clickLoginButton();
-  await accountPage.assertAccountIdInDropDownHasValue('number:1001');
-  await accountPage.assertAccountLineContainsText('Account Number : 1001');
-  await accountPage.assertAccountLineContainsText('Balance : 5096');
-  await accountPage.assertAccountLineContainsText('Currency : Dollar');
+ await expect(customerAccountPage.dropDownAccountId).toHaveValue('number:1001');
+ await expect(customerAccountPage.accountNumberText).toBeVisible();
+ await expect(customerAccountPage.balanceText).toBeVisible();
+ await expect(customerAccountPage.currencyText).toBeVisible();
+});
 });

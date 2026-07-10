@@ -1,7 +1,19 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { BankHomePage } from '../../../src/pages/BankHomePage';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
+
+test.describe('Logout', () => {
+  let bankHomePage;
+  let customerLoginPage;
+  let customerAccountPage;
+
+test.beforeEach(async ({ page }) => {
+  bankHomePage = new BankHomePage(page);
+  customerLoginPage = new CustomerLoginPage(page);
+  customerAccountPage = new CustomerAccountPage(page);
+  await page.goto('angularJs-protractor/BankingProject');
+});
 
 test('Assert correct customer Logout', async ({ page }) => {
   /* 
@@ -15,16 +27,12 @@ test('Assert correct customer Logout', async ({ page }) => {
   https://www.globalsqa.com/angularJs-protractor/BankingProject/#/customer
   7. Assert the drop-down is present with empty value 
   */
-  const bankHomePage = new BankHomePage(page);
-  const customerLoginPage = new CustomerLoginPage(page);
-  const accountPage = new CustomerAccountPage(page);
+ await bankHomePage.customerLoginButton.click();
+ await customerLoginPage.customerDropDown.selectOption({ label: 'Neville Longbottom'});
+ await customerLoginPage.loginButton.click();
 
-  await bankHomePage.open();
-  await bankHomePage.clickCustomerLoginButton();
-  await customerLoginPage.selectCustomer('Neville Longbottom');
-  await customerLoginPage.clickLoginButton();
-  await accountPage.clickLogoutButton();
-  await customerLoginPage.waitForOpened();
-  await customerLoginPage.assertSelectCustomerDropdownIsVisible();
-  await customerLoginPage.assertSelectCustomerDropdownContainsValue('');
+ await customerAccountPage.logoutButton.click();
+ await page.waitForURL('angularJs-protractor/BankingProject/#/customer');
+ await expect(customerLoginPage.customerDropDown).toHaveValue('');
+});
 });

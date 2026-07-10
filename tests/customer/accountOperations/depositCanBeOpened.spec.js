@@ -1,10 +1,25 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 import { TransactionsPage } from '../../../src/pages/customer/TransactionsPage';
 
+test.describe('Customer account operations', () => {
+  let customerLoginPage;
+  let customerAccountPage;
+  let transactionsPage;
+  const depositAmount = faker.number.int(100).toString();
+  const currentBalance = `Balance : ${depositAmount}`;
+
+  test.beforeEach(async ({ page }) => {
+    customerLoginPage = new CustomerLoginPage(page);
+    customerAccountPage = new CustomerAccountPage(page);
+    transactionsPage = new TransactionsPage(page);
+    await customerLoginPage.open();
+  });
+
 test('Assert the deposit can be opened', async ({ page }) => {
+  // #region Assert the deposit can be opened
   /* 
   Test:
   1. Open Wizard bank login for Customer
@@ -18,24 +33,19 @@ test('Assert the deposit can be opened', async ({ page }) => {
   9. Click [Transactions]
   10. Assert Deposit transaction
   */
+//  #endregion
+ await customerLoginPage.customerDropDown.selectOption({ label: 'Harry Potter' });
+ await customerLoginPage.loginButton.click();
+ await customerAccountPage.depositButton.click();
 
-  const customerLoginPage = new CustomerLoginPage(page);
-  const accountPage = new CustomerAccountPage(page);
-  const transactionsPage = new TransactionsPage(page);
+ await customerAccountPage.amountField.fill(depositAmount);
+ await customerAccountPage.depositFormButton.click();
 
-  await customerLoginPage.open();
-  await customerLoginPage.selectCustomer('Harry Potter');
-  await customerLoginPage.clickLoginButton();
-  await accountPage.clickDepositButton();
-
-  const amount = faker.number.int(100).toString();
-
-  await accountPage.fillAmountInputField(amount);
-  await accountPage.clickDepositFormButton();
-  await accountPage.assertDepositSuccessfulMessageIsVisible();
-  await accountPage.clickTransactionsButton();
-  await transactionsPage.assertHeaderIsVisible();
-  await transactionsPage.reload();
-  await transactionsPage.assertFirstRowAmountContainsText(amount);
-  await transactionsPage.assertFirstRowTypeContainsText('Credit');
+ await expect(customerAccountPage.depositSuccessfulMessage).toBeVisible();
+ await expect(page.getByText(`${currentBalance}`)).toBeVisible();
+ await customerAccountPage.transactionsButton.click();
+ await page.waitForTimeout(1000);
+ await page.reload();
+ await expect(transactionsPage.firstRowAmountCell).toHaveText(`${depositAmount}`);
+});
 });

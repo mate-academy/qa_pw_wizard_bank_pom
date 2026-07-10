@@ -1,11 +1,22 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 import { TransactionsPage } from '../../../src/pages/customer/TransactionsPage';
 
-test('Assert the empty transactions list has correct values', async ({
-  page,
-}) => {
+test.describe('Transactions', () => {
+  let customerLoginPage;
+  let customerAccountPage;
+  let transactionsPage;
+
+test.beforeEach(async ({ page }) => {
+  customerLoginPage = new CustomerLoginPage(page);
+  customerAccountPage = new CustomerAccountPage(page);
+  transactionsPage  = new TransactionsPage(page);
+  await customerLoginPage.open();
+});
+
+test('Assert the empty transactions list has correct values', async ({ page }) => {
+  // #region Assert the empty transactions list has correct values
   /* 
   Test:
   1. Open Wizard bank login for Customer 
@@ -17,16 +28,14 @@ test('Assert the empty transactions list has correct values', async ({
   7. Assert first column header conatins text "Transaction Type"
   8. Assert the first row in table is hidden
   */
-  const customerLoginPage = new CustomerLoginPage(page);
-  const accountPage = new CustomerAccountPage(page);
-  const transactionsPage = new TransactionsPage(page);
-
-  await customerLoginPage.open();
-  await customerLoginPage.selectCustomer('Albus Dumbledore');
-  await customerLoginPage.clickLoginButton();
-  await accountPage.clickTransactionsButton();
-  await transactionsPage.assertHeaderFirstCellContainsText('Date-Time');
-  await transactionsPage.assertHeaderSecondCellContainsText('Amount');
-  await transactionsPage.assertHeaderThirdCellContainsText('Transaction Type');
-  await transactionsPage.assertFirstRowIsHidden();
+//  #endregion
+ await customerLoginPage.customerDropDown.selectOption({ label: 'Albus Dumbledore' });
+ await customerLoginPage.loginButton.click();
+ await customerAccountPage.transactionsButton.click();
+ 
+ await expect(transactionsPage.headerDateTime).toHaveText('Date-Time');
+ await expect(transactionsPage.headerAmount).toHaveText('Amount');
+ await expect(transactionsPage.headerTransactionType).toHaveText('Transaction Type');
+ await expect(transactionsPage.firstRow).toBeHidden();
+});
 });

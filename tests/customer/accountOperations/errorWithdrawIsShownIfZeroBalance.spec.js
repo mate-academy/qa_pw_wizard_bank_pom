@@ -1,11 +1,23 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 
+test.describe('Negative customer balance', () => {
+  let customerLoginPage;
+  let customerAccountPage;
+  const withdrawlAmount = faker.number.int(100).toString();
+
+test.beforeEach(async ({ page }) => {
+  customerLoginPage = new CustomerLoginPage(page);
+  customerAccountPage = new CustomerAccountPage(page);
+  await customerLoginPage.open();
+});
+
 test('Assert the customer cannot withdraw money with empty balance', async ({
   page,
 }) => {
+  // #region Assert the customer cannot withdraw money with empty balance
   /* 
   Test:
   1. Open Wizard bank login for Customer
@@ -18,18 +30,15 @@ test('Assert the customer cannot withdraw money with empty balance', async ({
   8. Assert error message is visible:
     'Transaction Failed. You can not withdraw amount more than the balance.'
   */
-  const customerLoginPage = new CustomerLoginPage(page);
-  const accountPage = new CustomerAccountPage(page);
+//  #endregion
+await customerLoginPage.customerDropDown.selectOption({ label: 'Ron Weasly' });
+await customerLoginPage.loginButton.click();
 
-  await customerLoginPage.open();
-  await customerLoginPage.selectCustomer('Ron Weasly');
-  await customerLoginPage.clickLoginButton();
-  await accountPage.assertAccountLineContainsText('Balance : 0');
-  await accountPage.clickWithdrawlButton();
+await expect(page.getByText('Balance : 0')).toBeVisible();
+await customerAccountPage.withdrawlButton.click();
 
-  const amount = faker.number.int(100).toString();
-
-  await accountPage.fillAmountInputField(amount);
-  await accountPage.clickWithdrawlFormButton();
-  await accountPage.assertWithdrawNoBalanceErrorMessageIsVisible();
+await customerAccountPage.amountField.fill(withdrawlAmount);
+await customerAccountPage.withdrawlFormButton.click();
+await expect(customerAccountPage.withdrawNoBalanceErrorMessage).toBeVisible();
+});
 });
