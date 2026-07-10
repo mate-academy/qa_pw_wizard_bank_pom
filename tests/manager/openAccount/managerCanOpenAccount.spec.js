@@ -49,7 +49,7 @@ test('Assert manager can add new customer', async ({ page }) => {
   await openAccountPage.reload();
   await bankManagerMainPage.clickCustomersButton();
   await customersListPage.waitForOpened();
-  await customersListPage.assertLastRowHasAccountNumber();
+  await customersListPage.assertLastRowHasAccountNumber(firstName, lastName, postalCode);
 });
   /* 
   Test:
