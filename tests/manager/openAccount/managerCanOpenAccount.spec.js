@@ -25,7 +25,6 @@ test.beforeEach(async ({ page }) => {
  addCustomerPage = new AddCustomerPage(page);
 
  await addCustomerPage.open();
- await page.waitForTimeout(1000);
  await addCustomerPage.firstNameField.fill(firstName);
  await addCustomerPage.lastNameField.fill(lastName);
  await addCustomerPage.postCodeField.fill(postalCode);
@@ -35,8 +34,8 @@ test.beforeEach(async ({ page }) => {
  await openAccountPage.open();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
-  // #region Task: Assert manager can add new customer
+test('Assert manager can open account for existing customer', async ({ page }) => {
+  // #region Task: Assert manager can open account for existing customer
   /* 
   Test:
   1. Click [Open Account].
