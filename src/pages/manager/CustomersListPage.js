@@ -43,10 +43,13 @@ export class CustomersListPage {
     await expect(lastRow.locator('td').nth(3)).toHaveText('');
   }
 
-  async assertLastRowHasAccountNumber() {
-    const lastRow = await this.getLastRow();
-    await expect(lastRow.locator('td').nth(3)).not.toBeEmpty();
-  }
+  async assertLastRowHasAccountNumber(firstName, lastName, postalCode) {
+  const customerRow = this.customerRows
+    .filter({ hasText: firstName })
+    .filter({ hasText: lastName })
+    .filter({ hasText: postalCode });
+  await expect(customerRow.locator('td').nth(3)).not.toBeEmpty();
+}
 
   async deleteCustomerRow() {
     const lastRow = await this.getLastRow();

@@ -25,7 +25,14 @@ test.beforeEach(async ({ page }) => {
 
   await addCustomerPage.reload();
 });
-
+  /* 
+  Pre-conditons:
+  1. Open Add Customer page
+  2. Fill the First Name.  
+  3. Fill the Last Name.
+  4. Fill the Postal Code.
+  5. Click [Add Customer].
+  */
 
 test('Assert manager can search customer by First Name', async ({ page }) => {
 
