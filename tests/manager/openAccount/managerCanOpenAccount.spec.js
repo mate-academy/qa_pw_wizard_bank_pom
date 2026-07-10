@@ -1,7 +1,29 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
+let firstName;
+let lastName;
+let postalCode;
 
 test.beforeEach(async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  await addCustomerPage.open();
+
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postalCode = faker.location.zipCode();
+
+  await addCustomerPage.fillFirstNameField(firstName);
+  await addCustomerPage.fillLastNameField(lastName);
+  await addCustomerPage.fillPostalCodeField(postalCode);
+  await addCustomerPage.clickAddCustomerButton();
+
+  await addCustomerPage.reload();
+});
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -11,9 +33,24 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
-});
+
 
 test('Assert manager can add new customer', async ({ page }) => {
+
+  const bankManagerMainPage = new BankManagerMainPage(page);
+  const openAccountPage = new OpenAccountPage(page);
+  const customersListPage = new CustomersListPage(page);
+  
+  await bankManagerMainPage.clickOpenAccountButton();
+  await openAccountPage.waitForOpened();
+  await openAccountPage.selectCustomer(`${firstName} ${lastName}`);
+  await openAccountPage.selectCurrency('Dollar');
+  await openAccountPage.clickProcessButton();
+  await openAccountPage.reload();
+  await bankManagerMainPage.clickCustomersButton();
+  await customersListPage.waitForOpened();
+  await customersListPage.assertLastRowHasAccountNumber();
+});
   /* 
   Test:
   1. Click [Open Account].
@@ -28,4 +65,4 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
-});
+
