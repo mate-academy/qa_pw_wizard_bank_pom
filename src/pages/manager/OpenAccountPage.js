@@ -22,10 +22,6 @@ export class OpenAccountPage {
     await this.currencyDropDownLocator.selectOption(currency);
   }
 
-  async selectUser(userSelect) {
-    await this.userDropDownLocator.selectOption(userSelect);
-  }
-
   async selectUser(firstName,lastName) {
     await this.userDropDownLocator.selectOption({ label: `${firstName} ${lastName}` });
   }

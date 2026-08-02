@@ -2,13 +2,11 @@ import { test } from '@playwright/test';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { generateCustomerData } from '../../../src/data/customerData';
 import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
-import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 let addCustomerPage;
 let customerData;
 let bankManagerMainPage;
-let openAccountPage;
 let customersListPage;
 
 test.beforeEach(async ({ page }) => {
@@ -22,7 +20,6 @@ test.beforeEach(async ({ page }) => {
   */
   addCustomerPage = new AddCustomerPage(page);
   bankManagerMainPage = new BankManagerMainPage(page);
-  openAccountPage = new OpenAccountPage(page);
   customersListPage = new CustomersListPage(page);
   customerData = generateCustomerData();
  

@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import { faker } from '@faker-js/faker';
 
 export class AddCustomerPage {
   constructor(page) {
