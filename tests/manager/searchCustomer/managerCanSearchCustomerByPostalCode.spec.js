@@ -1,9 +1,9 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 
-let firstName;
-let lastName;
-let postalCode;
+let customer;
 
 test.beforeEach(async ({ page }) => {
   /* 
@@ -14,9 +14,16 @@ test.beforeEach(async ({ page }) => {
   4. Fill the Postal Code.
   5. Click [Add Customer].
   */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
+  customer = {
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    postCode: faker.location.zipCode(),
+  }
+  
+  const addCustomerPage = new AddCustomerPage(page);
+  
+  await addCustomerPage.open();
+  await addCustomerPage.registerCustomer(customer);
 });
 
 test('Assert manager can search customer by Postal Code', async ({ page }) => {
@@ -27,4 +34,13 @@ test('Assert manager can search customer by Postal Code', async ({ page }) => {
   3. Assert customer row is present in the table. 
   4. Assert no other rows is present in the table.
   */
+ const customersPage = new CustomersListPage(page);
+ 
+  await customersPage.open();
+  await customersPage.searchCustomer(customer.postCode);
+  /** 
+   * this assertion already checks for single entry presence so it
+   * can be used for verifying that its the only shown customer
+   */
+  await customersPage.assertCustomer(customer);
 });
