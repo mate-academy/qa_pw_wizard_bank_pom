@@ -1,7 +1,20 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage.js';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage.js';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage.js';
+
+let openAccountPage;
+let addCustomerPage;
+let customersListPage;
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
+const postCode = faker.location.zipCode();
 
 test.beforeEach(async ({ page }) => {
+  addCustomerPage = new AddCustomerPage(page);
+  openAccountPage = new OpenAccountPage(page);
+  customersListPage = new CustomersListPage(page);
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -11,6 +24,12 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostCode(postCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await addCustomerPage.reloadPage();
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
@@ -28,4 +47,11 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
+  await addCustomerPage.clickOpenAccountButton();
+  await openAccountPage.selectCustomerOption(`${firstName} ${lastName}`);
+  await openAccountPage.selectCurrencyOption('Dollar');
+  await openAccountPage.clickProcessButton();
+  await openAccountPage.reloadPage();
+  await addCustomerPage.clickCustomersButton();
+  await customersListPage.assertLastRowAccountNumberNotEmpty();
 });
