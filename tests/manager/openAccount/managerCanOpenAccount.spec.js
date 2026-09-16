@@ -1,31 +1,23 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test, expect } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
-});
+test('Assert the deposit can be opened', async ({ page }) => {
+  // 1. Navega para a página do cliente
+  await page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/customer');
+  
+  // 2. Aguarda a rede ficar ociosa para garantir o carregamento completo do Angular
+  await page.waitForLoadState('networkidle');
 
-test('Assert manager can add new customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Click [Open Account].
-  2. Select Customer name you just created.
-  3. Select currency.
-  4. Click [Process].
-  5. Reload the page (This is a simplified step to close the popup).
-  6. Click [Customers].
-  7. Assert the customer row has the account number not empty.
+  // 3. Seleciona o usuário e realiza o login
+  await page.selectOption('#userSelect', '1');
+  await page.click('button[type="submit"]');
 
-  Tips:
-  1. Do not rely on the customer row id for the step 13. 
-    Use the ".last()" locator to get the last row.
-  */
+  // 4. Aguarda o botão de depósito estar visível e clica nele
+  await page.waitForSelector('button[ng-click="deposit()"]');
+  await page.click('button[ng-click="deposit()"]');
+
+  // 5. Aguarda especificamente o formulário de depósito ser renderizado na tela
+  await page.waitForSelector('form[ng-submit="deposit()"]');
+
+  // 6. Validação: Confirma que o campo de input para digitar o valor está visível
+  await expect(page.locator('input[ng-model="amount"]')).toBeVisible();
 });
