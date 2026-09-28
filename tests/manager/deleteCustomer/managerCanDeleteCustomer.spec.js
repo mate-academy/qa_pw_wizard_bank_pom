@@ -30,8 +30,6 @@ test.beforeEach(async ({ page }) => {
   await addCustomer.fillLastName(lastName);
   await addCustomer.fillPostalCode(postalCode);
   await addCustomer.clickAddCustomer();
-
-  await page.reload();
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
