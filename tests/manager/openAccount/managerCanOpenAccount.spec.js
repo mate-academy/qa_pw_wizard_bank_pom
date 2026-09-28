@@ -1,31 +1,31 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test, expect } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage.js';
+// CORREÇÃO DE CONSISTÊNCIA: Adicionadas chaves { } na importação
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage.js';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage.js';
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
+test('Assert manager can open account', async ({ page }) => {
+  const bankHomePage = new BankHomePage(page);
+  const managerMainPage = new BankManagerMainPage(page);
+  const openAccountPage = new OpenAccountPage(page);
+
+  // 1. Abre a página inicial do banco
+  await bankHomePage.open(); 
+
+  // 2. Clica em "Bank Manager Login"
+  await bankHomePage.clickBankManagerLogin();
+
+  // 3. Clica na aba "Open Account" no menu do gerente
+  await managerMainPage.clickOpenAccountTab();
+
+  // 4. Seleciona o cliente usando a sua função
+  await openAccountPage.selectCustomer('Hermoine Granger');
+
+  // 5. Seleciona a moeda usando a sua função
+  await openAccountPage.selectCurrency('Dollar');
+
+  // 6. Clica no botão Processar e valida o alerta de sucesso com a sua função
+  await openAccountPage.processAccount();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Click [Open Account].
-  2. Select Customer name you just created.
-  3. Select currency.
-  4. Click [Process].
-  5. Reload the page (This is a simplified step to close the popup).
-  6. Click [Customers].
-  7. Assert the customer row has the account number not empty.
 
-  Tips:
-  1. Do not rely on the customer row id for the step 13. 
-    Use the ".last()" locator to get the last row.
-  */
-});

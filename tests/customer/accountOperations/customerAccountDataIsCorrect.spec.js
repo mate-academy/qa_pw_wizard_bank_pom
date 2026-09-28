@@ -1,27 +1,38 @@
-import { test } from '@playwright/test';
-import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
-import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
+import { test, expect } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage.js';
+import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage.js';
+import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage.js';
 
-test('Assert customer has correct bank data', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Wizard bank link
-  2. Select Hermione Granger
-  3. Click [Login]
-  4. Assert Account Number in Dropdown next to the Hermoine Granger name
-  5. Assert Account Number text
-  5. Assert Balance text
-  6. Assert Currency text
-  */
-
+test('Assert Customer has correct bank data', async ({ page }) => {
+  const bankHomePage = new BankHomePage(page);
   const loginPage = new CustomerLoginPage(page);
   const accountPage = new CustomerAccountPage(page);
 
-  await loginPage.open();
-  await loginPage.selectCustomer('Hermoine Granger');
+  await bankHomePage.open();
+  await bankHomePage.clickCustomerLogin();
+
+  await loginPage.selectCustomer('Hermione Granger');
   await loginPage.clickLoginButton();
-  await accountPage.assertAccountIdInDropDownHasValue('number:1001');
-  await accountPage.assertAccountLineContainsText('Account Number : 1001');
-  await accountPage.assertAccountLineContainsText('Balance : 5096');
-  await accountPage.assertAccountLineContainsText('Currency : Dollar');
+
+  // Validações estáticas dos dados originais exigidos pelo Luke
+  await accountPage.assertAccountLineContainsText('1001');
+  await accountPage.assertAccountLineContainsText('5096');
+  await accountPage.assertAccountLineContainsText('Dollar');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,13 +1,21 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage.js';
 
-test('Assert manager can Login', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Wizard bank home page 
-    https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login
-  2. Click [Bank Manager Login]
-  3. Assert button [Add Customer] is visible
-  4. Assert button [Open Account] is visible
-  5. Assert button [Customers] is visible
-  */
+test('Assert manager can login successfully and see options menu', async ({ page }) => {
+  const bankHomePage = new BankHomePage(page);
+
+  await bankHomePage.open();
+  await bankHomePage.clickBankManagerLogin();
+
+  // Validando o fluxo correto do gerente
+  const addCustomerTab = page.locator('button:has-text("Add Customer")');
+  const openAccountTab = page.locator('button:has-text("Open Account")');
+  const customersTab = page.locator('button:has-text("Customers")');
+
+  await expect(addCustomerTab).toBeVisible();
+  await expect(openAccountTab).toBeVisible();
+  await expect(customersTab).toBeVisible();
 });
+
+
+
