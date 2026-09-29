@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
-import { CustomersPage } from '../../../src/pages/manager/CustomersPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 let firstName;
 let lastName;
@@ -22,13 +22,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can search customer by Postal Code', async ({ page }) => {
-  const customersPage = new CustomersPage(page);
+  const customersPage = new CustomersListPage(page);
 
   await customersPage.open();
-
   await customersPage.searchCustomer(postalCode);
-
   await customersPage.assertCustomerInTable(firstName, lastName);
-
   await expect(customersPage.tableRows).toHaveCount(1);
 });

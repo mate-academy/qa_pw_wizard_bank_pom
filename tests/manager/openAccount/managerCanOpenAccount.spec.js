@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
-import { CustomersPage } from '../../../src/pages/manager/CustomersPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 let firstName;
 let lastName;
@@ -15,7 +15,6 @@ test.beforeEach(async ({ page }) => {
   lastName = faker.person.lastName();
   postalCode = faker.location.zipCode();
 
-  // Pre-conditions:
   await addCustomerPage.open();
   await addCustomerPage.fillFirstName(firstName);
   await addCustomerPage.fillLastName(lastName);
@@ -26,17 +25,14 @@ test.beforeEach(async ({ page }) => {
 
 test('Assert manager can open account for customer', async ({ page }) => {
   const openAccountPage = new OpenAccountPage(page);
-  const customersPage = new CustomersPage(page);
+  const customersPage = new CustomersListPage(page);
+
   await openAccountPage.open();
-
   await openAccountPage.selectCustomer(`${firstName} ${lastName}`);
-
   await openAccountPage.selectCurrency('Dollar');
-
   await openAccountPage.clickProcessButton();
 
   await page.reload();
-
   await customersPage.open();
 
   const lastRow = customersPage.tableRows.last();

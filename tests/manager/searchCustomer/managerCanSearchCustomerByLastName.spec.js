@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
-import { CustomersPage } from '../../../src/pages/manager/CustomersPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 let firstName;
 let lastName;
@@ -15,18 +15,14 @@ test.beforeEach(async ({ page }) => {
   postalCode = faker.location.zipCode();
 
   await addCustomerPage.open();
-
   await addCustomerPage.fillFirstName(firstName);
-
   await addCustomerPage.fillLastName(lastName);
-
   await addCustomerPage.fillPostCode(postalCode);
-
   await addCustomerPage.clickAddCustomerButton();
 });
 
 test('Assert manager can search customer by Last Name', async ({ page }) => {
-  const customersPage = new CustomersPage(page);
+  const customersPage = new CustomersListPage(page);
 
   /*
   * Test:
@@ -37,10 +33,7 @@ test('Assert manager can search customer by Last Name', async ({ page }) => {
   */
 
   await customersPage.open();
-
   await customersPage.searchCustomer(lastName);
-
   await customersPage.assertCustomerInTable(firstName, lastName);
-
   await expect(customersPage.tableRows).toHaveCount(1);
 });
