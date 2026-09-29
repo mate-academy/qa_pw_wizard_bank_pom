@@ -3,10 +3,6 @@ import { faker } from "@faker-js/faker";
 import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
 import { OpenAccountPage } from "../../../src/pages/manager/OpenAccountPage";
 
-const firstName = faker.person.firstName();
-const lastName = faker.person.lastName();
-const postCode = faker.location.zipCode();
-
 test.beforeEach(async ({ page }) => {
   /* 
   Pre-conditons:
@@ -18,6 +14,9 @@ test.beforeEach(async ({ page }) => {
   6. Reload the page (This is a simplified step to close the popup).
   */
   const addCustomer = new AddCustomerPage(page);
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
 
   await addCustomer.open();
   await addCustomer.customerName(firstName);
@@ -27,7 +26,7 @@ test.beforeEach(async ({ page }) => {
   await page.reload();
 });
 
-test("Assert manager can add new customer", async ({ page }) => {
+test("Assert manager can open account for custome", async ({ page }) => {
   /* 
   Test:
   1. Click [Open Account].
@@ -48,5 +47,5 @@ test("Assert manager can add new customer", async ({ page }) => {
   const openAccount = new OpenAccountPage(page);
   await openAccount.open();
 
-  await openAccount.choosecurrentAccount();
+  await openAccount.chooseCurrentAccount();
 });

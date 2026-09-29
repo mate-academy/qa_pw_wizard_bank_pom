@@ -23,7 +23,7 @@ export class OpenAccountPage {
     expect(currencyName).toContainText(currency);
   }
 
-  async choosecurrentAccount() {
+  async chooseCurrentAccount() {
     const account = this.currentAccount;
     const options = account.locator("option");
     await expect(options.nth(1)).toBeAttached();

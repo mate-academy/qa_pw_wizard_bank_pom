@@ -10,7 +10,7 @@ export class AddCustomerPage {
       .getByRole("form")
       .getByRole("button", { name: "Add Customer" });
     this.customerListClick = page.getByRole("button", { name: "Customers" });
-    this.openAccounLink = page.getByRole("button", { name: "Open Account" });
+    this.openAccountLink = page.getByRole("button", { name: "Open Account" });
   }
 
   async open() {
@@ -40,6 +40,6 @@ export class AddCustomerPage {
   }
 
   async openAccount() {
-    await this.openAccounLink.click();
+    await this.openAccountLink.click();
   }
 }
