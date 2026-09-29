@@ -37,7 +37,7 @@ export class CustomersListPage {
     await customerRow.getByRole("button").click();
   }
 
-  async deletedAccound(firstName) {
+  async deletedAccount(firstName) {
     const customerRow = this.page.getByRole("row", { name: firstName });
     await expect(customerRow).toBeHidden();
   }

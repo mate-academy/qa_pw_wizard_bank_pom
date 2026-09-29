@@ -3,10 +3,6 @@ import { faker } from "@faker-js/faker";
 import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
 import { CustomersListPage } from "../../../src/pages/manager/CustomersListPage";
 
-const firstName = faker.person.firstName();
-const lastName = faker.person.lastName();
-const postCode = faker.location.zipCode();
-
 test.beforeEach(async ({ page }) => {
   /* 
   Pre-conditons:
@@ -17,6 +13,9 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   */
   const addCustomer = new AddCustomerPage(page);
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
 
   await addCustomer.open();
   await addCustomer.customerName(firstName);
@@ -41,9 +40,9 @@ test("Assert manager can delete customer", async ({ page }) => {
 
   await customersList.open();
   await customersList.deleteCustomerAccount(firstName);
-  await customersList.deletedAccound(firstName);
+  await customersList.deletedAccount(firstName);
 
   await page.reload();
 
-  await customersList.deletedAccound(firstName);
+  await customersList.deletedAccount(firstName);
 });
