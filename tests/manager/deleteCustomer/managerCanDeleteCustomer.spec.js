@@ -41,6 +41,5 @@ test("Assert manager can delete customer", async ({ page }) => {
   await customersList.deletedAccount(firstName);
 
   await page.reload();
-
   await customersList.deletedAccount(firstName);
 });
