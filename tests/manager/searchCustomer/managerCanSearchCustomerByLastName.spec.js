@@ -13,15 +13,28 @@ test.beforeEach(async ({ page }) => {
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
   postalCode = faker.location.zipCode();
+
   await addCustomerPage.open();
+
   await addCustomerPage.fillFirstName(firstName);
+
   await addCustomerPage.fillLastName(lastName);
+
   await addCustomerPage.fillPostCode(postalCode);
+
   await addCustomerPage.clickAddCustomerButton();
 });
 
 test('Assert manager can search customer by Last Name', async ({ page }) => {
   const customersPage = new CustomersPage(page);
+
+  /*
+  * Test:
+  * 1. Open Customers page
+  * 2. Fill the lastName to the search field
+  * 3. Assert customer row is present in the table
+  * 4. Assert no other rows is present in the table
+  */
 
   await customersPage.open();
 
