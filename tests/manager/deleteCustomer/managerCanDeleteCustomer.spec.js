@@ -37,7 +37,6 @@ test("Assert manager can delete customer", async ({ page }) => {
   */
 
   const customersList = new CustomersListPage(page);
-
   await customersList.open();
   await customersList.deleteCustomerAccount(firstName);
   await customersList.deletedAccount(firstName);
