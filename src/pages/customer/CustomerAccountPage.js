@@ -23,6 +23,8 @@ export class CustomerAccountPage {
     this.withdrawlFormButton = page.getByRole('form').getByRole('button', {
       name: 'Withdraw',
     });
+    this.withdrawAmountLabel = page.getByText('Amount to be Withdrawn');
+    this.withdrawSuccessfulMessage = page.getByText('Transaction successful');
     this.withdrawNoBalanceErrorMessage = page.getByText(
       'Transaction Failed. You can not withdraw amount more than the balance.',
     );
@@ -72,6 +74,14 @@ export class CustomerAccountPage {
 
   async assertDepositSuccessfulMessageIsVisible() {
     await expect(this.depositSuccessfulMessage).toBeVisible();
+  }
+
+  async assertWithdrawFormIsVisible() {
+    await expect(this.withdrawAmountLabel).toBeVisible();
+  }
+
+  async assertWithdrawSuccessfulMessageIsVisible() {
+    await expect(this.withdrawSuccessfulMessage).toBeVisible();
   }
 
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
