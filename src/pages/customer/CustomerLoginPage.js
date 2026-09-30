@@ -29,6 +29,12 @@ export class CustomerLoginPage {
     await expect(this.customerDropDown).toBeVisible();
   }
 
+  async assertCustomerIsNotInDropdown(customerName) {
+    await expect(
+      this.customerDropDown.locator('option', { hasText: customerName }),
+    ).toHaveCount(0);
+  }
+
   async assertSelectCustomerDropdownContainsValue(value) {
     const currentOptionText = this.customerDropDown;
     await expect(currentOptionText).toHaveValue(value);
