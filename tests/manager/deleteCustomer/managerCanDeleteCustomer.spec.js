@@ -1,18 +1,10 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test } from '../../fixtures/manager.fixture';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page.
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-});
-
-test('Assert manager can delete customer', async ({ page }) => {
+test('Assert manager can delete customer', { tag: '@manager' }, async ({
+  page,
+  customer,
+}) => {
   /* 
   Test:
   1. Open Customers page.
@@ -21,4 +13,10 @@ test('Assert manager can delete customer', async ({ page }) => {
   4. Reload the page.
   5. Assert customer row is not present in the table. 
   */
+  const customersListPage = new CustomersListPage(page);
+  await customersListPage.open();
+  await customersListPage.clickDeleteForCustomer(customer.firstName, customer.lastName);
+  await customersListPage.assertCustomerIsHidden(customer.firstName, customer.lastName);
+  await page.reload();
+  await customersListPage.assertCustomerIsHidden(customer.firstName, customer.lastName);
 });

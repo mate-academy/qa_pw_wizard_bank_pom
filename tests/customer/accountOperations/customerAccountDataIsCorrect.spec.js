@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 
-test('Assert customer has correct bank data', async ({ page }) => {
+test('Assert customer has correct bank data', { tag: ['@customer', '@smoke'] }, async ({ page }) => {
   /* 
   Test:
   1. Open Wizard bank link

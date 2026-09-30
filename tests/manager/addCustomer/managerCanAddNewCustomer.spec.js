@@ -1,7 +1,9 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can add new customer', { tag: ['@manager', '@smoke'] }, async ({ page }) => {
   /* 
   Test:
   1. Open add customer page by link
@@ -26,4 +28,20 @@ test('Assert manager can add new customer', async ({ page }) => {
   2. Do not rely on the customer row id for the steps 8-11. 
     Use the ".last()" locator to get the last row.
   */
+
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postalCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillCustomerForm(firstName, lastName, postalCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await page.reload();
+  await customersListPage.clickCustomersButton();
+  await customersListPage.assertLastRowContainsText(firstName);
+  await customersListPage.assertLastRowContainsText(lastName);
+  await customersListPage.assertLastRowContainsText(postalCode);
+  await customersListPage.assertLastRowAccountNumberIsEmpty();
 });

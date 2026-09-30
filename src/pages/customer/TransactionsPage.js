@@ -15,6 +15,7 @@ export class TransactionsPage {
   async open() {
     await this.page.goto('/angularJs-protractor/BankingProject/#/listTx');
   }
+
   async reload() {
     await this.page.reload();
   }
@@ -25,6 +26,15 @@ export class TransactionsPage {
 
   async assertFirstRowTypeContainsText(type) {
     await expect(this.firstRowTypeCell).toContainText(type);
+  }
+
+  async assertTransactionExists(amount, type) {
+    const transactionRow = this.page
+      .locator('table tr')
+      .filter({ hasText: amount })
+      .filter({ hasText: type });
+
+    await expect(transactionRow.first()).toBeVisible();
   }
 
   async assertFirstRowIsHidden() {

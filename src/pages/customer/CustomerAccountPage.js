@@ -3,7 +3,7 @@ import { expect } from '@playwright/test';
 export class CustomerAccountPage {
   constructor(page) {
     this.page = page;
-    this.accountIdDropDown = page.getByTestId('accountSelect');
+    this.accountDropdown = page.getByTestId('accountSelect');
     this.accountDataLine = page
       .locator('div')
       .filter({
@@ -14,13 +14,13 @@ export class CustomerAccountPage {
     this.transactionsButton = page.getByRole('button', {
       name: 'Transactions',
     });
-    this.withdrawlButton = page.getByRole('button', { name: 'Withdraw' });
+    this.withdrawButton = page.getByRole('button', { name: 'Withdraw' });
     this.amountInputField = page.getByPlaceholder('amount');
     this.depositFormButton = page.getByRole('form').getByRole('button', {
       name: 'Deposit',
     });
     this.depositSuccessfulMessage = page.getByText('Deposit Successful');
-    this.withdrawlFormButton = page.getByRole('form').getByRole('button', {
+    this.withdrawFormButton = page.getByRole('form').getByRole('button', {
       name: 'Withdraw',
     });
     this.withdrawNoBalanceErrorMessage = page.getByText(
@@ -34,8 +34,11 @@ export class CustomerAccountPage {
   }
 
   async assertAccountIdInDropDownHasValue(value) {
-    const accountNumberInDrodown = this.accountIdDropDown;
-    await expect(accountNumberInDrodown).toHaveValue(value);
+    await expect(this.accountDropdown).toHaveValue(value);
+  }
+
+  async selectAccount(accountNumber) {
+    await this.accountDropdown.selectOption({ label: accountNumber });
   }
 
   async assertAccountLineContainsText(text) {
@@ -50,8 +53,8 @@ export class CustomerAccountPage {
     await this.transactionsButton.click();
   }
 
-  async clickWithdrawlButton() {
-    await this.withdrawlButton.click();
+  async clickWithdrawButton() {
+    await this.withdrawButton.click();
   }
 
   async fillAmountInputField(amount) {
@@ -62,8 +65,8 @@ export class CustomerAccountPage {
     await this.depositFormButton.click();
   }
 
-  async clickWithdrawlFormButton() {
-    await this.withdrawlFormButton.click();
+  async clickWithdrawFormButton() {
+    await this.withdrawFormButton.click();
   }
 
   async clickLogoutButton() {

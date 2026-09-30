@@ -1,25 +1,10 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test } from '../../fixtures/manager.fixture';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-let firstName;
-let lastName;
-let postalCode;
-
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
-});
-
-test('Assert manager can search customer by Last Name', async ({ page }) => {
+test('Assert manager can search customer by Last Name', { tag: '@manager' }, async ({
+  page,
+  customer,
+}) => {
   /* 
   Test:
   1. Open Customers page
@@ -27,4 +12,8 @@ test('Assert manager can search customer by Last Name', async ({ page }) => {
   3. Assert customer row is present in the table. 
   4. Assert no other rows is present in the table.
   */
+  const customersListPage = new CustomersListPage(page);
+  await customersListPage.open();
+  await customersListPage.searchCustomer(customer.lastName);
+  await customersListPage.assertOnlyCustomerIsVisible(customer.firstName, customer.lastName);
 });
