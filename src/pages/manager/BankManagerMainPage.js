@@ -20,8 +20,8 @@ export class BankManagerMainPage {
     await this.openAccountButton.click();
   }
 
-  async clickCustomersButton() {
-    await this.customersButton.click();
+  async clickAddCustomerButton() {
+    await this.addCustomerButton.click();
   }
 
   async assertAddCustomerButtonIsVisible() {
