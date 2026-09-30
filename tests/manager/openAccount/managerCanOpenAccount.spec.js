@@ -1,19 +1,11 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test } from '../../fixtures/manager.fixture';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
-});
-
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can add new customer', { tag: '@manager' }, async ({
+  page,
+  customer,
+}) => {
   /* 
   Test:
   1. Click [Open Account].
@@ -28,4 +20,14 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
+  const openAccountPage = new OpenAccountPage(page);
+  const customersListPage = new CustomersListPage(page);
+
+  await openAccountPage.open();
+  await openAccountPage.selectCustomer(`${customer.firstName} ${customer.lastName}`);
+  await openAccountPage.selectCurrency('Dollar');
+  await openAccountPage.clickProcessButton();
+  await page.reload();
+  await customersListPage.clickCustomersButton();
+  await customersListPage.assertLastRowAccountNumberIsPresent();
 });

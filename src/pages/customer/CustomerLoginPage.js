@@ -25,6 +25,10 @@ export class CustomerLoginPage {
     await this.loginButton.click();
   }
 
+  async assertLoginButtonIsUnavailable() {
+    await expect(this.loginButton).toHaveCount(0);
+  }
+
   async assertSelectCustomerDropdownIsVisible() {
     await expect(this.customerDropDown).toBeVisible();
   }
@@ -33,4 +37,5 @@ export class CustomerLoginPage {
     const currentOptionText = this.customerDropDown;
     await expect(currentOptionText).toHaveValue(value);
   }
+
 }
