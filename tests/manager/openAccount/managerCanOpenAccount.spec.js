@@ -1,7 +1,24 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+
+let firstName;
+let lastName;
 
 test.beforeEach(async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostCode(postCode);
+  await addCustomerPage.clickAddCustomer();
+  await page.reload();
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -14,6 +31,15 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
+  const openAccountPage = new OpenAccountPage(page);
+  const customersListPage = new CustomersListPage(page);
+  await openAccountPage.open();
+  await openAccountPage.selectCustomer(`${firstName} ${lastName}`);
+  await openAccountPage.selectCurrency('Dollar');
+  const accountNumber = await openAccountPage.clickProcessButton();
+  await page.reload();
+  await openAccountPage.clickCustomersButton();
+  await customersListPage.assertAccountNumber(accountNumber);
   /* 
   Test:
   1. Click [Open Account].

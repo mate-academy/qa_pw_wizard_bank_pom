@@ -1,6 +1,14 @@
 import { test } from '@playwright/test';
-
+import { BankHomePage } from '../../../src/pages/BankHomePage';
 test('Assert manager can Login', async ({ page }) => {
+  const bankHomePage = new BankHomePage(page);
+  await bankHomePage.open();
+  await bankHomePage.clickBankManagerLoginButton();
+  await bankHomePage.assertAddCustomerButtonVisibility();
+  await bankHomePage.assertOpenAccountButtonVisibility();
+  await bankHomePage.assertCustomersButtonVisibility();
+  
+  
   /* 
   Test:
   1. Open Wizard bank home page 
