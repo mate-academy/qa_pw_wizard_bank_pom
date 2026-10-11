@@ -2,10 +2,11 @@ import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 let firstName;
 let lastName;
-let postalCode;
+let postCode;
 
 test.beforeEach(async ({ page }) => {
   /* 
@@ -19,19 +20,19 @@ test.beforeEach(async ({ page }) => {
   */
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
+  postCode = faker.location.zipCode();
 
   const addCustomerPage = new AddCustomerPage(page);
 
   await addCustomerPage.open();
   await addCustomerPage.fillFirstName(firstName);
   await addCustomerPage.fillLastName(lastName);
-  await addCustomerPage.fillPostCode(postalCode);
+  await addCustomerPage.fillPostCode(postCode);
   await addCustomerPage.clickAddCustomerButton();
   await page.reload();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open an account for customer', async ({ page }) => {
   /* 
   Test:
   1. Click [Open Account].
@@ -48,17 +49,22 @@ test('Assert manager can add new customer', async ({ page }) => {
   */
 
    const openAccountPage = new OpenAccountPage(page);
-   
-
+   const customersListPage = new CustomersListPage(page);
+   const customerName = `${firstName} ${lastName}`;
+  
    
    await openAccountPage.open();
-   await openAccountPage.selectCustomer();
+   await openAccountPage.selectCustomer(customerName);
    await openAccountPage.selectCurrency('Dollar');
    await openAccountPage.process();
    await page.reload();
    await openAccountPage.openCustomers();
-   await openAccountPage.selectCustomer(`${firstName} ${lastName}`);
+
+   await customersListPage.assertCustomerHasAccountCount(
+  firstName,
+  lastName,
+  postCode,
+  1,
+);
   
-
-
 });

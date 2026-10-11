@@ -10,7 +10,7 @@ export class OpenAccountPage {
 
   async open() {
     await this.page.goto(
-      'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/openAccount',
+      '/angularJs-protractor/BankingProject/#/manager/openAccount',
     );
 
   
