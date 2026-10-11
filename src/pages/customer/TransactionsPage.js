@@ -10,6 +10,7 @@ export class TransactionsPage {
     this.firstRow = page.getByRole('row').nth(1);
     this.firstRowAmountCell = this.firstRow.getByRole('cell').nth(1);
     this.firstRowTypeCell = this.firstRow.getByRole('cell').nth(2);
+    this.resetButton = this.page.getByRole('button', { name: 'Reset' });
   }
 
   async open() {
@@ -46,4 +47,23 @@ export class TransactionsPage {
   async assertHeaderThirdCellContainsText(text) {
     await expect(this.headerThirdCell).toContainText(text);
   }
+
+  async assertTransactionIsPresent(amount, type) {
+  const transactionRow = this.page
+    .getByRole('row')
+    .filter({ hasText: amount })
+    .filter({ hasText: type });
+
+  await expect(transactionRow).toBeVisible();
+}
+
+  async clickResetButton() {
+  await this.resetButton.click();
+}
+
+  async assertFirstRowIsVisible() {
+  await expect(this.firstRow).toBeVisible();
+}
+
+
 }

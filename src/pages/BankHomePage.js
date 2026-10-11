@@ -15,4 +15,9 @@ export class BankHomePage {
   async clickCustomerLoginButton() {
     await this.customerLoginButton.click();
   }
+
+  async clickBankManagerLoginButton() {
+    await this.page.getByRole('button', { name: 'Bank Manager Login' }).click();
+  }
+
 }

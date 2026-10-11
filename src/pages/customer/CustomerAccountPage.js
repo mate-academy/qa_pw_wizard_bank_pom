@@ -77,4 +77,16 @@ export class CustomerAccountPage {
   async assertWithdrawNoBalanceErrorMessageIsVisible() {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
   }
+
+  async getCurrentBalance() {
+  const accountData = await this.accountDataLine.textContent();
+  const balance = accountData.match(/Balance\s*:\s*(\d+)/);
+
+  return Number(balance[1]);
+}
+
+
+
+
+
 }
