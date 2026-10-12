@@ -16,12 +16,13 @@ let createdCustomer;
 test.beforeEach(async ({ page }) => {
 addCustPage = new AddCustomerPage(page);
 custListPage = new CustomersListPage(page);
-createdCustomer = custListPage.getCreatedCustomerRow(firstName, lastName, postCode);
 
 
 firstName = faker.person.firstName();
 lastName = faker.person.lastName();
 postCode = faker.location.zipCode();
+
+createdCustomer = custListPage.getCreatedCustomerRow(firstName, lastName, postCode);
 
 await addCustPage.open();
 await addCustPage.firstNameField.fill(firstName);
@@ -55,7 +56,7 @@ test('Assert manager can search customer by Last Name', async ({ page }) => {
 
 
 await custListPage.open();
-await custListPage.searchCustomerField.fill(firstName);
+await custListPage.searchCustomerField.fill(lastName);
 await expect(custLastName).toBeVisible();
 await custListPage.assertNoOtherRowsPresented();
 });
@@ -65,7 +66,7 @@ test('Assert manager can search customer by Postal Code', async ({ page }) => {
 
 
 await custListPage.open();
-await custListPage.searchCustomerField.fill(firstName);
+await custListPage.searchCustomerField.fill(postCode);
 await expect(custPostCode).toBeVisible();
 await custListPage.assertNoOtherRowsPresented();
 });
