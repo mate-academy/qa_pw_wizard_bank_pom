@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
@@ -35,7 +35,6 @@ test('Assert the deposit can be opened', async ({ page }) => {
   await accountPage.assertDepositSuccessfulMessageIsVisible();
   await accountPage.clickTransactionsButton();
   await transactionsPage.assertHeaderIsVisible();
-  await transactionsPage.reload();
   await transactionsPage.assertFirstRowAmountContainsText(amount);
   await transactionsPage.assertFirstRowTypeContainsText('Credit');
 });
