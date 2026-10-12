@@ -59,7 +59,7 @@ export class CustomersListPage {
     .split(/\s+/)
     .filter(Boolean);
 
-  expect(accountNumbers).toHaveLength(expectedCount);
+  await expect(accountNumbers).toHaveLength(expectedCount);
 }
 
 async clickDeleteButtonForCustomer(firstName, lastName, postCode) {

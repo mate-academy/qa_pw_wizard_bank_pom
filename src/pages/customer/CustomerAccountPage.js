@@ -78,13 +78,16 @@ export class CustomerAccountPage {
     await expect(this.withdrawNoBalanceErrorMessage).toBeVisible();
   }
 
-  async getCurrentBalance() {
+async getCurrentBalance() {
   const accountData = await this.accountDataLine.textContent();
-  const balance = accountData.match(/Balance\s*:\s*(\d+)/);
+  const balance = accountData?.match(/Balance\s*:\s*(\d+)/);
+
+  if (!balance) {
+    throw new Error('Could not extract balance from account data');
+  }
 
   return Number(balance[1]);
 }
-
 
 
 
