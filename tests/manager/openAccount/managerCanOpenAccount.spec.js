@@ -13,14 +13,17 @@ test.beforeEach(async ({ page }) => {
 
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
-  const postCode = faker.location.zipCode();
 
   await addCustomerPage.open();
-  await addCustomerPage.addCustomer(firstName, lastName, postCode);
+  await addCustomerPage.addCustomer(
+    firstName,
+    lastName,
+    faker.location.zipCode(),
+  );
   await addCustomerPage.reload();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open account for new customer', async ({ page }) => {
   const managerMainPage = new BankManagerMainPage(page);
   const openAccountPage = new OpenAccountPage(page);
   const customersListPage = new CustomersListPage(page);

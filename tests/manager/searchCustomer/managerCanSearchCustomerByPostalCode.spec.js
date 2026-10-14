@@ -3,16 +3,13 @@ import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-
-let firstName;
-let lastName;
 let postalCode;
 
 test.beforeEach(async ({ page }) => {
   const addCustomerPage = new AddCustomerPage(page);
 
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
   postalCode = faker.location.zipCode();
 
   await addCustomerPage.open();
