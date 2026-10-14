@@ -1,4 +1,3 @@
-import { th } from '@faker-js/faker';
 import { expect } from '@playwright/test';
 
 export class OpenAccountPage {
@@ -52,7 +51,7 @@ export class OpenAccountPage {
   }
 
    async assertCustomerAccountNumber() {
-    await expect(this.customarAccountNumber).not.toBeEmpty()
+    await expect(this.customarAccountNumber).not.toBeEmpty();
   }
 
   async openDropDownAndNameCustomer(fullNameCustomer) {
