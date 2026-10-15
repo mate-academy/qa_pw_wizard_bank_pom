@@ -1,7 +1,36 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage} from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
+const addCustomerPage = new AddCustomerPage(page);
+const customersListPage = new CustomersListPage(page);
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
+const zipCode = faker.location.zipCode();
+
+await addCustomerPage.open();
+await addCustomerPage.firstNameField.fill(firstName);
+await addCustomerPage.lastNameField.fill(lastName);
+await addCustomerPage.postCodeField.fill(zipCode);
+await addCustomerPage.submitAddCustomerButton.click();
+await page.reload();
+await addCustomerPage.customersButton.click();
+
+await customersListPage.waitForCustomerListPage();
+await expect(customersListPage.lastCustomerFirstname).toHaveText(firstName);
+await expect(customersListPage.lastCustomerLastName).toHaveText(lastName);
+await expect(customersListPage.lastCustomerZipCode).toHaveText(zipCode);
+await expect(customersListPage.lastCustomerAccNum).toHaveText('');
+
+
+
+
+
+
+
+
   /* 
   Test:
   1. Open add customer page by link

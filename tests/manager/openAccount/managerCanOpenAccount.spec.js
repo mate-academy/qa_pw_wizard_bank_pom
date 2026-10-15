@@ -1,7 +1,36 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
+test.describe('Manager can open account', () => {
+  let firstName;
+  let lastName;
+  let postCode;
+  let createdCustomer;
+  let createdCustomerName;
+  let openAccPage;
+  let addCustPage;
+  let custListPage;
+
 
 test.beforeEach(async ({ page }) => {
+  addCustPage = new AddCustomerPage(page);
+
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postCode = faker.location.zipCode();
+  
+
+
+  await addCustPage.open();
+  await addCustPage.firstNameField.fill(firstName);
+  await addCustPage.lastNameField.fill(lastName);
+  await addCustPage.postCodeField.fill(postCode);
+  await addCustPage.submitAddCustomerButton.click();
+  await page.reload();
+
   /* 
   Pre-conditons:
   1. Open Add Customer page
@@ -14,6 +43,20 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can add new customer', async ({ page }) => {
+  openAccPage = new OpenAccountPage(page);
+  custListPage = new CustomersListPage(page);
+  createdCustomer = custListPage.getCreatedCustomerRow(firstName, lastName, postCode);
+  createdCustomerName = `${firstName} ${lastName}`;
+
+  await openAccPage.open();
+  await openAccPage.userDropDown.selectOption(createdCustomerName);
+  await openAccPage.currDropDown.selectOption('Rupee');
+  await openAccPage.proccesButton.click();
+  await page.reload();
+  await openAccPage.customersButton.click();
+  await expect(createdCustomer).toBeVisible();
+
+
   /* 
   Test:
   1. Click [Open Account].
@@ -28,4 +71,5 @@ test('Assert manager can add new customer', async ({ page }) => {
   1. Do not rely on the customer row id for the step 13. 
     Use the ".last()" locator to get the last row.
   */
+});
 });
