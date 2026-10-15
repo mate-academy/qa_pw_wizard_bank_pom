@@ -13,7 +13,9 @@ export class TransactionsPage {
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/listTx');
+   await this.page.goto('/angularJs-protractor/BankingProject/#/listTx', {
+  waitUntil: 'domcontentloaded',
+});
   }
   async reload() {
     await this.page.reload();

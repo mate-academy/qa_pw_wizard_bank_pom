@@ -30,7 +30,9 @@ export class CustomerAccountPage {
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/account');
+    await this.page.goto('/angularJs-protractor/BankingProject/#/account', {
+  waitUntil: 'domcontentloaded',
+});
   }
 
   async assertAccountIdInDropDownHasValue(value) {

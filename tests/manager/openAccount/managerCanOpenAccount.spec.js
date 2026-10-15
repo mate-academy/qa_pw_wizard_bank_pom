@@ -1,31 +1,25 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+export class OpenAccountPage {
+  constructor(page) {
+    this.page = page;
+    this.customerSelect = page.getByRole('combobox').first();
+    this.currencySelect = page.getByRole('combobox').last();
+    this.processButton = page.getByRole('button', { name: 'Process' });
+  }
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
-});
+  async selectCustomer(fullName) {
+    await this.customerSelect.selectOption({ label: fullName });
+  }
 
-test('Assert manager can add new customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Click [Open Account].
-  2. Select Customer name you just created.
-  3. Select currency.
-  4. Click [Process].
-  5. Reload the page (This is a simplified step to close the popup).
-  6. Click [Customers].
-  7. Assert the customer row has the account number not empty.
+  async selectCurrency(currency) {
+    await this.currencySelect.selectOption(currency);
+  }
 
-  Tips:
-  1. Do not rely on the customer row id for the step 13. 
-    Use the ".last()" locator to get the last row.
-  */
-});
+  async clickProcessButtonAndGetAlertText() {
+    const dialogPromise = this.page.waitForEvent('dialog');
+    await this.processButton.click();
+    const dialog = await dialogPromise;
+    const message = dialog.message();
+    await dialog.accept();
+    return message;
+  }
+}
