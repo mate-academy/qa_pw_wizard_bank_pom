@@ -2,7 +2,7 @@ name: PW Tests
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, e2e_testing ]
   pull_request:
     branches: [ main, master ]
 
