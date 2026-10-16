@@ -1,19 +1,9 @@
-import { expect } from '@playwright/test';
-
 export class OpenAccountPage {
   constructor(page) {
     this.page = page;
     this.customerSelect = page.getByRole('combobox').first();
     this.currencySelect = page.getByRole('combobox').last();
     this.processButton = page.getByRole('button', { name: 'Process' });
-    this.successMessage = page.getByText('Account created successfully');
-  }
-
-  async open() {
-    await this.page.goto(
-  '/angularJs-protractor/BankingProject/#/manager/addAccount',
-  { waitUntil: 'domcontentloaded' },
-);
   }
 
   async selectCustomer(fullName) {
@@ -24,11 +14,13 @@ export class OpenAccountPage {
     await this.currencySelect.selectOption(currency);
   }
 
-  async clickProcessButton() {
-    await this.processButton.click();
-  }
-
-  async assertAccountCreatedSuccessfully() {
-    await expect(this.successMessage).toBeVisible();
-  }
+ async clickProcessButtonAndGetAlertText() {
+  let message = '';
+  this.page.once('dialog', async (dialog) => {
+    message = dialog.message();
+    await dialog.accept();
+  });
+  await this.processButton.click();
+  return message;
+}
 }

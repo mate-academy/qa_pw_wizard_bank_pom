@@ -1,5 +1,3 @@
-import { expect } from '@playwright/test';
-
 export class AddCustomerPage {
   constructor(page) {
     this.page = page;
@@ -12,9 +10,10 @@ export class AddCustomerPage {
   }
 
   async open() {
-    this.page.goto('/angularJs-protractor/BankingProject/#/manager/addCust', {
-  waitUntil: 'domcontentloaded',
-});
+    await this.page.goto(
+      '/angularJs-protractor/BankingProject/#/manager/addCust',
+      { waitUntil: 'domcontentloaded' },
+    );
   }
 
   async fillFirstName(firstName) {

@@ -27,7 +27,7 @@ test('Assert the customer cannot withdraw money with empty balance', async ({
   await accountPage.assertAccountLineContainsText('Balance : 0');
   await accountPage.clickWithdrawlButton();
 
-  const amount = faker.number.int(100).toString();
+  const amount = faker.number.int({ min: 1, max: 100 }).toString();
 
   await accountPage.fillAmountInputField(amount);
   await accountPage.clickWithdrawlFormButton();

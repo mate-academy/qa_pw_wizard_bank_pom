@@ -1,25 +1,52 @@
-export class OpenAccountPage {
-  constructor(page) {
-    this.page = page;
-    this.customerSelect = page.getByRole('combobox').first();
-    this.currencySelect = page.getByRole('combobox').last();
-    this.processButton = page.getByRole('button', { name: 'Process' });
-  }
+import { test, expect } from '@playwright/test';
+import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
-  async selectCustomer(fullName) {
-    await this.customerSelect.selectOption({ label: fullName });
-  }
+test('Assert manager can open an account for a customer', async ({
+  page,
+}) => {
+  /*
+  Test:
+  1. Add a new customer (setup).
+  2. Open the "Open Account" page.
+  3. Select the new customer.
+  4. Select a currency.
+  5. Click [Process].
+  6. Assert the success alert message is correct.
+  7. Go to Customers, search for the customer.
+  8. Assert the account cell in the last row is no longer empty.
+  */
 
-  async selectCurrency(currency) {
-    await this.currencySelect.selectOption(currency);
-  }
+  const addCustomerPage = new AddCustomerPage(page);
+  const bankManagerMainPage = new BankManagerMainPage(page);
+  const customersListPage = new CustomersListPage(page);
+  const openAccountPage = new OpenAccountPage(page);
 
-  async clickProcessButtonAndGetAlertText() {
-    const dialogPromise = this.page.waitForEvent('dialog');
-    await this.processButton.click();
-    const dialog = await dialogPromise;
-    const message = dialog.message();
-    await dialog.accept();
-    return message;
-  }
-}
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+  const fullName = `${firstName} ${lastName}`;
+
+  // Setup: create a customer
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostalCode(postCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await addCustomerPage.reload();
+
+  // Act: open an account
+  await bankManagerMainPage.clickOpenAccountButton();
+  await openAccountPage.selectCustomer(fullName);
+  await openAccountPage.selectCurrency('Dollar');
+  const alertText = await openAccountPage.clickProcessButtonAndGetAlertText();
+  expect(alertText).toContain('Account created successfully');
+
+  // Assert: the account now shows up for that customer
+  await bankManagerMainPage.clickCustomersButton();
+  await customersListPage.searchCustomer(postCode);
+  await customersListPage.assertLastRowAccountCellIsNotEmpty();
+});

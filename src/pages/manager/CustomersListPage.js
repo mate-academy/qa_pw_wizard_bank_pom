@@ -8,9 +8,9 @@ export class CustomersListPage {
   }
 
   async open() {
-    this.page.goto('/angularJs-protractor/BankingProject/#/manager/list', {
-  waitUntil: 'domcontentloaded',
-});
+    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list', {
+      waitUntil: 'domcontentloaded',
+    });
   }
 
   async searchCustomer(text) {

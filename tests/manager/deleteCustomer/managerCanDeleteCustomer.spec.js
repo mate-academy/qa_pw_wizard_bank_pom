@@ -5,16 +5,16 @@ import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainP
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can delete a customer', async ({ page }) => {
-  /*
+    /*
   Test:
   1. Add a new customer (setup, via UI) so we have someone safe to delete.
   2. Reload and go to Customers.
-  3. Search for the new customer by first name.
+  3. Search for the new customer by Postal Code (more unique than first name
+     in this shared, public environment).
   4. Assert only that customer's row is visible.
   5. Click [Delete] on that row.
   6. Assert the row is no longer visible.
   */
-
   const addCustomerPage = new AddCustomerPage(page);
   const bankManagerMainPage = new BankManagerMainPage(page);
   const customersListPage = new CustomersListPage(page);
