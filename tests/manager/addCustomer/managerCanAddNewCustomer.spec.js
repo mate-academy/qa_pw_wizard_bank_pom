@@ -1,7 +1,31 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-test('Assert manager can add new customer', async ({ page }) => {
+test("Assert manager can add new customer", async ({ page }) => {
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
+
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillFieldFirstName(firstName);
+  await addCustomerPage.fillFieldLastName(lastName);
+  await addCustomerPage.fillFieldPostCode(postCode);
+  await addCustomerPage.clickAddCustumerButton();
+
+  await page.reload();
+  await customersListPage.open();
+
+  await customersListPage.assertCustomerDataIsPresentInLastRow(
+    firstName,
+    lastName,
+    postCode,
+  );
+
   /* 
   Test:
   1. Open add customer page by link
