@@ -1,29 +1,38 @@
+
 import { expect } from '@playwright/test';
 
 export class TransactionsPage {
   constructor(page) {
     this.page = page;
+
     this.tableHeader = page.getByRole('row').first();
     this.headerFirstCell = this.tableHeader.getByRole('cell').nth(0);
     this.headerSecondCell = this.tableHeader.getByRole('cell').nth(1);
     this.headerThirdCell = this.tableHeader.getByRole('cell').nth(2);
-    this.firstRow = page.getByRole('row').nth(1);
+
+    this.transactionRows = page.locator('table tbody tr');
+    this.firstRow = this.transactionRows.first();
     this.firstRowAmountCell = this.firstRow.getByRole('cell').nth(1);
     this.firstRowTypeCell = this.firstRow.getByRole('cell').nth(2);
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/listTx');
+    await this.page.goto(
+      '/angularJs-protractor/BankingProject/#/listTx',
+    );
   }
+
   async reload() {
     await this.page.reload();
   }
 
   async assertFirstRowAmountContainsText(amount) {
+    await expect(this.firstRow).toBeVisible();
     await expect(this.firstRowAmountCell).toContainText(amount);
   }
 
   async assertFirstRowTypeContainsText(type) {
+    await expect(this.firstRow).toBeVisible();
     await expect(this.firstRowTypeCell).toContainText(type);
   }
 
