@@ -1,5 +1,13 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
+let firstName;
+let lastName;
+let postCode;
 
 test.beforeEach(async ({ page }) => {
   /* 
@@ -11,9 +19,26 @@ test.beforeEach(async ({ page }) => {
   5. Click [Add Customer].
   6. Reload the page (This is a simplified step to close the popup).
   */
+
+  const bankHomePage = new BankHomePage(page);
+  const addCustomerPage = new AddCustomerPage(page);
+
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postCode = faker.location.zipCode();
+
+  await bankHomePage.open();
+  await bankHomePage.clickBankManagerLogin();
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostalCode(postCode);
+  await addCustomerPage.clickAddCustomer();
+  await page.reload();
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open account', async ({ page }) => {
   /* 
   Test:
   1. Click [Open Account].
@@ -23,9 +48,18 @@ test('Assert manager can add new customer', async ({ page }) => {
   5. Reload the page (This is a simplified step to close the popup).
   6. Click [Customers].
   7. Assert the customer row has the account number not empty.
-
-  Tips:
-  1. Do not rely on the customer row id for the step 13. 
-    Use the ".last()" locator to get the last row.
   */
+
+  const addCustomerPage = new AddCustomerPage(page);
+  const openAccountPage = new OpenAccountPage(page);
+  const customersListPage = new CustomersListPage(page);
+
+  await openAccountPage.clickOpenAccount();
+  await openAccountPage.selectCustomer(firstName, lastName);
+  await openAccountPage.selectCurrency('Dollar');
+  await openAccountPage.clickProcess();
+  await page.reload();
+  await addCustomerPage.clickCustomerButton();
+
+  await expect(customersListPage.getAccountNumberCell(firstName, lastName)).not.toHaveText('');
 });
