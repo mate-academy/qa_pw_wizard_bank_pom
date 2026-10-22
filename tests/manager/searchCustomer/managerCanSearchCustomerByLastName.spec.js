@@ -19,5 +19,5 @@ test('Assert manager can search a customer by last name', async ({ page }) => {
   await managerPage.clickCustomersTab();
   await customersListPage.searchCustomer('Granger');
   await customersListPage.assertRowsCount(1);
-  await customersListPage.assertCustomerIsVisible('Hermoine', 'Granger');
+  await customersListPage.assertCustomerIsVisible('Hermione', 'Granger');
 });

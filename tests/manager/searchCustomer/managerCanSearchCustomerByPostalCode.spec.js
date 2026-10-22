@@ -19,7 +19,7 @@ test('Assert manager can search customers by post code', async ({ page }) => {
   await managerPage.clickCustomersTab();
   await customersListPage.searchCustomer('E55');
   await customersListPage.assertRowsCount(2);
-  await customersListPage.assertCustomerIsVisible('Ron', 'Weasly');
+  await customersListPage.assertCustomerIsVisible('Ron', 'Weasley');
   await customersListPage.assertCustomerIsVisible('Albus', 'Dumbledore');
 });
 
