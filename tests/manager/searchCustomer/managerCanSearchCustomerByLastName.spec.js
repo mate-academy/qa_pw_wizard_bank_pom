@@ -1,30 +1,23 @@
 import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-let firstName;
-let lastName;
-let postalCode;
-
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
-});
-
-test('Assert manager can search customer by Last Name', async ({ page }) => {
-  /* 
+test('Assert manager can search a customer by last name', async ({ page }) => {
+  /*
   Test:
-  1. Open Customers page
-  2. Fill the lastName to the search field
-  3. Assert customer row is present in the table. 
-  4. Assert no other rows is present in the table.
+  1. Open Wizard bank link, login as manager, click [Customers]
+  2. Enter "Granger" in [Search Customer]
+  3. Assert only Hermoine Granger is shown
   */
+  const bankHomePage = new BankHomePage(page);
+  const managerPage = new BankManagerMainPage(page);
+  const customersListPage = new CustomersListPage(page);
+
+  await bankHomePage.open();
+  await bankHomePage.clickBankManagerLoginButton();
+  await managerPage.clickCustomersTab();
+  await customersListPage.searchCustomer('Granger');
+  await customersListPage.assertRowsCount(1);
+  await customersListPage.assertCustomerIsVisible('Hermione', 'Granger');
 });

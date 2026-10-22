@@ -1,24 +1,28 @@
 import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page.
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-});
-
-test('Assert manager can delete customer', async ({ page }) => {
-  /* 
+test('Assert manager can delete a customer', async ({ page }) => {
+  /*
   Test:
-  1. Open Customers page.
-  2. Click [Delete] for the row with customer name.
-  3. Assert customer row is not present in the table. 
-  4. Reload the page.
-  5. Assert customer row is not present in the table. 
+  1. Open Wizard bank link and login as manager
+  2. Click [Customers]
+  3. Click [Delete] for Albus Dumbledore
+  4. Assert Albus Dumbledore is no longer in the list
+  5. Assert the other 4 customers are still in the list
   */
+  const bankHomePage = new BankHomePage(page);
+  const managerPage = new BankManagerMainPage(page);
+  const customersListPage = new CustomersListPage(page);
+
+  await bankHomePage.open();
+  await bankHomePage.clickBankManagerLoginButton();
+  await managerPage.clickCustomersTab();
+  await customersListPage.assertCustomerIsVisible('Albus', 'Dumbledore');
+  await customersListPage.deleteCustomer('Albus', 'Dumbledore');
+
+  await customersListPage.assertCustomerIsNotVisible('Albus', 'Dumbledore');
+  await customersListPage.assertRowsCount(4);
+  await customersListPage.assertCustomerIsVisible('Harry', 'Potter');
 });

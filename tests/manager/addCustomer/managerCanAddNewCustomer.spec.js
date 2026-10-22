@@ -1,29 +1,47 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
-  /* 
+  /*
   Test:
-  1. Open add customer page by link
-    https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup)
-  7. Click [Customers] button.
-  8. Assert the customer First Name is present in the table in the last row. 
-  9. Assert the customer Last Name is present in the table in the last row. 
-  10. Assert the customer Postal Code is present in the table in the last row. 
-  11. Assert there is no account number for the new customer in the last row. 
-
-  Tips:
-  1. Use faker for test data generation, example usage:
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.LastName();
-    const postCode = faker.location.zipCode(); 
-
-  2. Do not rely on the customer row id for the steps 8-11. 
-    Use the ".last()" locator to get the last row.
+  1. Open Wizard bank link
+  2. Click [Bank Manager Login]
+  3. Click [Add Customer]
+  4. Fill First Name, Last Name and Post Code
+  5. Click [Add Customer] and accept the alert
+  6. Assert the alert says the customer was added successfully
+  7. Click [Customers]
+  8. Assert the new customer is in the list with the entered post code
+     and without any account
   */
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.string.numeric(6);
+
+  const bankHomePage = new BankHomePage(page);
+  const managerPage = new BankManagerMainPage(page);
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
+
+  await bankHomePage.open();
+  await bankHomePage.clickBankManagerLoginButton();
+  await managerPage.clickAddCustomerTab();
+  await addCustomerPage.fillCustomerForm(firstName, lastName, postCode);
+  const message = await addCustomerPage.submitAndGetAlertMessage();
+  await addCustomerPage.assertAlertMessage(
+    message,
+    /Customer added successfully with customer id :\d+/
+  );
+
+  await managerPage.clickCustomersTab();
+  await customersListPage.assertRowsCount(6);
+  await customersListPage.assertCustomerIsVisible(firstName, lastName);
+  await customersListPage.assertCustomerPostCode(firstName, lastName, postCode);
+  await customersListPage.assertCustomerHasNoAccounts(firstName, lastName);
 });
+
+
