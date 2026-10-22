@@ -35,8 +35,11 @@ test('Assert manager can open an account for a new customer', async ({ page }) =
   const message = await openAccountPage.submitAndGetAlertMessage();
   await openAccountPage.assertAlertMessage(message, /Account created successfully/);
   const accountNumber = openAccountPage.getAccountNumberFromMessage(message);
+ 
 
   await managerPage.reload();
   await managerPage.clickCustomersTab();
-  await customersListPage.assertLastCustomerHasAccountNumber();
+  
+  await customersListPage.assertCustomerIsVisible(firstName, lastName);
+  await customersListPage.assertCustomerHasAccount(firstName, lastName, accountNumber);
 });

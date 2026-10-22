@@ -81,17 +81,6 @@ export class CustomersListPage {
     ).toContainText(accountNumber);
   }
 
-  // Checks the last row in the table. If accountNumber is given, it must be
-  // in the account column; otherwise the column must contain some digits.
-  async assertLastCustomerHasAccountNumber(accountNumber) {
-    const accountCell = this.rows.last().locator('td').nth(3);
-    if (accountNumber) {
-      await expect(accountCell).toContainText(accountNumber);
-    } else {
-      await expect(accountCell).toHaveText(/\d+/);
-    }
-  }
-
   async assertCustomerHasNoAccounts(firstName, lastName) {
     await expect(
       this.rowByName(firstName, lastName).locator('td').nth(3)
