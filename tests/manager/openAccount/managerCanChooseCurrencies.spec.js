@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage';
 import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
 test('Assert manager can choose currencies for account', async ({ page }) => {
@@ -14,7 +15,11 @@ test('Assert manager can choose currencies for account', async ({ page }) => {
   7. Assert the drop-dwon has value Rupee
   */
 
+  const bankHomePage = new BankHomePage(page);
   const openAccountPage = new OpenAccountPage(page);
+
+  await bankHomePage.open();
+  await bankHomePage.clickBankManagerLogin();
 
   await openAccountPage.open();
 
