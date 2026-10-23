@@ -1,7 +1,48 @@
-import { test } from '@playwright/test';
+
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
+
+  // Open the Add Customer page
+  await addCustomerPage.open();
+
+  // Fill in the customer details
+  await addCustomerPage.fillCustomerForm(
+    firstName,
+    lastName,
+    postCode,
+  );
+
+  // Handle the confirmation popup
+  page.once('dialog', async (dialog) => {
+    await dialog.accept();
+  });
+
+  // Submit the form
+  await addCustomerPage.submitForm();
+
+  // Open the Customers list
+  await customersListPage.open();
+
+  // Check the last row in the table
+  const lastRow = page.locator('table tbody tr').last();
+
+  await expect(lastRow).toContainText(firstName);
+  await expect(lastRow).toContainText(lastName);
+  await expect(lastRow).toContainText(postCode);
+
+  // The new customer should not have an account number
+  await expect(lastRow.locator('td').nth(3)).toBeEmpty();
+});
   /* 
   Test:
   1. Open add customer page by link
@@ -26,4 +67,4 @@ test('Assert manager can add new customer', async ({ page }) => {
   2. Do not rely on the customer row id for the steps 8-11. 
     Use the ".last()" locator to get the last row.
   */
-});
+

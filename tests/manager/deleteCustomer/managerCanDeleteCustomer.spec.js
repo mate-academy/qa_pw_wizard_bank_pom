@@ -1,24 +1,39 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page.
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-});
+import { test, expect } from '@playwright/test';
+import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can delete customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Customers page.
-  2. Click [Delete] for the row with customer name.
-  3. Assert customer row is not present in the table. 
-  4. Reload the page.
-  5. Assert customer row is not present in the table. 
-  */
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+  const addCustomerPage = new AddCustomerPage(page);
+  const customersListPage = new CustomersListPage(page);
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillCustomerForm(firstName, lastName, postCode);
+
+  page.once('dialog', (dialog) => dialog.accept());
+  await addCustomerPage.submitForm();
+
+  await customersListPage.open();
+
+  const customerRow = page.locator('table tbody tr').filter({
+    hasText: firstName,
+  }).filter({
+    hasText: lastName,
+  });
+
+  await expect(customerRow).toHaveCount(1);
+
+  page.once('dialog', (dialog) => dialog.accept());
+  await customerRow.getByRole('button', { name: 'Delete' }).click();
+
+  await expect(customerRow).toHaveCount(0);
+
+  await page.reload();
+
+  await expect(customerRow).toHaveCount(0);
 });
