@@ -34,12 +34,13 @@ test("Assert manager can search customer by Postal Code", async ({ page }) => {
   const customersListPage = new CustomersListPage(page);
 
   await customersListPage.open();
-  await customersListPage.fillSearchFieldPostCode(postCode);
+  await customersListPage.fillSearchFieldPostalCode(postCode);
   await customersListPage.assertCustomerDataIsPresentInLastRow(
     firstName,
     lastName,
     postCode,
   );
+  await customersListPage.assertNumberOfCustomerRows(1);
   /* 
   Test:
   1. Open Customers page.

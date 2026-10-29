@@ -23,7 +23,7 @@ test('Assert correct customer Logout', async ({ page }) => {
   await bankHomePage.clickCustomerLoginButton();
   await customerLoginPage.selectCustomer('Neville Longbottom');
   await customerLoginPage.clickLoginButton();
-  await accountPage.clickLogoutButton();
+  await accountPage.logout();
   await customerLoginPage.waitForOpened();
   await customerLoginPage.assertSelectCustomerDropdownIsVisible();
   await customerLoginPage.assertSelectCustomerDropdownContainsValue('');

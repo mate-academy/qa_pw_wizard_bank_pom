@@ -99,6 +99,11 @@ export class CustomerAccountPage {
     await this.logoutButton.click();
   }
 
+  // Dedicated logout method as required by task
+  async logout() {
+    await this.clickLogoutButton();
+  }
+
   async assertLogoutButtonIsVisible() {
     await expect(this.logoutButton).toBeVisible();
   }

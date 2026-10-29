@@ -12,6 +12,7 @@ export class TransactionsPage {
     this.firstRowTypeCell = this.firstRow.getByRole('cell').nth(2);
     this.backButton = page.getByRole('button', { name: 'Back' });
     this.resetButton = page.getByRole('button', { name: 'Reset' });
+    this.logoutButton = page.getByRole('button', { name: 'Logout' });
   }
 
   async open() {
@@ -30,6 +31,15 @@ export class TransactionsPage {
 
   async clickResetButton() {
     await this.resetButton.click();
+  }
+
+  async clickLogoutButton() {
+    await this.logoutButton.click();
+  }
+
+  // Dedicated logout method on customer-facing page
+  async logout() {
+    await this.clickLogoutButton();
   }
 
   async assertTransactionHistoryIsVisible() {

@@ -6,3 +6,4 @@ export { AddCustomerPage } from './manager/AddCustomerPage';
 export { BankManagerMainPage } from './manager/BankManagerMainPage';
 export { CustomersListPage } from './manager/CustomersListPage';
 export { OpenAccountPage } from './manager/OpenAccountPage';
+

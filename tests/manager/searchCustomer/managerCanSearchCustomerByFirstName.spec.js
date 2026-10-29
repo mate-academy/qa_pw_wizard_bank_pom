@@ -41,6 +41,7 @@ test("Assert manager can search customer by First Name", async ({ page }) => {
     lastName,
     postCode,
   );
+  await customersListPage.assertNumberOfCustomerRows(1);
   /* 
   Test:
   1. Open Customers page.

@@ -68,4 +68,17 @@ export class CustomersListPage {
   async fillSearchFieldPostCode(postCode) {
     await this.searchField.fill(postCode);
   }
+
+  // Alias for postal code naming
+  async fillSearchFieldPostalCode(postalCode) {
+    await this.fillSearchFieldPostCode(postalCode);
+  }
+
+  async assertNumberOfCustomerRows(count) {
+    await expect(this.tableRows).toHaveCount(count);
+  }
+
+  async assertOnlyOneCustomerRowPresent() {
+    await expect(this.tableRows).toHaveCount(1);
+  }
 }

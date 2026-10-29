@@ -20,10 +20,9 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillFieldPostCode(postCode);
   await addCustomerPage.clickAddCustomerButton();
   await page.reload();
-
   /* 
   Pre-conditons:
-  1. Open Add Customer page
+  1. Open Add Customer page.
   2. Fill the First Name.  
   3. Fill the Last Name.
   4. Fill the Postal Code.
@@ -41,9 +40,10 @@ test("Assert manager can search customer by Last Name", async ({ page }) => {
     lastName,
     postCode,
   );
+  await customersListPage.assertNumberOfCustomerRows(1);
   /* 
   Test:
-  1. Open Customers page
+  1. Open Customers page.
   2. Fill the lastName to the search field
   3. Assert customer row is present in the table. 
   4. Assert no other rows is present in the table.
