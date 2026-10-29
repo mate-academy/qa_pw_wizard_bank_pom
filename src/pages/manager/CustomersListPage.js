@@ -69,7 +69,6 @@ export class CustomersListPage {
     await this.searchField.fill(postCode);
   }
 
-  // Alias for postal code naming
   async fillSearchFieldPostalCode(postalCode) {
     await this.fillSearchFieldPostCode(postalCode);
   }

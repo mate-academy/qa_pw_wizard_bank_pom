@@ -7,7 +7,6 @@ export class AddCustomerPage {
     this.addCustomerButton = page
       .getByRole("form")
       .getByRole("button", { name: "Add Customer" });
-    this.addCustumerButton = this.addCustomerButton;
   }
 
   async open() {
@@ -30,9 +29,5 @@ export class AddCustomerPage {
 
   async clickAddCustomerButton() {
     await this.addCustomerButton.click();
-  }
-
-  async clickAddCustumerButton() {
-    await this.clickAddCustomerButton();
   }
 }

@@ -23,11 +23,6 @@ export class OpenAccountPage {
     expect(selectedValue).toBe(expectedCurrency);
   }
 
-  // Alias for backward compatibility
-  async assertCurencyIsSelected(expectedCurrency) {
-    await this.assertCurrencyIsSelected(expectedCurrency);
-  }
-
   async selectCustomerFromDropdown(fullName) {
     await this.customerDropdown.selectOption({ label: fullName });
   }

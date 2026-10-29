@@ -73,7 +73,6 @@ export class CustomerAccountPage {
     await this.withdrawlButton.click();
   }
 
-  // Alias for proper spelling
   async clickWithdrawalButton() {
     await this.clickWithdrawlButton();
   }
@@ -90,7 +89,6 @@ export class CustomerAccountPage {
     await this.withdrawlFormButton.click();
   }
 
-  // Alias for proper spelling
   async clickWithdrawalFormButton() {
     await this.clickWithdrawlFormButton();
   }
@@ -99,7 +97,6 @@ export class CustomerAccountPage {
     await this.logoutButton.click();
   }
 
-  // Dedicated logout method as required by task
   async logout() {
     await this.clickLogoutButton();
   }

@@ -20,7 +20,6 @@ export class TransactionsPage {
   }
 
   async reload() {
-    // Small delay so AngularJS has finished updating storage before reload
     await this.page.waitForTimeout(500);
     await this.page.reload();
   }
@@ -37,7 +36,6 @@ export class TransactionsPage {
     await this.logoutButton.click();
   }
 
-  // Dedicated logout method on customer-facing page
   async logout() {
     await this.clickLogoutButton();
   }
