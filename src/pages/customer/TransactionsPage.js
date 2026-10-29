@@ -10,21 +10,46 @@ export class TransactionsPage {
     this.firstRow = page.getByRole('row').nth(1);
     this.firstRowAmountCell = this.firstRow.getByRole('cell').nth(1);
     this.firstRowTypeCell = this.firstRow.getByRole('cell').nth(2);
+    this.backButton = page.getByRole('button', { name: 'Back' });
+    this.resetButton = page.getByRole('button', { name: 'Reset' });
+    this.logoutButton = page.getByRole('button', { name: 'Logout' });
   }
 
   async open() {
     await this.page.goto('/angularJs-protractor/BankingProject/#/listTx');
   }
+
   async reload() {
+    await this.page.waitForTimeout(500);
     await this.page.reload();
   }
 
+  async clickBackButton() {
+    await this.backButton.click();
+  }
+
+  async clickResetButton() {
+    await this.resetButton.click();
+  }
+
+  async clickLogoutButton() {
+    await this.logoutButton.click();
+  }
+
+  async logout() {
+    await this.clickLogoutButton();
+  }
+
+  async assertTransactionHistoryIsVisible() {
+    await expect(this.firstRow).toBeVisible();
+  }
+
   async assertFirstRowAmountContainsText(amount) {
-    await expect(this.firstRowAmountCell).toContainText(amount);
+    await expect(this.firstRowAmountCell).toContainText(amount, { timeout: 10000 });
   }
 
   async assertFirstRowTypeContainsText(type) {
-    await expect(this.firstRowTypeCell).toContainText(type);
+    await expect(this.firstRowTypeCell).toContainText(type, { timeout: 10000 });
   }
 
   async assertFirstRowIsHidden() {

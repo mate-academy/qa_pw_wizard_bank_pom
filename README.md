@@ -8,15 +8,16 @@ Please read the [instructions](TaskDescription.md) in order to complete this tas
 # Test coverage
 
 - Customer:
-  - Account Operations
+  - Customer login
+  - Account Operations (Balance checks, Account selection, Deposit, Withdrawal error)
   - Logout
-  - Transactions
+  - Transactions (Empty list verification, Transaction history viewing)
 - Manager:
   - Bank manager login
   - Adding new customer
   - Adding new account for the customer
   - Deleting a customer
-  - Searching a customer
+  - Searching a customer (By First Name, Last Name, Postal Code)
 
 # How to run the tests
 

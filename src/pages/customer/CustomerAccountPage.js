@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 export class CustomerAccountPage {
   constructor(page) {
     this.page = page;
+    this.userNameHeading = page.locator('.fontBig');
     this.accountIdDropDown = page.getByTestId('accountSelect');
     this.accountDataLine = page
       .locator('div')
@@ -15,6 +16,7 @@ export class CustomerAccountPage {
       name: 'Transactions',
     });
     this.withdrawlButton = page.getByRole('button', { name: 'Withdraw' });
+    this.withdrawalButton = this.withdrawlButton;
     this.amountInputField = page.getByPlaceholder('amount');
     this.depositFormButton = page.getByRole('form').getByRole('button', {
       name: 'Deposit',
@@ -23,6 +25,7 @@ export class CustomerAccountPage {
     this.withdrawlFormButton = page.getByRole('form').getByRole('button', {
       name: 'Withdraw',
     });
+    this.withdrawalFormButton = this.withdrawlFormButton;
     this.withdrawNoBalanceErrorMessage = page.getByText(
       'Transaction Failed. You can not withdraw amount more than the balance.',
     );
@@ -33,6 +36,10 @@ export class CustomerAccountPage {
     await this.page.goto('/angularJs-protractor/BankingProject/#/account');
   }
 
+  async selectAccount(accountNumber) {
+    await this.accountIdDropDown.selectOption(accountNumber);
+  }
+
   async assertAccountIdInDropDownHasValue(value) {
     const accountNumberInDrodown = this.accountIdDropDown;
     await expect(accountNumberInDrodown).toHaveValue(value);
@@ -40,6 +47,18 @@ export class CustomerAccountPage {
 
   async assertAccountLineContainsText(text) {
     await expect(this.accountDataLine).toContainText(text);
+  }
+
+  async assertAccountNumber(accountNumber) {
+    await expect(this.accountDataLine).toContainText(`Account Number : ${accountNumber}`);
+  }
+
+  async assertBalance(balance) {
+    await expect(this.accountDataLine).toContainText(`Balance : ${balance}`);
+  }
+
+  async assertCurrency(currency) {
+    await expect(this.accountDataLine).toContainText(`Currency : ${currency}`);
   }
 
   async clickDepositButton() {
@@ -54,6 +73,10 @@ export class CustomerAccountPage {
     await this.withdrawlButton.click();
   }
 
+  async clickWithdrawalButton() {
+    await this.clickWithdrawlButton();
+  }
+
   async fillAmountInputField(amount) {
     await this.amountInputField.fill(amount);
   }
@@ -66,8 +89,24 @@ export class CustomerAccountPage {
     await this.withdrawlFormButton.click();
   }
 
+  async clickWithdrawalFormButton() {
+    await this.clickWithdrawlFormButton();
+  }
+
   async clickLogoutButton() {
     await this.logoutButton.click();
+  }
+
+  async logout() {
+    await this.clickLogoutButton();
+  }
+
+  async assertLogoutButtonIsVisible() {
+    await expect(this.logoutButton).toBeVisible();
+  }
+
+  async assertCustomerNameIsVisible(name) {
+    await expect(this.userNameHeading).toContainText(name);
   }
 
   async assertDepositSuccessfulMessageIsVisible() {
