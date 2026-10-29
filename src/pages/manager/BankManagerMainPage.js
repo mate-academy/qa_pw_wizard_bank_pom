@@ -12,12 +12,26 @@ export class BankManagerMainPage {
     await this.page.goto("/angularJs-protractor/BankingProject/#/manager");
   }
 
+  async clickAddCustomerButton() {
+    await this.addCustomerButton.click();
+  }
+
+  async clickOpenAccountButton() {
+    await this.openAccountButton.click();
+  }
+
+  async clickCustomersButton() {
+    await this.customersButton.click();
+  }
+
   async assertCustomersButton() {
     await expect(this.customersButton).toBeVisible();
   }
+
   async assertAddCustomerButton() {
     await expect(this.addCustomerButton).toBeVisible();
   }
+
   async assertOpenAccountButton() {
     await expect(this.openAccountButton).toBeVisible();
   }

@@ -16,6 +16,7 @@ export class CustomerAccountPage {
       name: 'Transactions',
     });
     this.withdrawlButton = page.getByRole('button', { name: 'Withdraw' });
+    this.withdrawalButton = this.withdrawlButton;
     this.amountInputField = page.getByPlaceholder('amount');
     this.depositFormButton = page.getByRole('form').getByRole('button', {
       name: 'Deposit',
@@ -24,6 +25,7 @@ export class CustomerAccountPage {
     this.withdrawlFormButton = page.getByRole('form').getByRole('button', {
       name: 'Withdraw',
     });
+    this.withdrawalFormButton = this.withdrawlFormButton;
     this.withdrawNoBalanceErrorMessage = page.getByText(
       'Transaction Failed. You can not withdraw amount more than the balance.',
     );
@@ -71,6 +73,11 @@ export class CustomerAccountPage {
     await this.withdrawlButton.click();
   }
 
+  // Alias for proper spelling
+  async clickWithdrawalButton() {
+    await this.clickWithdrawlButton();
+  }
+
   async fillAmountInputField(amount) {
     await this.amountInputField.fill(amount);
   }
@@ -81,6 +88,11 @@ export class CustomerAccountPage {
 
   async clickWithdrawlFormButton() {
     await this.withdrawlFormButton.click();
+  }
+
+  // Alias for proper spelling
+  async clickWithdrawalFormButton() {
+    await this.clickWithdrawlFormButton();
   }
 
   async clickLogoutButton() {

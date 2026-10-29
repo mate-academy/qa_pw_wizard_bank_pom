@@ -32,6 +32,10 @@ export class TransactionsPage {
     await this.resetButton.click();
   }
 
+  async assertTransactionHistoryIsVisible() {
+    await expect(this.firstRow).toBeVisible();
+  }
+
   async assertFirstRowAmountContainsText(amount) {
     await expect(this.firstRowAmountCell).toContainText(amount, { timeout: 10000 });
   }
