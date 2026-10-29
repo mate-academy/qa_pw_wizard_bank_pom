@@ -1,3 +1,5 @@
+import { expect } from '@playwright/test';
+
 export class BankHomePage {
   constructor(page) {
     this.page = page;
@@ -19,5 +21,13 @@ export class BankHomePage {
 
   async clickBankManagerLoginButton() {
     await this.bankManagerLoginButton.click();
+  }
+
+  async assertCustomerLoginButtonIsVisible() {
+    await expect(this.customerLoginButton).toBeVisible();
+  }
+
+  async assertBankManagerLoginButtonIsVisible() {
+    await expect(this.bankManagerLoginButton).toBeVisible();
   }
 }

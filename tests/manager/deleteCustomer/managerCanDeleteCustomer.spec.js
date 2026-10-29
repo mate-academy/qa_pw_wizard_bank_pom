@@ -18,7 +18,7 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillFieldFirstName(firstName);
   await addCustomerPage.fillFieldLastName(lastName);
   await addCustomerPage.fillFieldPostCode(postCode);
-  await addCustomerPage.clickAddCustumerButton();
+  await addCustomerPage.clickAddCustomerButton();
 
   /* 
   Pre-conditons:

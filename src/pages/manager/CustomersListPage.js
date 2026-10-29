@@ -52,7 +52,7 @@ export class CustomersListPage {
   }
 
   async assertAccountNumberOfCustomerNotEmpty() {
-    const accountNumberCell = this.tableRows.getByRole("cell").nth(3);
+    const accountNumberCell = this.tableRows.last().getByRole("cell").nth(3);
 
     await expect(accountNumberCell).not.toBeEmpty();
   }

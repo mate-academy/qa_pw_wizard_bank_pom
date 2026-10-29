@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 export class CustomerAccountPage {
   constructor(page) {
     this.page = page;
+    this.userNameHeading = page.locator('.fontBig');
     this.accountIdDropDown = page.getByTestId('accountSelect');
     this.accountDataLine = page
       .locator('div')
@@ -33,6 +34,10 @@ export class CustomerAccountPage {
     await this.page.goto('/angularJs-protractor/BankingProject/#/account');
   }
 
+  async selectAccount(accountNumber) {
+    await this.accountIdDropDown.selectOption(accountNumber);
+  }
+
   async assertAccountIdInDropDownHasValue(value) {
     const accountNumberInDrodown = this.accountIdDropDown;
     await expect(accountNumberInDrodown).toHaveValue(value);
@@ -40,6 +45,18 @@ export class CustomerAccountPage {
 
   async assertAccountLineContainsText(text) {
     await expect(this.accountDataLine).toContainText(text);
+  }
+
+  async assertAccountNumber(accountNumber) {
+    await expect(this.accountDataLine).toContainText(`Account Number : ${accountNumber}`);
+  }
+
+  async assertBalance(balance) {
+    await expect(this.accountDataLine).toContainText(`Balance : ${balance}`);
+  }
+
+  async assertCurrency(currency) {
+    await expect(this.accountDataLine).toContainText(`Currency : ${currency}`);
   }
 
   async clickDepositButton() {
@@ -68,6 +85,14 @@ export class CustomerAccountPage {
 
   async clickLogoutButton() {
     await this.logoutButton.click();
+  }
+
+  async assertLogoutButtonIsVisible() {
+    await expect(this.logoutButton).toBeVisible();
+  }
+
+  async assertCustomerNameIsVisible(name) {
+    await expect(this.userNameHeading).toContainText(name);
   }
 
   async assertDepositSuccessfulMessageIsVisible() {

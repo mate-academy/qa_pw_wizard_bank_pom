@@ -29,6 +29,10 @@ export class CustomerLoginPage {
     await expect(this.customerDropDown).toBeVisible();
   }
 
+  async assertLoginButtonIsVisible() {
+    await expect(this.loginButton).toBeVisible();
+  }
+
   async assertSelectCustomerDropdownContainsValue(value) {
     const currentOptionText = this.customerDropDown;
     await expect(currentOptionText).toHaveValue(value);

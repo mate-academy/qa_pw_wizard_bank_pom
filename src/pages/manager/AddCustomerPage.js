@@ -4,9 +4,10 @@ export class AddCustomerPage {
     this.fieldFirstName = page.getByPlaceholder("First Name");
     this.fieldLastName = page.getByPlaceholder("Last Name");
     this.fieldPostCode = page.getByPlaceholder("Post Code");
-    this.addCustumerButton = page
+    this.addCustomerButton = page
       .getByRole("form")
       .getByRole("button", { name: "Add Customer" });
+    this.addCustumerButton = this.addCustomerButton;
   }
 
   async open() {
@@ -27,7 +28,11 @@ export class AddCustomerPage {
     await this.fieldPostCode.fill(numb);
   }
 
+  async clickAddCustomerButton() {
+    await this.addCustomerButton.click();
+  }
+
   async clickAddCustumerButton() {
-    await this.addCustumerButton.click();
+    await this.clickAddCustomerButton();
   }
 }

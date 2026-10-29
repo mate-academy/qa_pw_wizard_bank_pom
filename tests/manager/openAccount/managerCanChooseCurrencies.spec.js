@@ -6,21 +6,21 @@ test("Assert manager can choose currencies for account", async ({ page }) => {
 
   await openAccountPage.open();
   await openAccountPage.selectCurrency("Dollar");
-  await openAccountPage.assertCurencyIsSelected("Dollar");
+  await openAccountPage.assertCurrencyIsSelected("Dollar");
   await openAccountPage.selectCurrency("Pound");
-  await openAccountPage.assertCurencyIsSelected("Pound");
+  await openAccountPage.assertCurrencyIsSelected("Pound");
   await openAccountPage.selectCurrency("Rupee");
-  await openAccountPage.assertCurencyIsSelected("Rupee");
+  await openAccountPage.assertCurrencyIsSelected("Rupee");
 
   /* 
   Test:
   1. Open the Open account page 
     https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/openAccount
   2. Select currency Dollar
-  3. Assert the drop-dwon has value Dollar
+  3. Assert the drop-down has value Dollar
   4. Select currency Pound
-  5. Assert the drop-dwon has value Pound
+  5. Assert the drop-down has value Pound
   6. Select currency Rupee
-  7. Assert the drop-dwon has value Rupee
+  7. Assert the drop-down has value Rupee
   */
 });
