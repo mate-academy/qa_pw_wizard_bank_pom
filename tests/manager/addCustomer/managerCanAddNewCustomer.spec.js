@@ -1,8 +1,30 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
+
 
 test('Assert manager can add new customer', async ({ page }) => {
-  /* 
+  
+  const addcustomerPage = new AddCustomerPage(page);
+  const customerListPage = new CustomersListPage(page);
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const postCode = faker.location.zipCode();
+
+    await addcustomerPage.open();
+    await addcustomerPage.fillFirstNameField(firstName);
+    await addcustomerPage.fillLastNameField(lastName);
+    await addcustomerPage.fillPostCodeField(postCode);
+    await addcustomerPage.clickSubmitAddCustomerForm();
+    await page.reload();
+    
+    await addcustomerPage.clickButtonCustomer();
+    await page.waitForURL('**/BankingProject/#/manager/list');
+    await customerListPage.assertLastCustomer(firstName, lastName, postCode);
+});
+
+/* 
   Test:
   1. Open add customer page by link
     https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust
@@ -20,10 +42,9 @@ test('Assert manager can add new customer', async ({ page }) => {
   Tips:
   1. Use faker for test data generation, example usage:
     const firstName = faker.person.firstName();
-    const lastName = faker.person.LastName();
+    const lastName = faker.person.lastName();
     const postCode = faker.location.zipCode(); 
 
   2. Do not rely on the customer row id for the steps 8-11. 
     Use the ".last()" locator to get the last row.
   */
-});
