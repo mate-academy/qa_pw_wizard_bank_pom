@@ -36,6 +36,7 @@ test('Assert the deposit can be opened', async ({ page }) => {
   await accountPage.clickTransactionsButton();
   await transactionsPage.assertHeaderIsVisible();
   await transactionsPage.reload();
+  await transactionsPage.waitForOpened();
   await transactionsPage.assertFirstRowAmountContainsText(amount);
   await transactionsPage.assertFirstRowTypeContainsText('Credit');
 });
