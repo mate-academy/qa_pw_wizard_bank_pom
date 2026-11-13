@@ -54,7 +54,7 @@ export class CustomersListPage {
   }
 
   async assertCustomerRowIsPresentInTable(firstName) {
-    await expect( ( this.customerRows).filter({hasText: firstName})).toBeVisible
+    await expect( ( this.customerRows).filter({hasText: firstName})).toBeVisible()
   }
 
   async assertNoOtherRowsArePresent() {
@@ -68,7 +68,7 @@ export class CustomersListPage {
   }
 
  async assertCustomerRowIsPresentInTable(lastName) {
-    await expect( ( this.customerRows).filter({hasText: lastName})).toBeVisible
+    await expect( ( this.customerRows).filter({hasText: lastName})).toBeVisible()
   }
 
   async fillZipCodeInSearchField(zipCode) {
@@ -76,6 +76,6 @@ export class CustomersListPage {
   }
 
   async assertCustomerRowIsPresentInTable(zipCode) {
-    await expect( ( this.customerRows).filter({hasText: zipCode})).toBeVisible
+    await expect( ( this.customerRows).filter({hasText: zipCode})).toBeVisible()
   }
 }

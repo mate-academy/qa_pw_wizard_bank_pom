@@ -26,7 +26,7 @@ export class AddCustomerPage {
     await this.lastNameInput.fill(text)
   };
 
-  async fillPostalCodeFill(text) {
+  async fillPostalCode(text) {
     await this.postalCodeInput.fill(text)
   };
 

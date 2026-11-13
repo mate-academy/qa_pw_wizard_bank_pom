@@ -3,8 +3,8 @@ import { expect } from "@playwright/test";
 export class OpenAccountPage {
   constructor(page) {
     this.page = page;
-    this.currenciesSelectDropdown = page.getByTestId("currency");
-    this.customerNameDropdown = page.getByTestId('userSelect')
+    this.currenciesSelectDropdown = page.locator("#currency");
+    this.customerNameDropdown = page.locator("#userSelect");
     this.processButton = page.getByRole('button', { name: 'Process' })
   }
 
