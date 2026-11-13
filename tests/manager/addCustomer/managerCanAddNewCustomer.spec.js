@@ -1,7 +1,30 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test } from "@playwright/test";
 
-test('Assert manager can add new customer', async ({ page }) => {
+import { faker } from "@faker-js/faker";
+
+import { CustomersListPage } from "../../../src/pages/manager/CustomersListPage";
+import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
+
+test("Assert manager can add new customer", async ({ page }) => {
+  const customersListPage = new CustomersListPage(page);
+  const addCustomerPage = new AddCustomerPage(page);
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
+  const zipCode = faker.location.zipCode();
+
+  await addCustomerPage.open();
+  await addCustomerPage.fillFirstName(firstName);
+
+  await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostalCodeFill(zipCode);
+  await addCustomerPage.clickAddCustomerButton();
+  await page.reload();
+  await addCustomerPage.clickCustomerButton();
+  await customersListPage.assertCustomerFirstNameIsPresent(firstName);
+  await customersListPage.assertCustomerLastNameIsPresent(lastName);
+  await customersListPage.assertPostalCodeIsPresent(zipCode);
+  await customersListPage.assertAccountNumberIsEmpty();
+
   /* 
   Test:
   1. Open add customer page by link
