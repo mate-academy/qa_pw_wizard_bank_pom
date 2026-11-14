@@ -1,8 +1,24 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { CustomersListPage } from "../../../src/pages/manager/CustomersListPage";
+import { AddCustomerPage } from "../../../src/pages/manager/AddCustomerPage";
+
+let firstName = faker.person.firstName();
+let lastName = faker.person.lastName();
+let zipCode = faker.location.zipCode();
 
 test.beforeEach(async ({ page }) => {
-  /* 
+ const customersListPage = new CustomersListPage(page);
+ const addCustomerPage = new AddCustomerPage(page);
+ 
+
+ await addCustomerPage.open();
+ await addCustomerPage.fillFirstName(firstName);
+
+ await addCustomerPage.fillLastName(lastName);
+  await addCustomerPage.fillPostalCode(zipCode);
+  await addCustomerPage.clickAddCustomerButton();
+/* 
   Pre-conditons:
   1. Open Add Customer page.
   2. Fill the First Name.  
@@ -13,6 +29,20 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
+  const customersListPage = new CustomersListPage(page);
+   
+await customersListPage.open();
+await customersListPage.clickCustomerDeleteButton(firstName, lastName, zipCode)
+await customersListPage.assertCustomerRowIsNotPresentInTable(firstName, lastName, zipCode);
+ await page.reload();
+await customersListPage.assertCustomerRowIsNotPresentInTable(firstName, lastName, zipCode);
+
+
+
+
+
+
+
   /* 
   Test:
   1. Open Customers page.
