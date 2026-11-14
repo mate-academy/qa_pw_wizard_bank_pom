@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { BankHomePage } from '../../../src/pages/BankHomePage';
+import { BankHomePage } from '../../../src/pages/manager/BankHomePage';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 
