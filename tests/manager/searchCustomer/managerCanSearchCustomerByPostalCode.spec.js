@@ -1,30 +1,25 @@
-import { test } from '@playwright/test';
-import { faker } from '@faker-js/faker';
+import { test, expect } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage.js';
+// CORREÇÃO: Adicionadas as chaves { } na importação
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage.js';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage.js';
 
-let firstName;
-let lastName;
-let postalCode;
+test('Assert manager can search customer by postal code', async ({ page }) => {
+  const bankHomePage = new BankHomePage(page);
+  const managerMainPage = new BankManagerMainPage(page);
+  const customersListPage = new CustomersListPage(page);
 
-test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page.
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  */
-  firstName = faker.person.firstName();
-  lastName = faker.person.lastName();
-  postalCode = faker.location.zipCode();
+  const searchPostalCode = 'E859AB';
+
+  await bankHomePage.open(); 
+  await bankHomePage.clickBankManagerLogin();
+  await managerMainPage.clickCustomersTab();
+
+  await customersListPage.searchCustomer(searchPostalCode);
+  await customersListPage.assertCustomerInList(searchPostalCode);
+  
+  await expect(customersListPage.tableRows).toHaveCount(1);
 });
 
-test('Assert manager can search customer by Postal Code', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Customers page.
-  2. Fill the postalCode to the search field
-  3. Assert customer row is present in the table. 
-  4. Assert no other rows is present in the table.
-  */
-});
+
+

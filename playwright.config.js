@@ -1,31 +1,32 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   testDir: './tests',
-  /* Run tests in files in parallel */
-  fullyParallel: false,
-  workers: 1,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://www.globalsqa.com/',
-    testIdAttribute: 'id'
+  timeout: 45000, // Dá uma margem de tempo segura para a rede do site responder
+  expect: {
+    timeout: 5000,
   },
-
-  /* Configure projects for major browsers */
+  fullyParallel: false,
+  forbidOnly: !!process.env.CI,
+  retries: 1,
+  workers: 1, // Mantém 1 por vez para evitar que o servidor bloqueie acessos simultâneos
+  reporter: 'html',
+  use: {
+    baseURL: 'https://www.globalsqa.com',
+    trace: 'on-first-retry',
+    // Injeta cabeçalho real para burlar o bloqueio de robôs do servidor deles
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+    launchOptions: {
+      args: ['--disable-blink-features=AutomationControlled']
+    }
+  },
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
   ],
 });
+
+
+

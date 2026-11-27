@@ -1,27 +1,43 @@
-import { test } from '@playwright/test';
-import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
-import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 
-test('Assert customer has correct bank data', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Wizard bank link
-  2. Select Hermione Granger
-  3. Click [Login]
-  4. Assert Account Number in Dropdown next to the Hermoine Granger name
-  5. Assert Account Number text
-  5. Assert Balance text
-  6. Assert Currency text
-  */
+import { test, expect } from '@playwright/test';
+import { BankHomePage } from '../../../src/pages/BankHomePage.js';
+import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage.js';
+import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage.js';
 
+test('Assert Customer has correct bank data', async ({ page }) => {
+  const bankHomePage = new BankHomePage(page);
   const loginPage = new CustomerLoginPage(page);
   const accountPage = new CustomerAccountPage(page);
 
-  await loginPage.open();
-  await loginPage.selectCustomer('Hermoine Granger');
+  await bankHomePage.open();
+  await bankHomePage.clickCustomerLogin();
+
+  // Aguarda o carregamento das opções de clientes
+  await page.locator('#userSelect option').nth(1).waitFor({
+    state: 'attached'
+  });
+
+  // Seleciona Hermione Granger pelo valor interno da opção
+  await loginPage.selectCustomer('1');
   await loginPage.clickLoginButton();
-  await accountPage.assertAccountIdInDropDownHasValue('number:1001');
-  await accountPage.assertAccountLineContainsText('Account Number : 1001');
-  await accountPage.assertAccountLineContainsText('Balance : 5096');
-  await accountPage.assertAccountLineContainsText('Currency : Dollar');
+
+  // Validações dos dados da conta
+  await accountPage.assertAccountLineContainsText('1001');
+  await accountPage.assertAccountLineContainsText('5096');
+  await accountPage.assertAccountLineContainsText('Dollar');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

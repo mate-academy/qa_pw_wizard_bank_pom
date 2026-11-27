@@ -1,30 +1,43 @@
-import { test } from '@playwright/test';
-import { BankHomePage } from '../../../src/pages/BankHomePage';
-import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage';
-import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
+import { test, expect } from '@playwright/test';
+
+import { BankHomePage } from '../../../src/pages/BankHomePage.js';
+import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage.js';
 
 test('Assert correct customer Logout', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Wizard bank link
-  2. Click [Customer Login]
-  3. Select Neville Longbottom
-  4. Click [Login]
-  5. Click [Logout]
-  6. Wait for the page URL 
-  https://www.globalsqa.com/angularJs-protractor/BankingProject/#/customer
-  7. Assert the drop-down is present with empty value 
-  */
   const bankHomePage = new BankHomePage(page);
   const customerLoginPage = new CustomerLoginPage(page);
-  const accountPage = new CustomerAccountPage(page);
 
+  // Acessa a página inicial
   await bankHomePage.open();
-  await bankHomePage.clickCustomerLoginButton();
-  await customerLoginPage.selectCustomer('Neville Longbottom');
+
+  // Acessa o login do cliente
+  await bankHomePage.clickCustomerLogin();
+
+  // Aguarda o carregamento das opções de clientes
+  await page.locator('#userSelect option').nth(1).waitFor({
+    state: 'attached'
+  });
+
+  // Seleciona o cliente pelo valor interno da opção
+  await customerLoginPage.selectCustomer('1');
+
+  // Realiza o login
   await customerLoginPage.clickLoginButton();
-  await accountPage.clickLogoutButton();
-  await customerLoginPage.waitForOpened();
-  await customerLoginPage.assertSelectCustomerDropdownIsVisible();
-  await customerLoginPage.assertSelectCustomerDropdownContainsValue('');
+
+  // Aguarda o botão Logout ficar visível
+  const logoutButton = page.locator('button:has-text("Logout")');
+
+  await logoutButton.waitFor({
+    state: 'visible'
+  });
+
+  // Realiza o logout
+  await logoutButton.click();
+
+  // Valida se o dropdown de clientes está visível novamente
+  await expect(page.locator('#userSelect')).toBeVisible();
+
+  // Valida se nenhum cliente permanece selecionado
+  await expect(page.locator('#userSelect')).toHaveValue('');
 });
+
