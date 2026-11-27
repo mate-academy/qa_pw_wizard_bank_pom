@@ -180,7 +180,7 @@ Além da cobertura funcional, o projeto permitiu desenvolver e aplicar conhecime
 
 A experiência reforçou a importância de compreender o comportamento esperado do produto, analisar as evidências antes de realizar alterações e verificar se os ajustes implementados realmente resolvem o problema identificado.
 
-## 7. Tecnologias e ferramentas
+## 7. Tecnologias e ferramentas utilizadas
 
 - **JavaScript:** linguagem utilizada na implementação dos testes.
 - **Playwright:** automação de testes E2E e validação de comportamentos.
@@ -188,7 +188,7 @@ A experiência reforçou a importância de compreender o comportamento esperado 
 - **Git e GitHub:** controle de versão e publicação das alterações.
 - **Chromium:** navegador utilizado na execução da suíte.
 
-## 8. Como executar o projeto
+## 8. Execução do projeto
 
 ### Instalação
 
