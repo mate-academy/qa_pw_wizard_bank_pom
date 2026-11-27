@@ -6,7 +6,7 @@ O trabalho envolveu análise das funcionalidades, definição de cenários, impl
 
 ## 1. Contexto do produto
 
-O [**Wizard Bank**](https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login) é uma aplicação web de simulação bancária que permite interações entre dois perfis: clientes e gerentes bancários.
+O **Wizard Bank** é uma aplicação web de simulação bancária que permite interações entre dois perfis: clientes e gerentes bancários.
 
 A plataforma disponibiliza funcionalidades relacionadas à administração de clientes, abertura de contas e operações bancárias.
 
@@ -221,11 +221,7 @@ npx playwright test --debug
 npx playwright show-report
 ```
 
-## 9. Aplicação testada
-
-- [Wizard Bank — Aplicação utilizada no projeto](https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login)
-
-## 10. Pull Request
+## 09. Pull Request
 
 - [Implementação de testes automatizados para a área Manager e ajustes nos testes Customer](https://github.com/mate-academy/qa_pw_wizard_bank_pom/pull/190)
 
