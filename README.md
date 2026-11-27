@@ -1,4 +1,3 @@
-
 # Playwright | Wizard Bank — Test Automation Project
 
 Projeto de automação de testes E2E desenvolvido com **Playwright, JavaScript e Page Object Model (POM)**, com foco na validação dos fluxos bancários das áreas Customer e Manager.
@@ -228,7 +227,7 @@ npx playwright show-report
 
 ## 10. Pull Request
 
-- [Implementação de testes automatizados para a área Manager e ajustes nos testes Customer](COLE_AQUI_O_LINK_DO_PULL_REQUEST)
+- [Implementação de testes automatizados para a área Manager e ajustes nos testes Customer](https://github.com/mate-academy/qa_pw_wizard_bank_pom/pull/190)
 
 ---
 
