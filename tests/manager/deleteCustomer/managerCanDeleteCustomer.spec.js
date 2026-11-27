@@ -8,7 +8,7 @@ test('Assert manager can delete customer', async ({ page }) => {
   const managerMainPage = new BankManagerMainPage(page);
   const customersListPage = new CustomersListPage(page);
 
-  const customerName = 'Hermione';
+  const customerName = 'Hermoine';
 
   await bankHomePage.open();
   await bankHomePage.clickBankManagerLogin();

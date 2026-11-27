@@ -17,7 +17,7 @@ test('Assert manager can choose currencies', async ({ page }) => {
   await managerMainPage.clickOpenAccountTab();
 
   // 3. Seleciona um cliente base
-  await openAccountPage.selectCustomer('Hermione Granger');
+  await openAccountPage.selectCustomer('Hermoine Granger');
 
   // 4. Valida se consegue alternar entre as moedas disponíveis (Dollar, Pound, Rupee)
   await openAccountPage.selectCurrency('Dollar');

@@ -1,3 +1,4 @@
+
 import { test, expect } from '@playwright/test';
 import { BankHomePage } from '../../../src/pages/BankHomePage.js';
 import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage.js';
@@ -11,16 +12,20 @@ test('Assert Customer has correct bank data', async ({ page }) => {
   await bankHomePage.open();
   await bankHomePage.clickCustomerLogin();
 
-  await loginPage.selectCustomer('Hermione Granger');
+  // Aguarda o carregamento das opções de clientes
+  await page.locator('#userSelect option').nth(1).waitFor({
+    state: 'attached'
+  });
+
+  // Seleciona Hermione Granger pelo valor interno da opção
+  await loginPage.selectCustomer('1');
   await loginPage.clickLoginButton();
 
-  // Validações estáticas dos dados originais exigidos pelo Luke
+  // Validações dos dados da conta
   await accountPage.assertAccountLineContainsText('1001');
   await accountPage.assertAccountLineContainsText('5096');
   await accountPage.assertAccountLineContainsText('Dollar');
 });
-
-
 
 
 

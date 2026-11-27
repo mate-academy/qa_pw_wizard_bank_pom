@@ -1,9 +1,8 @@
+
 import { expect } from '@playwright/test';
 
 export class TransactionsPage {
-
   constructor(page) {
-
     this.page = page;
 
     this.tableHeader = page.getByRole('row').first();
@@ -13,6 +12,8 @@ export class TransactionsPage {
     this.headerSecondCell = this.tableHeader.getByRole('cell').nth(1);
 
     this.headerThirdCell = this.tableHeader.getByRole('cell').nth(2);
+
+    this.transactionRows = page.locator('table tbody tr');
 
     this.firstRow = page.getByRole('row').nth(1);
 
@@ -55,5 +56,23 @@ export class TransactionsPage {
 
   async assertHeaderThirdCellContainsText(text) {
     await expect(this.headerThirdCell).toContainText(text);
+  }
+
+  async assertLatestTransactionContainsAmountAndType(amount, type) {
+    const matchingTransactions = this.transactionRows.filter({
+      hasText: amount
+    });
+
+    const latestTransaction = matchingTransactions.last();
+
+    await expect(latestTransaction).toBeVisible();
+
+    await expect(
+      latestTransaction.getByRole('cell').nth(1)
+    ).toHaveText(amount);
+
+    await expect(
+      latestTransaction.getByRole('cell').nth(2)
+    ).toHaveText(type);
   }
 }
